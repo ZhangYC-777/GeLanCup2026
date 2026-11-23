@@ -13,6 +13,11 @@ public class SwitchPlayer : MonoBehaviour
     private int currentPlayerIndex;
     private float nextSwitchTime;
 
+    // 供交互提示读取当前操控角色。
+    public Transform CurrentPlayer => isActiveAndEnabled && input != null && players[currentPlayerIndex] != null
+        ? players[currentPlayerIndex].transform
+        : null;
+
     // 检查 Inspector 引用，并创建两个脚本共享的输入动作。
     private void Awake()
     {

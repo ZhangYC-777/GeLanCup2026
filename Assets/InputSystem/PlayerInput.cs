@@ -103,12 +103,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Move"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""99870c93-96eb-4126-89c1-78a52c3bed4e"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -124,7 +124,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
+                    ""name"": ""WASD"",
+                    ""id"": ""63cc721d-89c4-4b97-a43b-1f847b917023"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
                     ""id"": ""2aa0591c-fd80-408e-90b0-aa14fe6c4dc9"",
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
@@ -132,10 +143,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
+                    ""name"": ""left"",
                     ""id"": ""8d5a3f69-994f-4413-a786-94bc8b40a758"",
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
@@ -143,10 +154,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
+                    ""name"": ""down"",
                     ""id"": ""15c5abe6-91b3-464c-84d6-8558a08134bf"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
@@ -154,10 +165,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
+                    ""name"": ""right"",
                     ""id"": ""9f25dd74-d9ff-48b3-a62d-edbcb771f460"",
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
@@ -165,7 +176,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 }
             ]
         }
