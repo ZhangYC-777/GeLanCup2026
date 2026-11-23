@@ -93,9 +93,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             ""id"": ""88a10212-42ab-4d04-8061-ed4ba23bcf22"",
             ""actions"": [
                 {
-                    ""name"": ""New action"",
+                    ""name"": ""Switch"",
                     ""type"": ""Button"",
                     ""id"": ""c74ed585-7226-44cd-afee-08e99823172a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Button"",
+                    ""id"": ""99870c93-96eb-4126-89c1-78a52c3bed4e"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -110,7 +119,51 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""Switch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2aa0591c-fd80-408e-90b0-aa14fe6c4dc9"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d5a3f69-994f-4413-a786-94bc8b40a758"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""15c5abe6-91b3-464c-84d6-8558a08134bf"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9f25dd74-d9ff-48b3-a62d-edbcb771f460"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -121,7 +174,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
 }");
         // PlayerMaps
         m_PlayerMaps = asset.FindActionMap("PlayerMaps", throwIfNotFound: true);
-        m_PlayerMaps_Newaction = m_PlayerMaps.FindAction("New action", throwIfNotFound: true);
+        m_PlayerMaps_Switch = m_PlayerMaps.FindAction("Switch", throwIfNotFound: true);
+        m_PlayerMaps_Move = m_PlayerMaps.FindAction("Move", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -202,7 +256,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     // PlayerMaps
     private readonly InputActionMap m_PlayerMaps;
     private List<IPlayerMapsActions> m_PlayerMapsActionsCallbackInterfaces = new List<IPlayerMapsActions>();
-    private readonly InputAction m_PlayerMaps_Newaction;
+    private readonly InputAction m_PlayerMaps_Switch;
+    private readonly InputAction m_PlayerMaps_Move;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerMaps".
     /// </summary>
@@ -215,9 +270,13 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// </summary>
         public PlayerMapsActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "PlayerMaps/Newaction".
+        /// Provides access to the underlying input action "PlayerMaps/Switch".
         /// </summary>
-        public InputAction @Newaction => m_Wrapper.m_PlayerMaps_Newaction;
+        public InputAction @Switch => m_Wrapper.m_PlayerMaps_Switch;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerMaps/Move".
+        /// </summary>
+        public InputAction @Move => m_Wrapper.m_PlayerMaps_Move;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -244,9 +303,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerMapsActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerMapsActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
+            @Switch.started += instance.OnSwitch;
+            @Switch.performed += instance.OnSwitch;
+            @Switch.canceled += instance.OnSwitch;
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
         }
 
         /// <summary>
@@ -258,9 +320,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// <seealso cref="PlayerMapsActions" />
         private void UnregisterCallbacks(IPlayerMapsActions instance)
         {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
+            @Switch.started -= instance.OnSwitch;
+            @Switch.performed -= instance.OnSwitch;
+            @Switch.canceled -= instance.OnSwitch;
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
         }
 
         /// <summary>
@@ -302,11 +367,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     public interface IPlayerMapsActions
     {
         /// <summary>
-        /// Method invoked when associated input action "New action" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Switch" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnSwitch(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMove(InputAction.CallbackContext context);
     }
 }
