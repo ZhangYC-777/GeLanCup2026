@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "PlayerInput",
+    "maps": [
+        {
+            "name": "PlayerMaps",
+            "id": "88a10212-42ab-4d04-8061-ed4ba23bcf22",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "c74ed585-7226-44cd-afee-08e99823172a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "ec1e4ec3-51ee-43b8-956c-ce67a9a27906",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
