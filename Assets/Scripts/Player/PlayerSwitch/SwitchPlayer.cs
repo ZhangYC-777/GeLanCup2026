@@ -34,13 +34,13 @@ public class SwitchPlayer : MonoBehaviour
         }
     }
 
-    // 为 true 时表示对话已暂停玩家移动与角色切换。
+    // 为 true 时表示剧情或背包已暂停玩家移动与角色切换。
     public bool IsGameplayLocked
     {
         get { return gameplayLocked; }
     }
 
-    // 对话期间保留角色和相机目标，只暂停移动和切换。
+    // 界面接管输入时保留角色和相机目标，只暂停移动和切换。
     // locked 为 true 时收回移动控制，false 时交还给当前角色。
     public void SetGameplayLocked(bool locked)
     {
@@ -67,6 +67,41 @@ public class SwitchPlayer : MonoBehaviour
     public bool WasDialogueDownPressed()
     {
         return input != null && input.PlayerMaps.DialogueDown.WasPressedThisFrame();
+    }
+
+    // B 对应的背包动作是否在本帧刚按下。
+    public bool WasInventoryPressed()
+    {
+        return input != null && input.PlayerMaps.Inventory.WasPressedThisFrame();
+    }
+
+    // Esc 对应的关闭动作是否在本帧刚按下。
+    public bool WasInventoryCancelPressed()
+    {
+        return input != null && input.PlayerMaps.InventoryCancel.WasPressedThisFrame();
+    }
+
+    // 返回本帧的格子移动方向。行号从上向下增加。
+    public Vector2Int ReadInventoryNavigation()
+    {
+        if (input == null)
+        {
+            return Vector2Int.zero;
+        }
+
+        if (WasDialogueUpPressed())
+        {
+            return Vector2Int.up * -1;
+        }
+
+        if (WasDialogueDownPressed())
+        {
+            return Vector2Int.up;
+        }
+
+        int left = input.PlayerMaps.InventoryLeft.WasPressedThisFrame() ? 1 : 0;
+        int right = input.PlayerMaps.InventoryRight.WasPressedThisFrame() ? 1 : 0;
+        return new Vector2Int(right - left, 0);
     }
 
     // 检查 Inspector 引用，并创建两个脚本共享的输入动作。

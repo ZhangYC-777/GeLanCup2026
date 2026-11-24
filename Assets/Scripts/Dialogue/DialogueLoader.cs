@@ -26,6 +26,8 @@ public class DialogueNode
     public string next;
     // 玩家可以选择的回应。有选项时由选项各自的 next 决定后续。
     public DialogueChoice[] choices;
+    // 播完本段最后一句时发放的物品 ID，留空表示没有奖励。
+    public string rewardItemId;
 }
 
 // 玩家可选的一个回应。
@@ -120,6 +122,13 @@ public static class DialogueLoader
         // 节点全部登记后，再逐个检查跳转和选项。
         foreach (DialogueNode node in dialogue.nodes)
         {
+            if (!string.IsNullOrWhiteSpace(node.rewardItemId) &&
+                (!string.IsNullOrEmpty(node.next) || (node.choices != null && node.choices.Length > 0)))
+            {
+                error = node.id + " 有后续台词或选项，请把物品奖励配置到本段最后一句。";
+                return false;
+            }
+
             if (!string.IsNullOrEmpty(node.next) && !nodes.ContainsKey(node.next))
             {
                 error = node.id + " 跳转到了不存在的节点：" + node.next;

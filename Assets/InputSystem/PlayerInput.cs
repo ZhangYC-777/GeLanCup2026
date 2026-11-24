@@ -136,6 +136,42 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""092d0806-d79e-470a-9e52-f4dd68289f02"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryCancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""c15d2c8f-1c4d-4f96-843c-9bcdfaa48ed5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""1162589f-9d44-4292-8adc-d019d473b429"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""dcd6f6d1-709d-4735-a9b1-c913ba6f2c44"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -237,6 +273,50 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""DialogueDown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""25055109-9368-45d3-8d56-8b7767fc674b"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf478344-d90d-4c4a-83e9-fed5fac4b011"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryCancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c3bae47a-8d6d-4a7e-b0e6-1dfe59382a59"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""95254ff2-72e2-4640-97a4-9dd23093a4c8"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -250,6 +330,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_PlayerMaps_Interact = m_PlayerMaps.FindAction("Interact", throwIfNotFound: true);
         m_PlayerMaps_DialogueUp = m_PlayerMaps.FindAction("DialogueUp", throwIfNotFound: true);
         m_PlayerMaps_DialogueDown = m_PlayerMaps.FindAction("DialogueDown", throwIfNotFound: true);
+        m_PlayerMaps_Inventory = m_PlayerMaps.FindAction("Inventory", throwIfNotFound: true);
+        m_PlayerMaps_InventoryCancel = m_PlayerMaps.FindAction("InventoryCancel", throwIfNotFound: true);
+        m_PlayerMaps_InventoryLeft = m_PlayerMaps.FindAction("InventoryLeft", throwIfNotFound: true);
+        m_PlayerMaps_InventoryRight = m_PlayerMaps.FindAction("InventoryRight", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -335,6 +419,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerMaps_Interact;
     private readonly InputAction m_PlayerMaps_DialogueUp;
     private readonly InputAction m_PlayerMaps_DialogueDown;
+    private readonly InputAction m_PlayerMaps_Inventory;
+    private readonly InputAction m_PlayerMaps_InventoryCancel;
+    private readonly InputAction m_PlayerMaps_InventoryLeft;
+    private readonly InputAction m_PlayerMaps_InventoryRight;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerMaps".
     /// </summary>
@@ -366,6 +454,22 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerMaps/DialogueDown".
         /// </summary>
         public InputAction @DialogueDown => m_Wrapper.m_PlayerMaps_DialogueDown;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerMaps/Inventory".
+        /// </summary>
+        public InputAction @Inventory => m_Wrapper.m_PlayerMaps_Inventory;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerMaps/InventoryCancel".
+        /// </summary>
+        public InputAction @InventoryCancel => m_Wrapper.m_PlayerMaps_InventoryCancel;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerMaps/InventoryLeft".
+        /// </summary>
+        public InputAction @InventoryLeft => m_Wrapper.m_PlayerMaps_InventoryLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerMaps/InventoryRight".
+        /// </summary>
+        public InputAction @InventoryRight => m_Wrapper.m_PlayerMaps_InventoryRight;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -407,6 +511,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @DialogueDown.started += instance.OnDialogueDown;
             @DialogueDown.performed += instance.OnDialogueDown;
             @DialogueDown.canceled += instance.OnDialogueDown;
+            @Inventory.started += instance.OnInventory;
+            @Inventory.performed += instance.OnInventory;
+            @Inventory.canceled += instance.OnInventory;
+            @InventoryCancel.started += instance.OnInventoryCancel;
+            @InventoryCancel.performed += instance.OnInventoryCancel;
+            @InventoryCancel.canceled += instance.OnInventoryCancel;
+            @InventoryLeft.started += instance.OnInventoryLeft;
+            @InventoryLeft.performed += instance.OnInventoryLeft;
+            @InventoryLeft.canceled += instance.OnInventoryLeft;
+            @InventoryRight.started += instance.OnInventoryRight;
+            @InventoryRight.performed += instance.OnInventoryRight;
+            @InventoryRight.canceled += instance.OnInventoryRight;
         }
 
         /// <summary>
@@ -433,6 +549,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @DialogueDown.started -= instance.OnDialogueDown;
             @DialogueDown.performed -= instance.OnDialogueDown;
             @DialogueDown.canceled -= instance.OnDialogueDown;
+            @Inventory.started -= instance.OnInventory;
+            @Inventory.performed -= instance.OnInventory;
+            @Inventory.canceled -= instance.OnInventory;
+            @InventoryCancel.started -= instance.OnInventoryCancel;
+            @InventoryCancel.performed -= instance.OnInventoryCancel;
+            @InventoryCancel.canceled -= instance.OnInventoryCancel;
+            @InventoryLeft.started -= instance.OnInventoryLeft;
+            @InventoryLeft.performed -= instance.OnInventoryLeft;
+            @InventoryLeft.canceled -= instance.OnInventoryLeft;
+            @InventoryRight.started -= instance.OnInventoryRight;
+            @InventoryRight.performed -= instance.OnInventoryRight;
+            @InventoryRight.canceled -= instance.OnInventoryRight;
         }
 
         /// <summary>
@@ -508,5 +636,33 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDialogueDown(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Inventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventory(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "InventoryCancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventoryCancel(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "InventoryLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventoryLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "InventoryRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventoryRight(InputAction.CallbackContext context);
     }
 }

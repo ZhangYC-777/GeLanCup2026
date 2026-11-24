@@ -23,6 +23,8 @@ public class DialogueController : MonoBehaviour
     [SerializeField] private SwitchPlayer switchPlayer;
     // 负责显示当前对话的 UI 组件。
     [SerializeField] private DialogueView view;
+    // 剧情奖励和提交界面共用的场景背包。
+    [SerializeField] private InventoryController inventory;
     // 每秒显示的文本单位数，Inspector 最小值为 1。
     [SerializeField, Min(1f)] private float charactersPerSecond = 25f;
     // 可以用 F 交互的场景对象，范围重叠时取最近的一个。
@@ -63,6 +65,11 @@ public class DialogueController : MonoBehaviour
     {
         // 有可操控角色时才处理这一帧的交互输入。
         if (switchPlayer == null || switchPlayer.CurrentPlayer == null)
+        {
+            return;
+        }
+
+        if (inventory != null && inventory.BlocksDialogueInput)
         {
             return;
         }
@@ -135,7 +142,8 @@ public class DialogueController : MonoBehaviour
     public bool TryPlay(TextAsset file, string entry, Action finished)
     {
         // 播放中的对话和未配置完整的组件直接拒绝新的开始请求。
-        if (IsPlaying || !isActiveAndEnabled || view == null || switchPlayer == null || file == null)
+        if (IsPlaying || !isActiveAndEnabled || view == null || switchPlayer == null ||
+            switchPlayer.IsGameplayLocked || file == null)
         {
             return false;
         }
@@ -311,7 +319,14 @@ public class DialogueController : MonoBehaviour
     private void Finish()
     {
         Action callback = onFinished;
+        string rewardItemId = currentNode.rewardItemId;
         ClearPlayback();
+
+        if (!string.IsNullOrWhiteSpace(rewardItemId) &&
+            (inventory == null || !inventory.TryGrant(rewardItemId)))
+        {
+            Debug.LogError("无法发放剧情物品，请检查场景背包的物品目录：" + rewardItemId, this);
+        }
 
         if (callback != null)
         {

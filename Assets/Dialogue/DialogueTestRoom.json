@@ -10,7 +10,7 @@
         {
             "id": "intro_controls",
             "speaker": "记录员",
-            "text": "WASD 移动，Tab 切换角色。靠近物体后按 F。"
+            "text": "WASD 移动，Tab 切换角色，B 打开背包。靠近物体后按 F。"
         },
         {
             "id": "guard",
@@ -24,7 +24,8 @@
         {
             "id": "guard_yes",
             "speaker": "门卫",
-            "text": "好，用我给你的钥匙就能直接打开。"
+            "text": "好，用我给你的钥匙就能直接打开。",
+            "rewardItemId": "archive_key"
         },
         {
             "id": "guard_no",
@@ -34,17 +35,20 @@
         {
             "id": "archive_yes",
             "speaker": "记录员",
-            "text": "钥匙转动后，柜门打开了。档案里写着：右下方的机关可以提交调查记录。"
+            "text": "钥匙转动后，柜门打开了。拿上调查记录，到右下方的机关提交。",
+            "rewardItemId": "investigation_record"
         },
         {
             "id": "archive_no",
             "speaker": "记录员",
-            "text": "你找到了侧边的卡扣。柜门打开了，里面的档案指向右下方的机关。"
+            "text": "你用侧边的卡扣打开了柜门。拿上调查记录，到右下方的机关提交。",
+            "rewardItemId": "investigation_record"
         },
         {
             "id": "archive_default",
             "speaker": "记录员",
-            "text": "柜门锁住了，柜顶留着一张便条：右下方有提交记录的机关。"
+            "text": "柜门锁住了，没来得及收进柜子的调查记录还放在柜顶。带它去右下方的机关。",
+            "rewardItemId": "investigation_record"
         },
         {
             "id": "ending",

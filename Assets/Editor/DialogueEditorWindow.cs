@@ -205,6 +205,14 @@ public class DialogueEditorWindow : EditorWindow
             node.next = DrawTarget("下一句", node.next, "本段结束");
         }
 
+        if ((node.choices.Length == 0 && string.IsNullOrEmpty(node.next)) ||
+            !string.IsNullOrEmpty(node.rewardItemId))
+        {
+            node.rewardItemId = EditorGUILayout.TextField(
+                new GUIContent("获得物品 ID", "本段剧情自然结束后，将对应物品加入背包。"),
+                node.rewardItemId ?? "").Trim();
+        }
+
         // 为每个选项绘制文字、跳转目标和可选的状态写入。
         for (int i = 0; i < node.choices.Length; i++)
         {

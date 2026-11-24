@@ -81,7 +81,7 @@ public class DialogueView : MonoBehaviour
     }
 
     // 依次试用常见中文字体，Windows 和 macOS 可以各用自己的系统字体。
-    private static Font FindDialogueFont()
+    internal static Font FindDialogueFont()
     {
         // 按照候选顺序选择能够显示中文的系统字体。
         string[] names = { "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "SimHei", "Noto Sans CJK SC" };
