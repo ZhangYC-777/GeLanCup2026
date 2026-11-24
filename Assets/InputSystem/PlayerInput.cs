@@ -109,6 +109,33 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""dfe304ad-e9d7-4799-aa2a-d88c2403c432"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DialogueUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""db6ddb1a-ab3c-46f2-9fb6-8611e8bbed9c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DialogueDown"",
+                    ""type"": ""Button"",
+                    ""id"": ""bc96bb3f-f26b-49e9-b600-789d2f1b9472"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -177,6 +204,39 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""79955902-abff-4759-b9b1-d6480b949ebc"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1ece736b-ce56-455d-9b9a-e791b2a2aed4"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DialogueUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f0007fed-a9a5-44f8-bd48-109d13657cda"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DialogueDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -187,6 +247,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_PlayerMaps = asset.FindActionMap("PlayerMaps", throwIfNotFound: true);
         m_PlayerMaps_Switch = m_PlayerMaps.FindAction("Switch", throwIfNotFound: true);
         m_PlayerMaps_Move = m_PlayerMaps.FindAction("Move", throwIfNotFound: true);
+        m_PlayerMaps_Interact = m_PlayerMaps.FindAction("Interact", throwIfNotFound: true);
+        m_PlayerMaps_DialogueUp = m_PlayerMaps.FindAction("DialogueUp", throwIfNotFound: true);
+        m_PlayerMaps_DialogueDown = m_PlayerMaps.FindAction("DialogueDown", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -269,6 +332,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private List<IPlayerMapsActions> m_PlayerMapsActionsCallbackInterfaces = new List<IPlayerMapsActions>();
     private readonly InputAction m_PlayerMaps_Switch;
     private readonly InputAction m_PlayerMaps_Move;
+    private readonly InputAction m_PlayerMaps_Interact;
+    private readonly InputAction m_PlayerMaps_DialogueUp;
+    private readonly InputAction m_PlayerMaps_DialogueDown;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerMaps".
     /// </summary>
@@ -288,6 +354,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerMaps/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_PlayerMaps_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerMaps/Interact".
+        /// </summary>
+        public InputAction @Interact => m_Wrapper.m_PlayerMaps_Interact;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerMaps/DialogueUp".
+        /// </summary>
+        public InputAction @DialogueUp => m_Wrapper.m_PlayerMaps_DialogueUp;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerMaps/DialogueDown".
+        /// </summary>
+        public InputAction @DialogueDown => m_Wrapper.m_PlayerMaps_DialogueDown;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -320,6 +398,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
+            @DialogueUp.started += instance.OnDialogueUp;
+            @DialogueUp.performed += instance.OnDialogueUp;
+            @DialogueUp.canceled += instance.OnDialogueUp;
+            @DialogueDown.started += instance.OnDialogueDown;
+            @DialogueDown.performed += instance.OnDialogueDown;
+            @DialogueDown.canceled += instance.OnDialogueDown;
         }
 
         /// <summary>
@@ -337,6 +424,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
+            @DialogueUp.started -= instance.OnDialogueUp;
+            @DialogueUp.performed -= instance.OnDialogueUp;
+            @DialogueUp.canceled -= instance.OnDialogueUp;
+            @DialogueDown.started -= instance.OnDialogueDown;
+            @DialogueDown.performed -= instance.OnDialogueDown;
+            @DialogueDown.canceled -= instance.OnDialogueDown;
         }
 
         /// <summary>
@@ -391,5 +487,26 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInteract(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "DialogueUp" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDialogueUp(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "DialogueDown" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDialogueDown(InputAction.CallbackContext context);
     }
 }
