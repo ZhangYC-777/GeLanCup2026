@@ -47,8 +47,13 @@ public class PartySan : MonoBehaviour, IHealth
         }
     }
 
-    // 只在数值实际变化时更新界面，进入 0 点时额外通知关卡。
-    private void SetSan(int nextSan)
+    // 读档同步 SAN 和界面，耗尽事件只用于游玩中扣至 0 的那一刻。
+    internal void RestoreSan(int savedSan)
+    {
+        SetSan(Mathf.Clamp(savedSan, 0, MaxSan), notifyDepleted: false);
+    }
+
+    private void SetSan(int nextSan, bool notifyDepleted = true)
     {
         if (nextSan == CurrentSan)
         {
@@ -58,7 +63,7 @@ public class PartySan : MonoBehaviour, IHealth
         currentSan = nextSan;
         SanChanged?.Invoke(nextSan, MaxSan);
 
-        if (nextSan == 0)
+        if (notifyDepleted && nextSan == 0)
         {
             onDepleted.Invoke();
         }

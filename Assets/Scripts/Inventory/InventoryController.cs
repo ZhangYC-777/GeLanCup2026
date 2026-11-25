@@ -8,7 +8,7 @@ public class InventoryController : MonoBehaviour
 {
     [SerializeField] private SwitchPlayer switchPlayer;
     [SerializeField] private InventoryView view;
-    // 剧情里能发放的物品，ID 应在同一场景中唯一。
+    // 剧情和读档共用的物品目录。ID 应唯一，发布后应保持稳定。
     [SerializeField] private InventoryItem[] itemCatalog = new InventoryItem[0];
     [SerializeField, Min(0.1f)] private float rewardSeconds = 2.5f;
 
@@ -22,6 +22,37 @@ public class InventoryController : MonoBehaviour
 
     // 打开背包时接管 F，关闭当帧也不让同一次 F 传给对话。
     public bool BlocksDialogueInput => isOpen || Time.frameCount == closedFrame;
+
+    // 按背包格子的顺序记录物品 ID。
+    internal string[] CaptureItemIds()
+    {
+        string[] ids = new string[items.Count];
+        for (int i = 0; i < items.Count; i++)
+        {
+            ids[i] = items[i].ItemId;
+        }
+        return ids;
+    }
+
+    // 读档时直接还原背包内容，保持原来的顺序和唯一物品规则。
+    internal void RestoreItemIds(string[] ids)
+    {
+        items.Clear();
+        foreach (string id in ids)
+        {
+            InventoryItem item = FindItemDefinition(id);
+            if (item == null)
+            {
+                Debug.LogWarning("物品目录中找不到存档物品：" + id, this);
+                continue;
+            }
+
+            if (!items.Contains(item))
+            {
+                items.Add(item);
+            }
+        }
+    }
 
     // 剧情自然结束时调用。同一物品在背包里只占一个格子。
     public bool TryGrant(string itemId)

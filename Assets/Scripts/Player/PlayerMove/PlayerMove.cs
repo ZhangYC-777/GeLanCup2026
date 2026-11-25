@@ -13,6 +13,17 @@ public class PlayerMove : MonoBehaviour
     // 当前角色收到的移动输入，交出控制权时为空。
     private InputAction moveInput;
 
+    // 读取物理位置，避免把插值中的显示位置写入存档。
+    internal Vector3 SavePosition => new Vector3(body.position.x, body.position.y, transform.position.z);
+
+    // 同时更新刚体和显示位置，清掉旧速度后从读档点继续。
+    internal void RestorePosition(Vector3 position)
+    {
+        body.position = position;
+        body.velocity = Vector2.zero;
+        transform.position = position;
+    }
+
     // 缓存刚体，关闭重力并冻结 Z 轴旋转。
     private void Awake()
     {

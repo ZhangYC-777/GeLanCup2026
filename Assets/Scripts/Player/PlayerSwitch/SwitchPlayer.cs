@@ -14,6 +14,33 @@ public class SwitchPlayer : MonoBehaviour
     private float nextSwitchTime;
     private bool gameplayLocked;
 
+    internal int CurrentPlayerIndex => currentPlayerIndex;
+
+    // 存档位置与 Inspector 里的角色列表顺序对应。
+    internal Vector3[] CapturePositions()
+    {
+        Vector3[] positions = new Vector3[players.Length];
+        for (int i = 0; i < players.Length; i++)
+        {
+            positions[i] = players[i].SavePosition;
+        }
+        return positions;
+    }
+
+    // 先定位全队，再交还移动输入和相机跟随。
+    internal void RestoreParty(Vector3[] positions, int activePlayerIndex)
+    {
+        players[currentPlayerIndex].SetMoveInput(null);
+        for (int i = 0; i < Mathf.Min(players.Length, positions.Length); i++)
+        {
+            players[i].RestorePosition(positions[i]);
+        }
+
+        currentPlayerIndex = activePlayerIndex < players.Length ? activePlayerIndex : 0;
+        GiveControlToCurrentPlayer();
+        gameCamera.PreviousStateIsValid = false;
+    }
+
     // 供交互提示读取当前操控角色。
     public Transform CurrentPlayer
     {
