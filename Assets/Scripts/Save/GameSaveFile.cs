@@ -6,23 +6,52 @@ using UnityEngine.SceneManagement;
 [Serializable]
 internal class GameSaveData
 {
-    public const int CurrentVersion = 1;
+    public const int CurrentVersion = 3;
 
     public int version;
+    public SceneProgress progress;
+    public SceneProgress checkpoint;
+
+    internal bool IsValid()
+    {
+        return version == CurrentVersion && IsMainStoryProgress(progress) && IsMainStoryProgress(checkpoint);
+    }
+
+    private static bool IsMainStoryProgress(SceneProgress progress)
+    {
+        return progress != null && SceneSave.IsMainStoryScene(progress.scenePath) && progress.IsValid();
+    }
+}
+
+[Serializable]
+internal class SceneProgress
+{
     public string scenePath;
     public Vector3[] playerPositions;
     public int activePlayerIndex;
     public string[] itemIds;
-    // 旧存档缺少此字段时保留关卡初始 SAN。0 点本身也是有效的存档值。
     public bool hasPartySan;
     public int currentSan;
+    public DialogueStateChange[] storyValues;
+    public string[] completedDialogueTriggers;
+    public bool skipOpeningDialogue;
 
     internal bool IsValid()
     {
-        if (version != CurrentVersion || string.IsNullOrEmpty(scenePath) ||
-            scenePath == SceneSave.MainMenuPath || SceneUtility.GetBuildIndexByScenePath(scenePath) < 0 ||
-            playerPositions == null || activePlayerIndex < 0 || activePlayerIndex >= playerPositions.Length ||
-            itemIds == null)
+        if (string.IsNullOrEmpty(scenePath) || scenePath == SceneSave.MainMenuPath ||
+            SceneUtility.GetBuildIndexByScenePath(scenePath) < 0 || playerPositions == null ||
+            itemIds == null || (hasPartySan && currentSan <= 0))
+        {
+            return false;
+        }
+
+        // 序章这样的纯剧情场景没有队伍位置。
+        if (playerPositions.Length == 0)
+        {
+            return activePlayerIndex == -1;
+        }
+
+        if (activePlayerIndex < 0 || activePlayerIndex >= playerPositions.Length)
         {
             return false;
         }
@@ -61,7 +90,19 @@ internal static class GameSaveFile
 
         try
         {
-            GameSaveData data = JsonUtility.FromJson<GameSaveData>(File.ReadAllText(SavePath));
+            string json = File.ReadAllText(SavePath);
+            GameSaveData data = JsonUtility.FromJson<GameSaveData>(json);
+            if (data != null && (data.version == 1 || data.version == 2))
+            {
+                // 旧主线存档只有一份进度，用它作为首次读档的失败检查点。
+                SceneProgress oldProgress = JsonUtility.FromJson<SceneProgress>(json);
+                oldProgress.hasPartySan = oldProgress.hasPartySan && oldProgress.currentSan > 0;
+                oldProgress.skipOpeningDialogue = data.version == 1;
+                data.version = GameSaveData.CurrentVersion;
+                data.progress = oldProgress;
+                data.checkpoint = oldProgress;
+            }
+
             if (data != null && data.IsValid())
             {
                 save = data;
@@ -79,6 +120,11 @@ internal static class GameSaveFile
 
     internal static bool TryWrite(GameSaveData save)
     {
+        if (!save.IsValid())
+        {
+            return false;
+        }
+
         string path = SavePath;
         string temporaryPath = path + ".tmp";
         try

@@ -21,6 +21,8 @@ public class DialogueController : MonoBehaviour
 
     // 场景中的角色切换组件，提供当前角色、输入和控制权锁定。
     [SerializeField] private SwitchPlayer switchPlayer;
+    // 纯剧情场景只启用现有的对话按键，不需要场景角色。
+    [SerializeField] private bool playWithoutPlayer;
     // 负责显示当前对话的 UI 组件。
     [SerializeField] private DialogueView view;
     // 剧情奖励和提交界面共用的场景背包。
@@ -53,6 +55,11 @@ public class DialogueController : MonoBehaviour
     private float typingStarted;
     // 已经显示的文本单位数，用来避免重复刷新 UI。
     private int visibleCharacters;
+    private PlayerInput standaloneInput;
+
+    // 开始显示一句时，场景可按节点 ID 同步切图或播放音效。
+    public event Action<string> LineStarted;
+    internal event Action PlaybackCompleted;
 
     // 处于任意对话状态时返回 true，供触发器和提示判断。
     public bool IsPlaying
@@ -60,11 +67,22 @@ public class DialogueController : MonoBehaviour
         get { return state != PlaybackState.Idle; }
     }
 
+    private void OnEnable()
+    {
+        if (playWithoutPlayer && switchPlayer == null)
+        {
+            standaloneInput = new PlayerInput();
+            standaloneInput.PlayerMaps.Interact.Enable();
+            standaloneInput.PlayerMaps.DialogueUp.Enable();
+            standaloneInput.PlayerMaps.DialogueDown.Enable();
+        }
+    }
+
     // F 在场景和对话中共用。一次按键只处理当前所在的状态。
     private void Update()
     {
-        // 有可操控角色时才处理这一帧的交互输入。
-        if (switchPlayer == null || switchPlayer.CurrentPlayer == null)
+        bool standalone = standaloneInput != null;
+        if (!standalone && (switchPlayer == null || switchPlayer.CurrentPlayer == null))
         {
             return;
         }
@@ -80,20 +98,23 @@ public class DialogueController : MonoBehaviour
             UpdateTyping();
         }
 
+        PlayerInput.PlayerMapsActions actions = standalone ? standaloneInput.PlayerMaps : default;
+
         // 选项出现时，读取上下键并切换高亮。
         if (state == PlaybackState.Choosing)
         {
-            if (switchPlayer.WasDialogueUpPressed())
+            if (standalone ? actions.DialogueUp.WasPressedThisFrame() : switchPlayer.WasDialogueUpPressed())
             {
                 MoveChoice(-1);
             }
-            else if (switchPlayer.WasDialogueDownPressed())
+            else if (standalone ? actions.DialogueDown.WasPressedThisFrame() : switchPlayer.WasDialogueDownPressed())
             {
                 MoveChoice(1);
             }
         }
 
-        if (!switchPlayer.WasInteractPressed())
+        bool advancePressed = standalone ? actions.Interact.WasPressedThisFrame() : switchPlayer.WasInteractPressed();
+        if (!advancePressed)
         {
             return;
         }
@@ -133,6 +154,13 @@ public class DialogueController : MonoBehaviour
         {
             ClearPlayback();
         }
+
+        if (standaloneInput != null)
+        {
+            standaloneInput.PlayerMaps.Disable();
+            standaloneInput.Dispose();
+            standaloneInput = null;
+        }
     }
 
     // 加载并检查剧情，检查通过后才接管角色输入。
@@ -142,8 +170,8 @@ public class DialogueController : MonoBehaviour
     public bool TryPlay(TextAsset file, string entry, Action finished)
     {
         // 播放中的对话和未配置完整的组件直接拒绝新的开始请求。
-        if (IsPlaying || !isActiveAndEnabled || view == null || switchPlayer == null ||
-            switchPlayer.IsGameplayLocked || file == null)
+        if (IsPlaying || !isActiveAndEnabled || view == null || file == null ||
+            (switchPlayer == null ? standaloneInput == null : switchPlayer.IsGameplayLocked))
         {
             return false;
         }
@@ -173,7 +201,10 @@ public class DialogueController : MonoBehaviour
         nodes = indexedNodes;
         onFinished = finished;
         openedFrame = Time.frameCount;
-        switchPlayer.SetGameplayLocked(true);
+        if (switchPlayer != null)
+        {
+            switchPlayer.SetGameplayLocked(true);
+        }
         EnterNode(entry);
         return true;
     }
@@ -189,6 +220,16 @@ public class DialogueController : MonoBehaviour
     public bool HasStoryValue(string key, string value)
     {
         return story.Matches(key, value);
+    }
+
+    internal DialogueStateChange[] CaptureStoryValues()
+    {
+        return story.CaptureValues();
+    }
+
+    internal void RestoreStoryValues(DialogueStateChange[] values)
+    {
+        story.RestoreValues(values);
     }
 
     // 当两个范围重叠时，F 对最近的物体生效。
@@ -240,6 +281,7 @@ public class DialogueController : MonoBehaviour
         typingStarted = Time.unscaledTime;
         visibleCharacters = 0;
         view.ShowLine(currentNode.speaker);
+        LineStarted?.Invoke(id);
     }
 
     // 按时间显示文本元素，避免把一个组合字符拆成两段。
@@ -332,6 +374,9 @@ public class DialogueController : MonoBehaviour
         {
             callback();
         }
+
+        // 剧情奖励和收尾事件都执行完毕后，才允许记录检查点。
+        PlaybackCompleted?.Invoke();
     }
 
     // 清空本段的临时数据、隐藏界面，并交还当前角色的控制权。

@@ -17,6 +17,7 @@ public class PartySan : MonoBehaviour, IHealth
 
     // SAN 实际变化后通知界面，参数依次是当前值和上限。
     public event Action<int, int> SanChanged;
+    internal event Action Depleted;
 
     public int MaxSan
     {
@@ -66,6 +67,7 @@ public class PartySan : MonoBehaviour, IHealth
         if (notifyDepleted && nextSan == 0)
         {
             onDepleted.Invoke();
+            Depleted?.Invoke();
         }
     }
 }

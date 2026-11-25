@@ -1,0 +1,90 @@
+{
+  "entry": "find_bottle",
+  "nodes": [
+    {
+      "id": "find_bottle",
+      "speaker": "主角",
+      "text": "咦，瓶子里有张图……是格兰岛的藏宝图！",
+      "next": "wedding"
+    },
+    {
+      "id": "wedding",
+      "speaker": "主角",
+      "text": "太好了！找到宝藏，我就有钱跟她办婚礼了！",
+      "next": "doubt"
+    },
+    {
+      "id": "doubt",
+      "speaker": "主角",
+      "text": "不过……这图是真的吗？我真要去吗？",
+      "choices": [
+        {
+          "text": "留下来攒钱",
+          "next": "return_home"
+        },
+        {
+          "text": "约青梅和兄弟一起出海",
+          "next": "invite"
+        }
+      ]
+    },
+    {
+      "id": "invite",
+      "speaker": "主角",
+      "text": "快来看看！你们愿不愿意跟我去格兰岛？",
+      "next": "love_accepts"
+    },
+    {
+      "id": "love_accepts",
+      "speaker": "青梅",
+      "text": "看你高兴的！行，我陪你去。",
+      "next": "friend_accepts"
+    },
+    {
+      "id": "friend_accepts",
+      "speaker": "兄弟",
+      "text": "算我一个！明早码头见。",
+      "next": "departure"
+    },
+    {
+      "id": "departure",
+      "speaker": "兄弟",
+      "text": "出发！找到宝藏，记得请我喝喜酒啊！",
+      "next": "rain"
+    },
+    {
+      "id": "rain",
+      "speaker": "青梅",
+      "text": "雨越下越大了。咱们要不要掉头？",
+      "choices": [
+        {
+          "text": "立即返航",
+          "next": "return_home"
+        },
+        {
+          "text": "继续前进",
+          "next": "sail_on",
+          "set": {
+            "key": "prologueRoute",
+            "value": "island"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sail_on",
+      "speaker": "主角",
+      "text": "继续开！咱们去格兰岛！"
+    },
+    {
+      "id": "return_home",
+      "speaker": "",
+      "text": "恭喜你，回家种地去吧。"
+    },
+    {
+      "id": "prologue_end",
+      "speaker": "",
+      "text": "序章结束。"
+    }
+  ]
+}

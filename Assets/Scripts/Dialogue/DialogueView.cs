@@ -1,10 +1,20 @@
+using System;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 接收播放器给出的文字和选项，更新场景中的对话面板。
+// 接收播放器给出的说话人、文字和选项，更新场景中的对话界面。
 public class DialogueView : MonoBehaviour
 {
+    [Serializable]
+    private class SpeakerPortrait
+    {
+        // 与剧情 JSON 的 speaker 一致。
+        public string speaker;
+        // 立绘使用对应 Image 的 RectTransform 布局。
+        public Image image;
+    }
+
     // 可以整体开关的对话面板物体。
     [SerializeField] private GameObject panel;
     // 显示说话人的 Text 组件。
@@ -15,6 +25,8 @@ public class DialogueView : MonoBehaviour
     [SerializeField] private Text choices;
     // 显示继续、选择和确认操作提示的 Text 组件。
     [SerializeField] private Text hint;
+    // 场景可以按说话人名称绑定立绘，也可以留空。
+    [SerializeField] private SpeakerPortrait[] portraits = Array.Empty<SpeakerPortrait>();
 
     // 初始化对话字体和面板可见状态。
     private void Awake()
@@ -42,6 +54,7 @@ public class DialogueView : MonoBehaviour
         body.text = "";
         choices.text = "";
         hint.text = "F  继续";
+        ShowPortrait(name);
         panel.SetActive(true);
     }
 
@@ -74,10 +87,24 @@ public class DialogueView : MonoBehaviour
         hint.text = "↑ / ↓  选择     F  确认";
     }
 
-    // 隐藏整块对话面板。
+    // 隐藏对话面板和立绘。
     public void Hide()
     {
         panel.SetActive(false);
+        ShowPortrait(null);
+    }
+
+    // 每句只显示当前说话人的立绘，旁白和未配置的说话人清空立绘。
+    private void ShowPortrait(string name)
+    {
+        string speakerName = name?.Trim();
+        foreach (SpeakerPortrait portrait in portraits)
+        {
+            if (portrait?.image != null)
+            {
+                portrait.image.enabled = !string.IsNullOrEmpty(speakerName) && portrait.speaker == speakerName;
+            }
+        }
     }
 
     // 依次试用常见中文字体，Windows 和 macOS 可以各用自己的系统字体。

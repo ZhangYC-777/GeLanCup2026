@@ -13,6 +13,7 @@ public class SwitchPlayer : MonoBehaviour
     private int currentPlayerIndex;
     private float nextSwitchTime;
     private bool gameplayLocked;
+    private bool switchingLocked;
 
     internal int CurrentPlayerIndex => currentPlayerIndex;
 
@@ -75,6 +76,22 @@ public class SwitchPlayer : MonoBehaviour
         if (CurrentPlayer != null)
         {
             UpdateMoveInput();
+        }
+    }
+
+    // 临时同行时仍允许移动，只暂停切换操控对象。
+    internal void SetSwitchingLocked(bool locked)
+    {
+        switchingLocked = locked;
+    }
+
+    // 演出可以临时改变镜头目标，角色的操控权仍由切换系统管理。
+    internal void SetCameraFocus(Transform target, bool snap = false)
+    {
+        gameCamera.Follow = target;
+        if (snap)
+        {
+            gameCamera.PreviousStateIsValid = false;
         }
     }
 
@@ -184,7 +201,7 @@ public class SwitchPlayer : MonoBehaviour
     // context 是输入系统的切换按键回调上下文。
     private void OnSwitchPressed(InputAction.CallbackContext context)
     {
-        if (gameplayLocked || players.Length < 2 || Time.time < nextSwitchTime)
+        if (gameplayLocked || switchingLocked || players.Length < 2 || Time.time < nextSwitchTime)
             return;
 
         players[currentPlayerIndex].SetMoveInput(null);
@@ -197,7 +214,7 @@ public class SwitchPlayer : MonoBehaviour
     private void GiveControlToCurrentPlayer()
     {
         UpdateMoveInput();
-        gameCamera.Follow = players[currentPlayerIndex].transform;
+        SetCameraFocus(players[currentPlayerIndex].transform);
     }
 
     // 根据锁定状态将移动动作交给当前角色，或暂停其移动。

@@ -7,6 +7,9 @@ public class SortByY : MonoBehaviour
 {
     // 相对于物体原点的脚底 Y 偏移，填写世界坐标单位。
     [SerializeField] private float footOffsetY;
+    [SerializeField, Min(1f)] private float ordersPerUnit = 100f;
+    [SerializeField] private int sortingOrderOffset;
+
     // 把一个角色或道具的多个 Sprite 当作一组排序。
     private SortingGroup sortingGroup;
 
@@ -20,6 +23,6 @@ public class SortByY : MonoBehaviour
     private void LateUpdate()
     {
         float footY = transform.position.y + footOffsetY;
-        sortingGroup.sortingOrder = Mathf.RoundToInt(-footY * 100f);
+        sortingGroup.sortingOrder = sortingOrderOffset - Mathf.RoundToInt(footY * ordersPerUnit);
     }
 }

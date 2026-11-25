@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     // 新游戏加载的起始关卡。路线变化时在主菜单修改这里。
-    [SerializeField] private string firstScenePath = "Assets/Scenes/DialogueTestRoom.unity";
+    [SerializeField] private string firstScenePath = SceneSave.MainStoryDirectory + "Prologue.unity";
     [SerializeField] private GameObject options;
     [SerializeField] private GameObject confirmation;
     [SerializeField] private Button newGameButton;
@@ -23,7 +23,7 @@ public class MainMenu : MonoBehaviour
         continueButton.interactable = GameSaveFile.TryRead(out savedGame);
         if (!continueButton.interactable)
         {
-            status.text = GameSaveFile.Exists ? "存档无法读取" : "暂无存档";
+            status.text = "暂无可继续的主线存档";
         }
     }
 
@@ -43,7 +43,7 @@ public class MainMenu : MonoBehaviour
     // 单存档槽已有数据时，确认后才进入新的一局。
     public void NewGame()
     {
-        if (GameSaveFile.Exists)
+        if (savedGame != null)
         {
             options.SetActive(false);
             confirmation.SetActive(true);
@@ -70,7 +70,7 @@ public class MainMenu : MonoBehaviour
     {
         if (savedGame != null)
         {
-            OpenScene(savedGame.scenePath, savedGame);
+            OpenScene(savedGame.progress.scenePath, savedGame);
         }
     }
 
@@ -91,7 +91,7 @@ public class MainMenu : MonoBehaviour
         }
 
         int buildIndex = SceneUtility.GetBuildIndexByScenePath(scenePath);
-        if (buildIndex < 0 || scenePath == SceneSave.MainMenuPath)
+        if (buildIndex < 0 || !SceneSave.IsMainStoryScene(scenePath))
         {
             CancelNewGame();
             status.text = "找不到游戏场景";

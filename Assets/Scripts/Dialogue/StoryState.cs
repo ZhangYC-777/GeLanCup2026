@@ -23,4 +23,32 @@ public class StoryState
         string actual;
         return values.TryGetValue(key, out actual) && actual == expected;
     }
+
+    internal DialogueStateChange[] CaptureValues()
+    {
+        var snapshot = new DialogueStateChange[values.Count];
+        int index = 0;
+        foreach (var value in values)
+        {
+            snapshot[index++] = new DialogueStateChange { key = value.Key, value = value.Value };
+        }
+        return snapshot;
+    }
+
+    internal void RestoreValues(DialogueStateChange[] snapshot)
+    {
+        values.Clear();
+        if (snapshot == null)
+        {
+            return;
+        }
+
+        foreach (DialogueStateChange value in snapshot)
+        {
+            if (value != null && !string.IsNullOrWhiteSpace(value.key))
+            {
+                Set(value.key, value.value);
+            }
+        }
+    }
 }

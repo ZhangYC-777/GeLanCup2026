@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: 0961eac61018d4664912f0c037aa8d3e
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 7
+  defaultSettings:
+    serializedVersion: 2
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+    preloadAudioData: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 'Rain on Window Loop by alxl (CC0 1.0)
+
+    https://opengameart.org/content/rain-on-window-loop'
+  assetBundleName: 
+  assetBundleVariant: 

@@ -43,8 +43,31 @@ public class DialogueTrigger : MonoBehaviour
 
     // 记录控制器是否已经接受过本触发器的播放请求。
     private bool played;
+    private bool completed;
     // 已经在当前区域处理过的角色，避免持续重播。
     private Transform lastPlayerInArea;
+
+    internal DialogueController Controller => controller;
+    internal bool HasCompleted => playOnce && completed;
+
+    // 路径同时区分同名物体和挂在同一个物体上的多个触发器。
+    internal string CheckpointKey
+    {
+        get
+        {
+            string path = ":" + Array.IndexOf(GetComponents<DialogueTrigger>(), this);
+            for (Transform current = transform; current != null; current = current.parent)
+            {
+                path = "/" + current.GetSiblingIndex() + ":" + current.name + path;
+            }
+            return path;
+        }
+    }
+
+    internal void RestoreCompleted()
+    {
+        played = completed = true;
+    }
 
     // 开场对话在场景组件初始化完成后开始。
     private void Start()
@@ -121,6 +144,7 @@ public class DialogueTrigger : MonoBehaviour
     // 收到控制器的完成回调后，执行 Inspector 中配置的事件。
     private void NotifyFinished()
     {
+        completed = true;
         onFinished.Invoke();
     }
 }
