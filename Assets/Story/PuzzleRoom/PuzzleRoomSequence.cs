@@ -1,21 +1,23 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-// 一层解谜路线的进场、盲解、手电揭示、汇合和密码门。对话触发器负责记录检查点。
+// 一层解谜路线的进场、齿轮选择、手电揭示、汇合、面包迷宫和密码门。
 [DisallowMultipleComponent]
 public sealed class PuzzleRoomSequence : MonoBehaviour
 {
-    private enum Phase { Approach, Staging, Trace, Gear, Collect, FindParty, Reunited, Password }
-    private enum Stroke { Up, Down, Left, Right }
+    private enum Phase { Approach, Staging, Failed, Collect, FindParty, Reunited, Password, BreadTrial }
 
     [SerializeField] private SwitchPlayer party;
     [SerializeField] private PlayerMove protagonist;
     [SerializeField] private PlayerMove childhoodFriend;
     [SerializeField] private PlayerMove brother;
     [SerializeField] private DialogueController dialogue;
+    [SerializeField] private InventoryController inventory;
     [SerializeField] private PuzzleRoomVisibility visibility;
     [SerializeField] private PuzzleRoomOverlay overlay;
+    [SerializeField] private SceneSave sceneSave;
+    [SerializeField] private BreadTrial breadTrial;
+    [SerializeField] private SpriteRenderer[] trialAvatars;
 
     [SerializeField] private DialogueTrigger entry;
     [SerializeField] private DialogueTrigger call;
@@ -57,19 +59,19 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
     [SerializeField] private Transform distantSound;
     [SerializeField] private Transform closeSound;
 
-    private static readonly Stroke[] OldStrokes = { Stroke.Up, Stroke.Down, Stroke.Up };
-    private static readonly Stroke[] GearStrokes = { Stroke.Up, Stroke.Down, Stroke.Up, Stroke.Left, Stroke.Right, Stroke.Right };
-    private static readonly string[] StrokeNames = { "上", "下", "左", "右" };
     private static readonly int GateOpenParameter = Animator.StringToHash("open");
     private static readonly int GateOpenState = Animator.StringToHash("DoorNSOpen");
     private const string PasswordCode = "472";
+    private const string FlashlightItemId = "flashlight";
+    private const string BreadTrialStoryKey = "puzzleBreadTrial";
+    private const string CompletedTrial = "cleared";
+
+    private bool BreadTrialCleared => dialogue.HasStoryValue(BreadTrialStoryKey, CompletedTrial);
 
     private readonly char[] passwordDigits = new char[PasswordCode.Length];
     private Phase phase;
-    private int strokeIndex;
+    internal bool HasEnteredRoute => phase != Phase.Approach || entry.HasCompleted;
     private int selectedDial;
-    private bool tracingPointer;
-    private Vector2 pointerStart;
     private Quaternion spriteRestRotation;
     private Coroutine recoil;
     private Vector2 flashlightDirection = Vector2.up;
@@ -95,6 +97,12 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
     private void Start()
     {
         UpdateInteractions();
+        // 较早的存档可能已经播完捡起手电筒的演出，但尚未记录该道具。
+        if (reveal.HasCompleted)
+        {
+            inventory.TryGrant(FlashlightItemId);
+        }
+
         if (entry.HasCompleted)
         {
             ResumeAfterBeat();
@@ -114,7 +122,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         Transform player = party.CurrentPlayer;
         if (phase == Phase.Approach && player != null && !party.IsGameplayLocked)
         {
-            if (routeEntryArea.OverlapPoint(player.position))
+            if (!dialogue.HasStoryValue("firstFloorRoute", "sacrifice") && routeEntryArea.OverlapPoint(player.position))
             {
                 EnterRoute();
             }
@@ -124,9 +132,9 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         {
             StartReunion();
         }
-        else if ((phase == Phase.Trace || phase == Phase.Gear) && Time.frameCount != inputOpenedFrame)
+        else if (phase == Phase.Failed && Time.frameCount != inputOpenedFrame && party.WasInteractPressed())
         {
-            ReadStrokeInput();
+            RetryGear();
         }
         else if (phase == Phase.Password && Time.frameCount != inputOpenedFrame)
         {
@@ -159,7 +167,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         }
     }
 
-    // 如果玩家用其他角色走进左门，由主角接手，另一位角色回到主角原来的位置。
+    // 如果玩家用其他角色走进解谜门，由主角接手，另一位角色回到主角原来的位置。
     private void EnterRoute()
     {
         int index = party.CurrentPlayerIndex;
@@ -194,13 +202,21 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
             phase = Phase.Collect;
             RecoverFromRecoil();
         }
-        else if (scare.HasCompleted)
-        {
-            BeginGesture(Phase.Gear);
-        }
         else if (call.HasCompleted)
         {
-            BeginGesture(Phase.Trace);
+            phase = Phase.Staging;
+            protagonist.RestorePosition(blindMark.position);
+            party.SetSwitchingLocked(true);
+            party.SetCameraFocus(protagonist.transform, snap: true);
+            visibility.SetBlackout(true);
+            if (dialogue.HasStoryValue("puzzleGear", "solved"))
+            {
+                StartCoroutine(RevealChamber());
+            }
+            else
+            {
+                scare.Play();
+            }
         }
         else
         {
@@ -242,105 +258,29 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         call.Play();
     }
 
-    private void BeginGesture(Phase next)
+    // 选错时中止播放，检查点仍停在主角念出第一组刻痕之前。
+    private void ShowGearFailure()
     {
-        phase = next;
-        protagonist.RestorePosition(blindMark.position);
-        party.SetSwitchingLocked(true);
+        dialogue.ClearPlayback();
         party.SetGameplayLocked(true);
-        visibility.SetBlackout(true);
-        strokeIndex = 0;
-        tracingPointer = false;
+        phase = Phase.Failed;
         inputOpenedFrame = Time.frameCount;
-        ShowGesture();
+        foley.Stop();
+        PlayFoley(mechanism, .64f, -.12f);
+        overlay.ShowFailure();
     }
 
-    private void ReadStrokeInput()
+    public void RetryGear()
     {
-        var keys = Keyboard.current;
-        if (keys != null)
+        if (phase == Phase.Failed)
         {
-            if (keys.upArrowKey.wasPressedThisFrame || keys.wKey.wasPressedThisFrame) { ApplyStroke(Stroke.Up); return; }
-            if (keys.downArrowKey.wasPressedThisFrame || keys.sKey.wasPressedThisFrame) { ApplyStroke(Stroke.Down); return; }
-            if (keys.leftArrowKey.wasPressedThisFrame || keys.aKey.wasPressedThisFrame) { ApplyStroke(Stroke.Left); return; }
-            if (keys.rightArrowKey.wasPressedThisFrame || keys.dKey.wasPressedThisFrame) { ApplyStroke(Stroke.Right); return; }
+            sceneSave.RetryCheckpoint();
         }
-
-        var pointer = Pointer.current;
-        if (pointer == null)
-        {
-            return;
-        }
-
-        Vector2 position = pointer.position.ReadValue();
-        if (pointer.press.wasPressedThisFrame)
-        {
-            pointerStart = position;
-            tracingPointer = true;
-        }
-
-        Vector2 travel = position - pointerStart;
-        if (tracingPointer && travel.sqrMagnitude >= 38f * 38f)
-        {
-            tracingPointer = false;
-            ApplyStroke(Mathf.Abs(travel.y) >= Mathf.Abs(travel.x)
-                ? (travel.y > 0f ? Stroke.Up : Stroke.Down)
-                : (travel.x > 0f ? Stroke.Right : Stroke.Left));
-        }
-        else if (!pointer.press.isPressed)
-        {
-            tracingPointer = false;
-        }
-    }
-
-    private void ApplyStroke(Stroke stroke)
-    {
-        bool gear = phase == Phase.Gear;
-        Stroke[] sequence = gear ? GearStrokes : OldStrokes;
-        PlayFoley(scrape, .58f, -.16f);
-        if (sequence[strokeIndex] != stroke)
-        {
-            if (gear)
-            {
-                strokeIndex = 0;
-            }
-            ShowGesture(gear ? "齿轮弹回了。按旧刻痕、新刻痕的顺序再试。" : "指尖离开了凹槽。");
-            return;
-        }
-
-        strokeIndex++;
-        if (strokeIndex < sequence.Length)
-        {
-            ShowGesture();
-            return;
-        }
-
-        overlay.Hide();
-        phase = Phase.Staging;
-        if (gear)
-        {
-            StartCoroutine(RevealChamber());
-        }
-        else
-        {
-            party.SetGameplayLocked(false);
-            scare.Play();
-        }
-    }
-
-    private void ShowGesture(string message = null)
-    {
-        bool gear = phase == Phase.Gear;
-        string status = gear ? $"已拨动 {strokeIndex} / {GearStrokes.Length}"
-            : $"指尖摸到一道朝「{StrokeNames[(int)OldStrokes[strokeIndex]]}」的凹槽";
-        overlay.Show(gear ? "拨动墙上的齿轮" : "沿着刻痕摸索",
-            gear ? "按先摸到的刻痕、再接上新刻痕 · 拖动或按方向键"
-                : "按住拖动，或使用方向键",
-            message == null ? status : $"{message}\n{status}");
     }
 
     private IEnumerator RevealChamber()
     {
+        party.SetGameplayLocked(true);
         PlayFoley(mechanism, .78f, -.12f);
         yield return new WaitForSeconds(.72f);
         protagonist.RestorePosition(firstBeam.position);
@@ -366,6 +306,13 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         {
             case "puzzle_no_answer":
                 PlayFoley(breath, .25f, 0f);
+                break;
+            case "puzzle_read_old":
+            case "puzzle_read_new":
+                PlayFoley(scrape, .48f, -.16f);
+                break;
+            case "puzzle_gear_failed":
+                ShowGearFailure();
                 break;
             case "puzzle_distant_drips":
                 PlayAt(dripping, .46f, distantSound);
@@ -450,9 +397,40 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         ShowPassword();
     }
 
-    public void InspectThirdClue()
+    public void InspectBreadTrial()
     {
-        if (phase == Phase.Reunited)
+        if (phase != Phase.Reunited || thirdClue.HasCompleted || party.IsGameplayLocked)
+        {
+            return;
+        }
+
+        if (BreadTrialCleared)
+        {
+            thirdClue.Play();
+            return;
+        }
+
+        SpriteRenderer avatar = trialAvatars[party.CurrentPlayerIndex];
+        if (breadTrial.Begin(avatar, RecordBreadTrialWin, CloseBreadTrial))
+        {
+            phase = Phase.BreadTrial;
+            party.SetGameplayLocked(true);
+        }
+    }
+
+    private void RecordBreadTrialWin()
+    {
+        dialogue.SetStoryValue(BreadTrialStoryKey, CompletedTrial);
+        sceneSave.CaptureCheckpoint();
+    }
+
+    private void CloseBreadTrial(bool won)
+    {
+        phase = Phase.Reunited;
+        inputOpenedFrame = Time.frameCount;
+        party.SetGameplayLocked(false);
+        UpdateInteractions();
+        if (won)
         {
             thirdClue.Play();
         }
@@ -500,18 +478,13 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
 
     private void ShowPassword(string feedback = null)
     {
-        string[] dials = new string[passwordDigits.Length];
-        for (int i = 0; i < passwordDigits.Length; i++)
-        {
-            dials[i] = i == selectedDial ? $"【{passwordDigits[i]}】" : $"　{passwordDigits[i]}　";
-        }
-        overlay.Show("三段密码门", "方向键选转盘、改数字 · F 确认 · Esc 返回",
-            $"{string.Join("  ", dials)}\n{feedback ?? "纸条上的数字：" + string.Join("、", PasswordCode.ToCharArray())}");
+        overlay.ShowPassword(passwordDigits, selectedDial,
+            feedback ?? "纸条上的数字    " + string.Join(" · ", PasswordCode.ToCharArray()), feedback != null);
     }
 
     private void ClosePassword()
     {
-        overlay.Hide();
+        overlay.HidePassword();
         phase = Phase.Reunited;
         party.SetGameplayLocked(false);
     }
@@ -521,7 +494,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         passageSeal.enabled = !clues.HasCompleted;
         cluesInteraction.enabled = !clues.HasCompleted && reveal.HasCompleted;
         thirdClueInteraction.enabled = reunion.HasCompleted && !thirdClue.HasCompleted;
-        thirdClueSlip.SetActive(!thirdClue.HasCompleted);
+        thirdClueSlip.SetActive(BreadTrialCleared && !thirdClue.HasCompleted);
         gateInteraction.enabled = reunion.HasCompleted && !gateOpened.HasCompleted;
     }
 

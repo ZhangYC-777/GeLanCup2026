@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "Unity MCP connection",
+    "description": "Connects the MCP for Unity server at 127.0.0.1:8080 so agents can inspect and edit the GeLanCup2026 Unity project scenes. Exposes tools as mcp__unity__*.",
+    "detail": "docs/DETAIL.md"
+  }
+}

@@ -29,6 +29,7 @@ internal class SceneProgress
     public string scenePath;
     public Vector3[] playerPositions;
     public int activePlayerIndex;
+    public int safeRoomRouteLayoutVersion;
     public string[] itemIds;
     public bool hasPartySan;
     public int currentSan;

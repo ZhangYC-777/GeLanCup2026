@@ -37,9 +37,15 @@ public class SwitchPlayer : MonoBehaviour
             players[i].RestorePosition(positions[i]);
         }
 
-        currentPlayerIndex = activePlayerIndex < players.Length ? activePlayerIndex : 0;
-        GiveControlToCurrentPlayer();
-        gameCamera.PreviousStateIsValid = false;
+        int index = activePlayerIndex >= 0 && activePlayerIndex < players.Length ? activePlayerIndex : 0;
+        if (!players[index].gameObject.activeInHierarchy)
+        {
+            index = System.Array.FindIndex(players, player => player.gameObject.activeInHierarchy);
+        }
+        if (index >= 0)
+        {
+            SelectPlayer(players[index]);
+        }
     }
 
     // 供交互提示读取当前操控角色。
@@ -53,7 +59,7 @@ public class SwitchPlayer : MonoBehaviour
             }
 
             PlayerMove player = players[currentPlayerIndex];
-            if (player == null)
+            if (player == null || !player.gameObject.activeInHierarchy)
             {
                 return null;
             }
@@ -83,6 +89,21 @@ public class SwitchPlayer : MonoBehaviour
     internal void SetSwitchingLocked(bool locked)
     {
         switchingLocked = locked;
+    }
+
+    // 剧情演出可以把控制权交给仍在队伍里的指定角色。
+    internal void SelectPlayer(PlayerMove player)
+    {
+        int index = System.Array.IndexOf(players, player);
+        if (index < 0 || !player.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
+        players[currentPlayerIndex].SetMoveInput(null);
+        currentPlayerIndex = index;
+        GiveControlToCurrentPlayer();
+        gameCamera.PreviousStateIsValid = false;
     }
 
     // 演出可以临时改变镜头目标，角色的操控权仍由切换系统管理。
@@ -204,10 +225,18 @@ public class SwitchPlayer : MonoBehaviour
         if (gameplayLocked || switchingLocked || players.Length < 2 || Time.time < nextSwitchTime)
             return;
 
-        players[currentPlayerIndex].SetMoveInput(null);
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.Length;
-        GiveControlToCurrentPlayer();
-        nextSwitchTime = Time.time + switchCooldown;
+        for (int offset = 1; offset < players.Length; offset++)
+        {
+            int next = (currentPlayerIndex + offset) % players.Length;
+            if (players[next].gameObject.activeInHierarchy)
+            {
+                players[currentPlayerIndex].SetMoveInput(null);
+                currentPlayerIndex = next;
+                GiveControlToCurrentPlayer();
+                nextSwitchTime = Time.time + switchCooldown;
+                return;
+            }
+        }
     }
 
     // 交给当前角色移动输入，同时把它设为相机的跟随目标。

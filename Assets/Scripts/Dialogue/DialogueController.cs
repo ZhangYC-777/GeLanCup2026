@@ -222,6 +222,12 @@ public class DialogueController : MonoBehaviour
         return story.Matches(key, value);
     }
 
+    // 由场景玩法记录完成状态，沿用对话分支的存档方式。
+    internal void SetStoryValue(string key, string value)
+    {
+        story.Set(key, value);
+    }
+
     internal DialogueStateChange[] CaptureStoryValues()
     {
         return story.CaptureValues();
@@ -379,8 +385,8 @@ public class DialogueController : MonoBehaviour
         PlaybackCompleted?.Invoke();
     }
 
-    // 清空本段的临时数据、隐藏界面，并交还当前角色的控制权。
-    private void ClearPlayback()
+    // 清空本段的临时数据、隐藏界面，并交还当前角色的控制权。演出也可在失败时提前结束本段。
+    internal void ClearPlayback()
     {
         state = PlaybackState.Idle;
         nodes = null;

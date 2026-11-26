@@ -28,6 +28,8 @@ Shader "Hidden/GeLanCup/PuzzleRoomVisibility"
             half _Blackout;
             float4 _BeamOrigin;
             float4 _BeamDirection;
+            float4 _AccentLight;
+            half _LightingScale;
 
             half Reveal(float2 world, float4 region)
             {
@@ -58,7 +60,11 @@ Shader "Hidden/GeLanCup/PuzzleRoomVisibility"
                 brightness = max(brightness, beam);
                 fixed4 pixel = tex2D(_MainTex, input.uv);
                 half3 shadow = half3(0.022, 0.020, 0.033);
-                pixel.rgb = lerp(shadow, lerp(shadow, pixel.rgb, brightness), visible);
+                half3 litPixel = lerp(shadow, pixel.rgb, brightness);
+                half accent = (1.0 - smoothstep(0.0, max(_AccentLight.z, 0.001),
+                    distance(world, _AccentLight.xy))) * _AccentLight.w;
+                litPixel += accent * pixel.rgb * half3(1.0, 0.19, 0.15);
+                pixel.rgb = lerp(shadow, litPixel, visible * _LightingScale);
                 return pixel;
             }
             ENDCG

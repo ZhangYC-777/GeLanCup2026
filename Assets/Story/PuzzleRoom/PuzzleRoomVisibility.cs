@@ -1,7 +1,7 @@
 using Cinemachine;
 using UnityEngine;
 
-// 解谜路线留一小圈近处的光。房间和拐角的可见范围由 Scene2 配置。
+// 按镜头跟随位置限制房间可见范围。各段的亮度、门洞和局部光源由 Scene2 配置。
 [RequireComponent(typeof(Camera))]
 [DisallowMultipleComponent]
 public sealed class PuzzleRoomVisibility : MonoBehaviour
@@ -17,6 +17,9 @@ public sealed class PuzzleRoomVisibility : MonoBehaviour
         [Range(0f, 1f)] public float ambientBrightness = 1f;
         [Range(0f, 1f)] public float nearbyBrightness = 1f;
         [Min(0f)] public float lightRadius;
+        public Transform accentLight;
+        [Min(0f)] public float accentRadius;
+        [Range(0f, 1f)] public float accentStrength;
     }
 
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
@@ -34,16 +37,24 @@ public sealed class PuzzleRoomVisibility : MonoBehaviour
     private static readonly int Blackout = Shader.PropertyToID("_Blackout");
     private static readonly int BeamOrigin = Shader.PropertyToID("_BeamOrigin");
     private static readonly int BeamDirection = Shader.PropertyToID("_BeamDirection");
+    private static readonly int AccentLight = Shader.PropertyToID("_AccentLight");
+    private static readonly int LightingScale = Shader.PropertyToID("_LightingScale");
 
     private Camera sceneCamera;
     private Material material;
     private bool blackout;
+    private float lightingScale = 1f;
     private Vector4 beamOrigin;
     private Vector4 beamDirection;
 
     public void SetBlackout(bool active)
     {
         blackout = active;
+    }
+
+    internal void SetLightingScale(float scale)
+    {
+        lightingScale = Mathf.Clamp01(scale);
     }
 
     public void SetFlashlight(bool active, Vector2 origin, Vector2 direction)
@@ -97,6 +108,14 @@ public sealed class PuzzleRoomVisibility : MonoBehaviour
         material.SetFloat(Blackout, blackout ? 1f : 0f);
         material.SetVector(BeamOrigin, beamOrigin);
         material.SetVector(BeamDirection, beamDirection);
+        Vector4 accent = Vector4.zero;
+        if (view.accentLight != null && view.accentLight.gameObject.activeInHierarchy)
+        {
+            Vector3 light = view.accentLight.position;
+            accent = new Vector4(light.x, light.y, view.accentRadius, view.accentStrength);
+        }
+        material.SetVector(AccentLight, accent);
+        material.SetFloat(LightingScale, lightingScale);
         Graphics.Blit(source, destination, material);
     }
 

@@ -17,6 +17,7 @@ public class SceneSave : MonoBehaviour
     [SerializeField] private DialogueTrigger openingDialogue;
     [SerializeField] private DialogueController dialogue;
     [SerializeField] private Text errorLabel;
+    [SerializeField] private SafeRoomSequence safeRoom;
 
     private static SceneProgress pendingRestore;
     private static SceneProgress latestProgress;
@@ -84,6 +85,7 @@ public class SceneSave : MonoBehaviour
         HasRestoredProgress = true;
         if (switchPlayer != null && restore.playerPositions.Length > 0)
         {
+            safeRoom?.RestoreRoutePositions(restore);
             switchPlayer.RestoreParty(restore.playerPositions, restore.activePlayerIndex);
         }
         inventory?.RestoreItemIds(restore.itemIds);
@@ -205,6 +207,7 @@ public class SceneSave : MonoBehaviour
             scenePath = gameObject.scene.path,
             playerPositions = switchPlayer != null ? switchPlayer.CapturePositions() : Array.Empty<Vector3>(),
             activePlayerIndex = switchPlayer != null ? switchPlayer.CurrentPlayerIndex : -1,
+            safeRoomRouteLayoutVersion = safeRoom != null ? SafeRoomSequence.RouteLayoutVersion : 0,
             itemIds = inventory != null ? inventory.CaptureItemIds() : Array.Empty<string>(),
             hasPartySan = partySan != null,
             currentSan = partySan != null ? partySan.CurrentSan : 0,
@@ -248,6 +251,7 @@ public class SceneSave : MonoBehaviour
         progress.scenePath = path;
         progress.playerPositions = Array.Empty<Vector3>();
         progress.activePlayerIndex = -1;
+        progress.safeRoomRouteLayoutVersion = 0;
         progress.completedDialogueTriggers = Array.Empty<string>();
         pendingRestore = latestProgress = progress;
         loading = true;
@@ -281,7 +285,7 @@ public class SceneSave : MonoBehaviour
     }
 
     // 重新加载场景以清掉检查点之后发生的临时变化。
-    private void RetryCheckpoint()
+    internal void RetryCheckpoint()
     {
         if (loading)
         {

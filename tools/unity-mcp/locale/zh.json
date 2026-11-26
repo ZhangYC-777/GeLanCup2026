@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "Unity MCP 连接",
+    "description": "连接 127.0.0.1:8080 的 MCP for Unity 服务器，让 Agent 可以查看和编辑 GeLanCup2026 工程的 Unity 场景，工具名形如 mcp__unity__*。",
+    "detail": "docs/DETAIL.md"
+  }
+}

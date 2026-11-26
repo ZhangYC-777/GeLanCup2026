@@ -23,7 +23,10 @@ public sealed class SafeRoomSequence : MonoBehaviour
     [SerializeField] private Animator entranceAnimator;
     [SerializeField] private Collider2D entranceCollider;
     [SerializeField] private ProximityStoneDoor[] routeDoors;
+    [SerializeField] private Transform puzzleRouteLayout;
+    [SerializeField] private Transform sacrificeDoor;
 
+    internal const int RouteLayoutVersion = 1;
     private static readonly int OpenParameter = Animator.StringToHash("open");
     private static readonly int OpenState = Animator.StringToHash("DoorNSOpen");
     private static readonly int ClosedState = Animator.StringToHash("DoorNSClosed");
@@ -86,6 +89,33 @@ public sealed class SafeRoomSequence : MonoBehaviour
     public void CloseAndCheckEntrance()
     {
         StartCoroutine(CheckClosedEntrance());
+    }
+
+    // 旧版解谜路线在左手侧。保留房间内的相对站位，测试通道中的角色回到献祭门前。
+    internal void RestoreRoutePositions(SceneProgress progress)
+    {
+        if (progress.safeRoomRouteLayoutVersion >= RouteLayoutVersion)
+        {
+            return;
+        }
+
+        for (int i = 0; i < progress.playerPositions.Length; i++)
+        {
+            Vector3 position = progress.playerPositions[i];
+            if (position.y >= 14f || position.y > 2.52f && position.x < -3.12f)
+            {
+                position.x += puzzleRouteLayout.position.x;
+            }
+            else if (position.y > 2.52f)
+            {
+                position.x = sacrificeDoor.position.x + (i - 1) * 0.8f;
+                position.y = sacrificeDoor.position.y - 1.25f;
+            }
+
+            progress.playerPositions[i] = position;
+        }
+
+        progress.safeRoomRouteLayoutVersion = RouteLayoutVersion;
     }
 
     private IEnumerator WalkInside()
