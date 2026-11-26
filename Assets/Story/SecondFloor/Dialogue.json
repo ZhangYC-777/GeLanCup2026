@@ -1,0 +1,40 @@
+{
+  "entry": "second_floor_statue",
+  "nodes": [
+    {
+      "id": "second_floor_statue",
+      "speaker": "",
+      "text": "两人冲上楼梯。二层的圣女像伸出一只手，掌心朝上，托着两枚刻有齿轮和人脸的石牌。",
+      "next": "brother_reads_the_plaques"
+    },
+    {
+      "id": "brother_reads_the_plaques",
+      "speaker": "兄弟",
+      "text": "嘶——这牌子怎么跟冰块一样？哥，这上面有字。",
+      "next": "second_floor_note"
+    },
+    {
+      "id": "second_floor_note",
+      "speaker": "",
+      "text": "两枚石牌下压着一张泛黄的羊皮纸，上面用暗红色的字迹写着：『想救她吗？』",
+      "next": "protagonist_loses_patience"
+    },
+    {
+      "id": "protagonist_loses_patience",
+      "speaker": "主角",
+      "text": "可恶！它就是故意不告诉我们去哪里，又让我们盲选。",
+      "next": "brother_calms_protagonist"
+    },
+    {
+      "id": "brother_calms_protagonist",
+      "speaker": "兄弟",
+      "text": "哥，嫂子既然是被抓走的，说明她没死！现在不是发火的时候。只要我们往上爬，总能找到她。",
+      "next": "brother_chooses_the_door"
+    },
+    {
+      "id": "brother_chooses_the_door",
+      "speaker": "兄弟",
+      "text": "哥，上次你选的，这次让我来。"
+    }
+  ]
+}
