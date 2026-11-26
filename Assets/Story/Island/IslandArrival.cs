@@ -24,7 +24,7 @@ public class IslandArrival : MonoBehaviour
     [SerializeField] private Animator gateAnimator;
     [SerializeField] private PlayerHit gateInteraction;
     [SerializeField, Min(0f)] private float gateOpeningSeconds = 0.44f;
-    [SerializeField] private string nextScenePath = SceneSave.MainStoryDirectory + "GameScene1.unity";
+    [SerializeField] private string nextScenePath = SceneSave.MainStoryDirectory + "Scene2.unity";
 
     private const float FollowDistance = 1.05f;
     private const float FollowSpeed = 6.5f;

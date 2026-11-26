@@ -14,7 +14,7 @@ public class PrologueDirector : MonoBehaviour
     [SerializeField] private AudioSource rainAudio;
     [SerializeField] private Image blackout;
     // 格兰岛外部场景加入构建列表后，继续航行分支会从这里进入。
-    [SerializeField] private string arrivalScenePath = SceneSave.MainStoryDirectory + "GameScene0.unity";
+    [SerializeField] private string arrivalScenePath = SceneSave.MainStoryDirectory + "Scene1.unity";
 
     private float targetRainVolume;
     private SceneSave sceneSave;

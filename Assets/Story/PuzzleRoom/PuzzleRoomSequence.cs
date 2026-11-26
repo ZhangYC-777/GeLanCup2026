@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-// 一层解谜路线的进场、齿轮选择、手电揭示、汇合、面包迷宫和密码门。
+// 一层解谜路线的进场、齿轮选择、手电揭示、汇合、面包迷宫、密码门和楼梯演出。
 [DisallowMultipleComponent]
 public sealed class PuzzleRoomSequence : MonoBehaviour
 {
@@ -29,6 +29,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
     [SerializeField] private DialogueTrigger thirdClue;
     [SerializeField] private DialogueTrigger gateOpened;
     [SerializeField] private DialogueTrigger landing;
+    [SerializeField] private DialogueTrigger stairAbduction;
     [SerializeField] private PlayerHit cluesInteraction;
     [SerializeField] private PlayerHit thirdClueInteraction;
     [SerializeField] private PlayerHit gateInteraction;
@@ -115,6 +116,17 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
             gateAnimator.Update(0f);
             gateBlocker.enabled = false;
         }
+
+        if (stairAbduction.HasCompleted)
+        {
+            FinishStairAbduction();
+        }
+        else if (landing.HasCompleted)
+        {
+            // 楼梯口的旧存档及中途退出的存档会从新演出开始。
+            StageStairParty();
+            stairAbduction.Play();
+        }
     }
 
     private void Update()
@@ -163,6 +175,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         if (gateOpened.HasCompleted && !gateBlocker.enabled && !landing.HasCompleted &&
             player != null && !party.IsGameplayLocked && landingArea.OverlapPoint(player.position))
         {
+            StageStairParty();
             landing.Play();
         }
     }
@@ -328,7 +341,54 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
                 gateAnimator.SetBool(GateOpenParameter, true);
                 PlayFoley(mechanism, .78f, 0f);
                 break;
+            case "puzzle_stair_darkness":
+                visibility.SetBlackout(true);
+                break;
+            case "puzzle_stair_ceiling_click":
+                PlayFoley(scrape, .24f, .12f);
+                break;
+            case "puzzle_stair_slab_opens":
+                PlayFoley(mechanism, .7f, .08f);
+                break;
+            case "puzzle_stair_lifted":
+                PlayFoley(breath, .76f, -.2f);
+                HideChildhoodFriend();
+                break;
+            case "puzzle_stair_slab_shuts":
+                foley.Stop();
+                PlayFoley(clickAndDrop, .86f, 0f);
+                break;
         }
+    }
+
+    // 任何一位角色走过密码门都能触发。三人在楼梯口会合，由主角接手。
+    private void StageStairParty()
+    {
+        Vector3 landingPosition = landingArea.transform.position;
+        protagonist.RestorePosition(landingPosition + Vector3.up * .52f);
+        childhoodFriend.RestorePosition(landingPosition + Vector3.down * .18f);
+        brother.RestorePosition(landingPosition + Vector3.down * .88f);
+        party.SelectPlayer(protagonist);
+        flashlightDirection = Vector2.up;
+        lastPosition = protagonist.SavePosition;
+    }
+
+    public void FinishStairAbduction()
+    {
+        HideChildhoodFriend();
+        dialogue.SetStoryValue("firstFloorCompanion", "taken");
+        dialogue.SetStoryValue("firstFloorPuzzleExit", "ready");
+        visibility.SetBlackout(false);
+        sceneSave.LoadNextPartyScene(SceneSave.SecondFloorPath);
+    }
+
+    private void HideChildhoodFriend()
+    {
+        if (party.CurrentPlayer == childhoodFriend.transform)
+        {
+            party.SelectPlayer(protagonist);
+        }
+        childhoodFriend.gameObject.SetActive(false);
     }
 
     private IEnumerator RecoilAndDrop()

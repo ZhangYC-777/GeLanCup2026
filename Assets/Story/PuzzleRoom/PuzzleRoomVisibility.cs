@@ -1,7 +1,7 @@
 using Cinemachine;
 using UnityEngine;
 
-// 按镜头跟随位置限制房间可见范围。各段的亮度、门洞和局部光源由 Scene2 配置。
+// 按镜头跟随位置限制房间可见范围。各段的亮度、门洞和局部光源在场景中配置。
 [RequireComponent(typeof(Camera))]
 [DisallowMultipleComponent]
 public sealed class PuzzleRoomVisibility : MonoBehaviour

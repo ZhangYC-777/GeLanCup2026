@@ -10,6 +10,7 @@ public class SceneSave : MonoBehaviour
 {
     internal const string MainMenuPath = "Assets/Scenes/MainMenu.unity";
     internal const string MainStoryDirectory = "Assets/Scenes/GameScene/";
+    internal const string SecondFloorPath = MainStoryDirectory + "Scene4.unity";
 
     [SerializeField] private SwitchPlayer switchPlayer;
     [SerializeField] private InventoryController inventory;
@@ -18,6 +19,7 @@ public class SceneSave : MonoBehaviour
     [SerializeField] private DialogueController dialogue;
     [SerializeField] private Text errorLabel;
     [SerializeField] private SafeRoomSequence safeRoom;
+    [SerializeField] private bool checkpointOnArrival;
 
     private static SceneProgress pendingRestore;
     private static SceneProgress latestProgress;
@@ -106,6 +108,12 @@ public class SceneSave : MonoBehaviour
         if (restore.skipOpeningDialogue && openingDialogue != null)
         {
             openingDialogue.RestoreCompleted();
+        }
+
+        // 跨场景进度没有位置数据，由本场景的出生站位建立检查点。
+        if (checkpointOnArrival && restore.playerPositions.Length == 0)
+        {
+            CaptureCheckpoint();
         }
     }
 

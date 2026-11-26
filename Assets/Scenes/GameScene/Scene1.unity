@@ -31041,7 +31041,7 @@ MonoBehaviour:
   gateAnimator: {fileID: 1963431464}
   gateInteraction: {fileID: 1652514194}
   gateOpeningSeconds: 0.44
-  nextScenePath: Assets/Scenes/GameScene/GameScene1.unity
+  nextScenePath: Assets/Scenes/GameScene/Scene2.unity
 --- !u!1 &653273472
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ public sealed class ProximityStoneDoor : MonoBehaviour
     [SerializeField] private Collider2D closedDoorCollider;
     [SerializeField] private Transform risingVisuals;
     [SerializeField] private GameObject wallCover;
-    [SerializeField] private PlayerHit doorInspection;
+    [SerializeField] private bool startsRaised;
     [SerializeField, Min(0.1f)] private float riseDistance = 2.5f;
     [SerializeField, Min(0.1f)] private float riseSeconds = 0.85f;
 
@@ -25,13 +25,21 @@ public sealed class ProximityStoneDoor : MonoBehaviour
     private bool rising;
     private bool raised;
 
+    // 为剧情升起的门记住原位，也允许场景直接放置已升起的门。
     private void Awake()
     {
         raisedPosition = risingVisuals.localPosition;
-        risingVisuals.localPosition = raisedPosition + Vector3.down * riseDistance;
-        if (doorInspection != null)
+        if (!startsRaised)
         {
-            doorInspection.enabled = false;
+            risingVisuals.localPosition = raisedPosition + Vector3.down * riseDistance;
+        }
+    }
+
+    private void Start()
+    {
+        if (startsRaised)
+        {
+            RestoreRaised();
         }
     }
 
@@ -42,7 +50,10 @@ public sealed class ProximityStoneDoor : MonoBehaviour
             return;
         }
 
-        wallCover.SetActive(false);
+        if (wallCover != null)
+        {
+            wallCover.SetActive(false);
+        }
         remainingRise = riseSeconds;
         rising = true;
     }
@@ -50,7 +61,10 @@ public sealed class ProximityStoneDoor : MonoBehaviour
     // 读档恢复石门的演出状态。有人存档在门洞时，先让出通路。
     public void RestoreRaised()
     {
-        wallCover.SetActive(false);
+        if (wallCover != null)
+        {
+            wallCover.SetActive(false);
+        }
         FinishRise();
         if (IsDoorwayOccupied())
         {
@@ -90,10 +104,6 @@ public sealed class ProximityStoneDoor : MonoBehaviour
         risingVisuals.localPosition = raisedPosition;
         rising = false;
         raised = true;
-        if (doorInspection != null)
-        {
-            doorInspection.enabled = true;
-        }
     }
 
     private bool IsDoorwayOccupied()

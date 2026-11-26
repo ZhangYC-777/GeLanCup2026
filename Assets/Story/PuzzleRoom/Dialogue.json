@@ -30,6 +30,21 @@
     {"id":"puzzle_gate_open","speaker":"","text":"最后一枚转盘咔哒一声扣紧。石门缓缓打开，门后有一股凉风往下灌。","next":"puzzle_gate_open_end"},
     {"id":"puzzle_gate_open_end","speaker":"兄弟","text":"门后有台阶。我听见上面有动静，先过去看看。"},
     {"id":"puzzle_stairway","speaker":"青梅","text":"上面好黑。你把手电照低一点，我看不清脚下。","next":"puzzle_stairway_end"},
-    {"id":"puzzle_stairway_end","speaker":"主角","text":"踩着我走过的地方。我们挨近点，别再走散了。"}
+    {"id":"puzzle_stairway_end","speaker":"主角","text":"踩着我走过的地方。我们挨近点，别再走散了。"},
+
+    {"id":"puzzle_stair_darkness","speaker":"","text":"三人刚踏入门内，视野便被黑暗吞没。","next":"puzzle_stair_ceiling_click"},
+    {"id":"puzzle_stair_ceiling_click","speaker":"","text":"头顶突然传来极细微的一声「咔哒」。","next":"puzzle_stair_slab_opens"},
+    {"id":"puzzle_stair_slab_opens","speaker":"","text":"还没等任何人反应过来，通道顶部一块厚重的石板毫无预兆地抽开。一股巨大的吸力伴着血腥气从天而降。","next":"puzzle_stair_look_up"},
+    {"id":"puzzle_stair_look_up","speaker":"青梅","text":"什么声——","next":"puzzle_stair_lifted"},
+    {"id":"puzzle_stair_lifted","speaker":"","text":"青梅猛地抬头。一个巨大、冰冷的东西从黑暗中扑下来，死死缠住她的腰，把她整个人拽离地面！","next":"puzzle_stair_friend_taken"},
+    {"id":"puzzle_stair_friend_taken","speaker":"青梅","text":"啊——！救我！主角——！","next":"puzzle_stair_reach"},
+    {"id":"puzzle_stair_reach","speaker":"","text":"主角猛地转身，伸手在黑暗中乱抓，却只摸到一把冷空气。","next":"puzzle_stair_call_out"},
+    {"id":"puzzle_stair_call_out","speaker":"主角","text":"青梅！！","next":"puzzle_stair_grab_hand"},
+    {"id":"puzzle_stair_grab_hand","speaker":"兄弟","text":"操！拽住我！嫂子拽住我！","next":"puzzle_stair_fading_cry"},
+    {"id":"puzzle_stair_fading_cry","speaker":"","text":"兄弟拼命向上跳。可什么也看不见，只有青梅的哭喊声在头顶的黑暗里迅速远去。","next":"puzzle_stair_slab_shuts"},
+    {"id":"puzzle_stair_slab_shuts","speaker":"","text":"砰！头顶的石板瞬间合拢，哭喊声戛然而止。通道重新陷入死寂。","next":"puzzle_stair_search_wall"},
+    {"id":"puzzle_stair_search_wall","speaker":"","text":"主角用双手在四周的墙壁上疯狂捶打、摸索。兄弟喘着粗气，死死抱住他。","next":"puzzle_stair_panic"},
+    {"id":"puzzle_stair_panic","speaker":"主角","text":"门呢？！口子在哪？！把她还给我！！","next":"puzzle_stair_silence"},
+    {"id":"puzzle_stair_silence","speaker":"兄弟","text":"哥！冷静点！没声音了……上面根本没有门！这墙是实的！"}
   ]
 }

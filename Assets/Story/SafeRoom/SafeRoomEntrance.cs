@@ -11,7 +11,7 @@ public sealed class SafeRoomEntrance : MonoBehaviour
     {
         if (other.transform == switchPlayer.CurrentPlayer && !switchPlayer.IsGameplayLocked)
         {
-            sceneSave.LoadNextPartyScene(SceneSave.MainStoryDirectory + "Scene2.unity");
+            sceneSave.LoadNextPartyScene(SceneSave.MainStoryDirectory + "Scene3.unity");
         }
     }
 }

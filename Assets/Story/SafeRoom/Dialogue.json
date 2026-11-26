@@ -39,16 +39,6 @@
       "id": "route_doors_rise",
       "speaker": "",
       "text": "当、当、当……面前，两座石门缓缓升起。"
-    },
-    {
-      "id": "inspect_puzzle_door",
-      "speaker": "主角",
-      "text": "这是解谜..."
-    },
-    {
-      "id": "inspect_sacrifice_door",
-      "speaker": "主角",
-      "text": "这是献祭..."
     }
   ]
 }

@@ -40,9 +40,11 @@
 | 路径 | 用途 |
 | --- | --- |
 | [`Assets/Scenes/MainMenu.unity`](Assets/Scenes/MainMenu.unity) | 新游戏由此进入序章。继续游戏恢复保存的主线进度。 |
-| [`Assets/Scenes/GameScene/Prologue.unity`](Assets/Scenes/GameScene/Prologue.unity) | 漂流瓶、出海和暴雨中的两次选择。 |
-| [`Assets/Scenes/GameScene/GameScene0.unity`](Assets/Scenes/GameScene/GameScene0.unity) | 登岛、兄弟先到石门、玩家带青梅会合及进门。 |
-| [`Assets/Scenes/GameScene/GameScene1.unity`](Assets/Scenes/GameScene/GameScene1.unity) | 当前石门后的迷宫入口场景。后续关卡从这里衔接。 |
+| [`Assets/Scenes/GameScene/Scene0.unity`](Assets/Scenes/GameScene/Scene0.unity) | 漂流瓶、出海和暴雨中的两次选择。 |
+| [`Assets/Scenes/GameScene/Scene1.unity`](Assets/Scenes/GameScene/Scene1.unity) | 登岛、兄弟先到石门、玩家带青梅会合及进门。 |
+| [`Assets/Scenes/GameScene/Scene2.unity`](Assets/Scenes/GameScene/Scene2.unity) | 石门后的迷宫入口，北门通往一层安全房。 |
+| [`Assets/Scenes/GameScene/Scene3.unity`](Assets/Scenes/GameScene/Scene3.unity) | 一层安全房、解谜和献祭分流。 |
+| [`Assets/Scenes/GameScene/Scene4.unity`](Assets/Scenes/GameScene/Scene4.unity) | 二层安全房、探索迷宫和献祭通道。 |
 | [`Assets/Story/`](Assets/Story/) | 剧情演出脚本、对话数据和配套资源。 |
 
 所有新增的主线流程场景都在 `Assets/Scenes/GameScene/` 创建。该目录只放 Unity 场景文件及对应的 `.meta`。剧情数据、脚本、图片、预制体等按用途放在已有资源目录。接通新场景时核对 [构建场景列表](ProjectSettings/EditorBuildSettings.asset) 和前后场景入口。`DialogueTestRoom` 与 `SampleScene` 用于测试。

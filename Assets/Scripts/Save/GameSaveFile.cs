@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 [Serializable]
 internal class GameSaveData
 {
-    public const int CurrentVersion = 3;
+    public const int CurrentVersion = 4;
 
     public int version;
     public SceneProgress progress;
@@ -93,16 +93,7 @@ internal static class GameSaveFile
         {
             string json = File.ReadAllText(SavePath);
             GameSaveData data = JsonUtility.FromJson<GameSaveData>(json);
-            if (data != null && (data.version == 1 || data.version == 2))
-            {
-                // 旧主线存档只有一份进度，用它作为首次读档的失败检查点。
-                SceneProgress oldProgress = JsonUtility.FromJson<SceneProgress>(json);
-                oldProgress.hasPartySan = oldProgress.hasPartySan && oldProgress.currentSan > 0;
-                oldProgress.skipOpeningDialogue = data.version == 1;
-                data.version = GameSaveData.CurrentVersion;
-                data.progress = oldProgress;
-                data.checkpoint = oldProgress;
-            }
+            UpgradeSave(data, json);
 
             if (data != null && data.IsValid())
             {
@@ -117,6 +108,55 @@ internal static class GameSaveFile
         }
 
         return false;
+    }
+
+    private static void UpgradeSave(GameSaveData data, string json)
+    {
+        if (data == null || data.version < 1 || data.version >= GameSaveData.CurrentVersion)
+        {
+            return;
+        }
+
+        if (data.version <= 2)
+        {
+            // 旧主线存档只有一份进度，用它作为首次读档的失败检查点。
+            SceneProgress oldProgress = JsonUtility.FromJson<SceneProgress>(json);
+            oldProgress.hasPartySan = oldProgress.hasPartySan && oldProgress.currentSan > 0;
+            oldProgress.skipOpeningDialogue = data.version == 1;
+            data.progress = oldProgress;
+            data.checkpoint = oldProgress;
+        }
+
+        // 旧 Scene2 和新 Scene2 对应不同关卡，只对改名前写入的存档换路径。
+        MigrateScenePath(data.progress);
+        if (data.checkpoint != data.progress)
+        {
+            MigrateScenePath(data.checkpoint);
+        }
+
+        data.version = GameSaveData.CurrentVersion;
+    }
+
+    private static void MigrateScenePath(SceneProgress progress)
+    {
+        switch (progress?.scenePath)
+        {
+            case SceneSave.MainStoryDirectory + "Prologue.unity":
+                progress.scenePath = SceneSave.MainStoryDirectory + "Scene0.unity";
+                break;
+            case SceneSave.MainStoryDirectory + "GameScene0.unity":
+                progress.scenePath = SceneSave.MainStoryDirectory + "Scene1.unity";
+                break;
+            case SceneSave.MainStoryDirectory + "GameScene1.unity":
+                progress.scenePath = SceneSave.MainStoryDirectory + "Scene2.unity";
+                break;
+            case SceneSave.MainStoryDirectory + "Scene2.unity":
+                progress.scenePath = SceneSave.MainStoryDirectory + "Scene3.unity";
+                break;
+            case SceneSave.MainStoryDirectory + "Scene3.unity":
+                progress.scenePath = SceneSave.MainStoryDirectory + "Scene4.unity";
+                break;
+        }
     }
 
     internal static bool TryWrite(GameSaveData save)

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     // 新游戏加载的起始关卡。路线变化时在主菜单修改这里。
-    [SerializeField] private string firstScenePath = SceneSave.MainStoryDirectory + "Prologue.unity";
+    [SerializeField] private string firstScenePath = SceneSave.MainStoryDirectory + "Scene0.unity";
     [SerializeField] private GameObject options;
     [SerializeField] private GameObject confirmation;
     [SerializeField] private Button newGameButton;

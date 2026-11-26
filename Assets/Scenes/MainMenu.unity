@@ -1256,7 +1256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273e0988a51684462b1a9f026843d280, type: 3}
   m_Name:
   m_EditorClassIdentifier:
-  firstScenePath: Assets/Scenes/GameScene/Prologue.unity
+  firstScenePath: Assets/Scenes/GameScene/Scene0.unity
   options: {fileID: 666994143}
   confirmation: {fileID: 186109425}
   newGameButton: {fileID: 591757965}

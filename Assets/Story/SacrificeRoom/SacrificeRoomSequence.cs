@@ -10,6 +10,7 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
     [SerializeField] private SwitchPlayer party;
     [SerializeField] private PuzzleRoomSequence puzzleRoute;
     [SerializeField] private DialogueController dialogue;
+    [SerializeField] private SceneSave sceneSave;
     [SerializeField] private DialogueTrigger doorsRaised;
     [SerializeField] private Collider2D passageEntry;
     [SerializeField] private Rect waitingArea;
@@ -112,6 +113,10 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
             if (inscription.HasCompleted)
             {
                 visibility.SetLightingScale(1f);
+                if (stairs.HasCompleted)
+                {
+                    RecordStairArrival();
+                }
             }
             else
             {
@@ -134,13 +139,15 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
 
         if (!routeChosen && doorsRaised.HasCompleted && !puzzleRoute.HasEnteredRoute)
         {
+            // 分流门演出结束后，只累计在安全房内可以自由行动的时间。
             if (waitingArea.Contains(player.position))
             {
                 decisionTime += Time.deltaTime;
             }
+
             if (passageEntry.OverlapPoint(player.position) || decisionTime >= decisionTimeout)
             {
-                ChooseLeftDoor();
+                EnterRoute();
             }
         }
         else if (inscription.HasCompleted && !stairs.HasCompleted && stairArea.OverlapPoint(player.position))
@@ -149,7 +156,7 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
         }
     }
 
-    private void ChooseLeftDoor()
+    private void EnterRoute()
     {
         routeChosen = true;
         dialogue.SetStoryValue(RouteKey, RouteValue);
@@ -345,6 +352,7 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
     public void RecordStairArrival()
     {
         dialogue.SetStoryValue("firstFloorSacrificeExit", "ready");
+        sceneSave.LoadNextPartyScene(SceneSave.SecondFloorPath);
     }
 
     private bool MoveTo(PlayerMove actor, Vector3 target)

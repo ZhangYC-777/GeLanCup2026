@@ -1,9 +1,9 @@
 {
   "entry": "sacrifice_two_doors",
   "nodes": [
-    {"id":"sacrifice_two_doors","speaker":"兄弟","text":"两扇门？这上面连个记号都没有。咱们走哪边？","next":"sacrifice_other_way"},
-    {"id":"sacrifice_other_way","speaker":"青梅","text":"要不我们先找找，有没有别的机关？总觉得这地方在故意让我们选。","next":"sacrifice_choose_left"},
-    {"id":"sacrifice_choose_left","speaker":"主角","text":"这地方太邪门了，留在这里不知道还会发生什么。走左边这扇，我打头阵！"},
+    {"id":"sacrifice_two_doors","speaker":"兄弟","text":"这扇门上连个记号都没有。里面能看清吗？","next":"sacrifice_other_way"},
+    {"id":"sacrifice_other_way","speaker":"青梅","text":"看不清……总觉得这地方在故意让我们选。","next":"sacrifice_choose_left"},
+    {"id":"sacrifice_choose_left","speaker":"主角","text":"这地方太邪门了。跟紧我，我打头阵。"},
 
     {"id":"sacrifice_watch_step","speaker":"主角","text":"慢点走，脚下不太平……","next":"sacrifice_ceiling_click"},
     {"id":"sacrifice_ceiling_click","speaker":"","text":"青梅紧攥着主角的衣角，兄弟跟在最后。头顶突然传来一声细微的「咔哒」。","next":"sacrifice_look_up"},

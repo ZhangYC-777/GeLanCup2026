@@ -707,7 +707,7 @@ MonoBehaviour:
   departureIllustration: {fileID: 2800000, guid: 57137fd9572f2400294c625425707acb, type: 3}
   rainAudio: {fileID: 1474462251}
   blackout: {fileID: 823432256}
-  arrivalScenePath: Assets/Scenes/GameScene/GameScene0.unity
+  arrivalScenePath: Assets/Scenes/GameScene/Scene1.unity
 --- !u!114 &1474462253
 MonoBehaviour:
   m_ObjectHideFlags: 0
