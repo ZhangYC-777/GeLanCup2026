@@ -22,3 +22,9 @@
 # Operating system files
 .DS_Store
 Thumbs.db
+
+# Local environment artifacts
+/.vsconfig
+/Captures/
+# 本地嵌入的 MCP for Unity 包副本，正式依赖以 Packages/manifest.json 里的 git 地址为准
+/Packages/com.coplaydev.unity-mcp/
