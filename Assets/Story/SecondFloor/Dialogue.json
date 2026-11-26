@@ -35,6 +35,159 @@
       "id": "brother_chooses_the_door",
       "speaker": "兄弟",
       "text": "哥，上次你选的，这次让我来。"
+    },
+
+    {
+      "id": "explore_door",
+      "speaker": "",
+      "text": "说罢，兄弟没有犹豫，径直走向了左侧的石门，主角紧紧跟上。"
+    },
+    {
+      "id": "explore_vast",
+      "speaker": "",
+      "text": "门后的空间极大。空气里弥漫着沉闷的灰尘味，手电筒的光束打出去，就像被黑暗吞噬了一样，根本照不到边际。这是一个巨大的迷宫，视野的极度受限，让人的神经紧绷到了极点。",
+      "next": "explore_panic"
+    },
+    {
+      "id": "explore_panic",
+      "speaker": "主角",
+      "text": "这到底是哪儿？门呢？出口在哪？青梅到底被藏在哪里了？！",
+      "next": "explore_calm"
+    },
+    {
+      "id": "explore_calm",
+      "speaker": "兄弟",
+      "text": "哥，别急。这地方太大了，我们得慢慢找线索，越是焦躁越容易出事。"
+    },
+    {
+      "id": "explore_lost",
+      "speaker": "",
+      "text": "时间在这个黑暗的空间里仿佛被拉长了。两人在迷宫般的石壁间穿梭了许久，却仿佛一直在原地打转。"
+    },
+    {
+      "id": "explore_punch",
+      "speaker": "",
+      "text": "压抑的氛围让主角的情绪越来越焦灼。他甚至开始用拳头去砸那些坚硬的石壁，试图找到隐藏的暗道。",
+      "next": "explore_dead_end"
+    },
+    {
+      "id": "explore_dead_end",
+      "speaker": "主角",
+      "text": "该死！全都是死路！这根本就是个出不去的死局！"
+    },
+    {
+      "id": "explore_chest_call",
+      "speaker": "兄弟",
+      "text": "哥！快过来看！这里有个箱子！"
+    },
+    {
+      "id": "explore_chest_open",
+      "speaker": "",
+      "text": "主角猛地转过身跑过去。那是一个半埋在土里的破旧木箱。兄弟用随身带的匕首撬开了锁，里面赫然躺着一把沉甸甸的铁锤，以及一把备用的手电筒。",
+      "next": "explore_chest_tool"
+    },
+    {
+      "id": "explore_chest_tool",
+      "speaker": "兄弟",
+      "text": "太好了，有这玩意儿，前面要是再有那种石门，就不用再瞎找了！",
+      "rewardItemId": "iron_hammer"
+    },
+    {
+      "id": "explore_gate",
+      "speaker": "",
+      "text": "拿到新工具后，两人继续深入。没过多久，一扇与周围石壁格格不入、显得极其厚重的巨大铁门挡在了必经之路上。铁门上没有任何锁眼，只有几个已经锈死的齿轮。"
+    },
+    {
+      "id": "explore_gate_push",
+      "speaker": "主角",
+      "text": "打不开！这破门根本推不动！",
+      "next": "explore_gate_step"
+    },
+    {
+      "id": "explore_gate_step",
+      "speaker": "兄弟",
+      "text": "让开，我来。"
+    },
+    {
+      "id": "explore_hammer",
+      "speaker": "",
+      "text": "「砰——！」「砰——！」沉闷的金属撞击声在死寂的迷宫里显得震耳欲聋。兄弟抡起铁锤，一下又一下，拼尽全力地砸在那些卡死的齿轮上。火花四溅中，齿轮终于发出了令人牙酸的「嘎吱」声，开始缓缓转动。但巨大的噪音，也在黑暗中引来了恐怖的东西。",
+      "next": "explore_hammer_listen"
+    },
+    {
+      "id": "explore_hammer_listen",
+      "speaker": "主角",
+      "text": "兄弟，别砸了……你听，什么声音？",
+      "next": "explore_hammer_scrape"
+    },
+    {
+      "id": "explore_hammer_scrape",
+      "speaker": "",
+      "text": "一阵极其密集的、类似金属刮擦石板的刺耳声音，正以极快的速度从四面八方逼近！手电筒照向远处，只见黑暗中，无数双猩红的眼睛亮起。",
+      "next": "explore_hammer_hunters"
+    },
+    {
+      "id": "explore_hammer_hunters",
+      "speaker": "主角",
+      "text": "追猎者……那些怪物追过来了！",
+      "next": "explore_hammer_final"
+    },
+    {
+      "id": "explore_hammer_final",
+      "speaker": "兄弟",
+      "text": "给我——开！！！",
+      "next": "explore_gate_burst"
+    },
+    {
+      "id": "explore_gate_burst",
+      "speaker": "",
+      "text": "「轰隆——」铁门终于被硬生生砸开了，露出了后面安全的通道。但在同一瞬间，一道巨大的黑影如闪电般从侧面扑向了主角。主角刚想举着手电筒去挡，却被兄弟一把狠狠推开。"
+    },
+    {
+      "id": "explore_run",
+      "speaker": "兄弟",
+      "text": "哥！跑！快跑啊！！",
+      "next": "explore_brother"
+    },
+    {
+      "id": "explore_brother",
+      "speaker": "主角",
+      "text": "兄弟！！",
+      "next": "explore_hesitate"
+    },
+    {
+      "id": "explore_hesitate",
+      "speaker": "",
+      "text": "铁门就在身后，只要退进去就能活命。但主角看着被黑影缠住的兄弟，腿脚却发软。",
+      "next": "explore_hold"
+    },
+    {
+      "id": "explore_hold",
+      "speaker": "兄弟",
+      "text": "别管我！我拦住它！走！",
+      "next": "explore_inner"
+    },
+    {
+      "id": "explore_inner",
+      "speaker": "主角",
+      "text": "我打不过它……我过去也是白搭……我不能死，我必须留着命，我还要去救青梅。我这也是为了保存有生之力……"
+    },
+    {
+      "id": "explore_end_run",
+      "speaker": "",
+      "text": "主角拼命地往前跑，不敢回头。当他终于脱力地瘫坐在地上，大口喘息着、惊魂未定地抬起头时，他发现周围的环境又变了。这里没有怪物，也没有黑暗的迷宫。他死里逃生——这扇砸开的门，直接连通的，正是第三层最终的安全点。而兄弟的惨叫声，已经被厚重的铁门彻底隔绝。",
+      "next": "explore_end_light"
+    },
+    {
+      "id": "explore_end_light",
+      "speaker": "",
+      "text": "主角看着手里那只掉落出来的、原本属于兄弟的手电筒，整个人仿佛被抽干了灵魂，呆呆地坐在死寂的安全房里。",
+      "next": "explore_end_last"
+    },
+    {
+      "id": "explore_end_last",
+      "speaker": "主角",
+      "text": "……就剩我了。"
     }
   ]
 }
