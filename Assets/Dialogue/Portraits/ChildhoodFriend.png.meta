@@ -116,10 +116,10 @@ TextureImporter:
       name: ChildhoodFriend
       rect:
         serializedVersion: 2
-        x: 65
+        x: 0
         y: 0
-        width: 848
-        height: 1970
+        width: 878
+        height: 1170
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -116,10 +116,10 @@ TextureImporter:
       name: Brother
       rect:
         serializedVersion: 2
-        x: 128
+        x: 0
         y: 0
-        width: 697
-        height: 1722
+        width: 840
+        height: 1120
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
