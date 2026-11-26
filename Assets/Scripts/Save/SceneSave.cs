@@ -229,6 +229,31 @@ public class SceneSave : MonoBehaviour
         }
     }
 
+    // 保留队伍状态，位置和本场景对话触发器由下一场景重新初始化。
+    internal void LoadNextPartyScene(string path)
+    {
+        if (loading)
+        {
+            return;
+        }
+
+        int sceneIndex = SceneUtility.GetBuildIndexByScenePath(path);
+        SceneProgress progress = CaptureProgress();
+        if (!IsMainStoryScene(path) || sceneIndex < 0 || progress == null)
+        {
+            Debug.LogError("无法进入主线场景：" + path, this);
+            return;
+        }
+
+        progress.scenePath = path;
+        progress.playerPositions = Array.Empty<Vector3>();
+        progress.activePlayerIndex = -1;
+        progress.completedDialogueTriggers = Array.Empty<string>();
+        pendingRestore = latestProgress = progress;
+        loading = true;
+        SceneManager.LoadScene(sceneIndex);
+    }
+
     private bool SaveProgress()
     {
         if (!IsMainStoryScene(gameObject.scene.path))
