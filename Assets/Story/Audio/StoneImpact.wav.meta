@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0961eac61018d4664912f0c037aa8d3e
+guid: c20a19b874c914af3b8b63461734d6f4
 AudioImporter:
   externalObjects: {}
   serializedVersion: 7
@@ -18,8 +18,6 @@ AudioImporter:
   loadInBackground: 0
   ambisonic: 0
   3D: 1
-  userData: 'Rain on Window Loop by alxl (CC0 1.0)
-
-    https://opengameart.org/content/rain-on-window-loop'
+  userData: 
   assetBundleName: 
   assetBundleVariant: 

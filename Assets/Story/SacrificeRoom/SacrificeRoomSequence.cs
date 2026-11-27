@@ -57,6 +57,8 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
     private const string RouteValue = "sacrifice";
     private Vector3 slabClosedPosition;
     private Vector3 friendRestScale;
+    private Vector3 shadowRestScale;
+    private Vector3 shadowRestPosition;
     private Font writingFont;
     private Coroutine pullingFriend;
     private bool routeChosen;
@@ -67,6 +69,8 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
     {
         slabClosedPosition = closedSlab.localPosition;
         friendRestScale = childhoodFriend.transform.localScale;
+        shadowRestPosition = loomingShadow.position;
+        shadowRestScale = loomingShadow.localScale;
         if (wallWriting.font == null || !wallWriting.font.HasCharacter('赠'))
         {
             writingFont = DialogueView.FindDialogueFont();
@@ -85,6 +89,10 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
     private void OnDisable()
     {
         dialogue.LineStarted -= OnLineStarted;
+        if (pullingFriend != null)
+        {
+            dialogue.CanAdvanceLine = null;
+        }
     }
 
     private void OnDestroy()
@@ -224,6 +232,7 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
                 PlayFoley(scrape, .48f, -.19f);
                 break;
             case "sacrifice_friend_taken":
+                dialogue.CanAdvanceLine = () => pullingFriend == null;
                 pullingFriend = StartCoroutine(OpenShaftAndPull());
                 break;
             case "sacrifice_call_out":
@@ -251,17 +260,19 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
         PlayFoley(mechanism, .72f);
         openShaft.SetActive(true);
         loomingShadow.gameObject.SetActive(true);
-        Vector3 shadowScale = loomingShadow.localScale;
         Vector3 from = childhoodFriend.SavePosition;
-        const float duration = .64f;
+        Vector3 grip = from + new Vector3(-.3f, .12f, 0f);
+        const float duration = .76f;
         for (float current = 0f; current < duration; current += Time.deltaTime)
         {
             float t = Mathf.Clamp01(current / duration);
             float opening = Mathf.SmoothStep(0f, 1f, t * 2.65f);
-            float pull = Mathf.SmoothStep(0f, 1f, (t - .12f) / .88f);
+            float lunge = Mathf.SmoothStep(0f, 1f, t / .36f);
+            float pull = Mathf.SmoothStep(0f, 1f, (t - .36f) / .64f);
             closedSlab.localPosition = slabClosedPosition + new Vector3(.95f, .15f, 0f) * opening;
-            loomingShadow.localScale = shadowScale * Mathf.Lerp(.24f, 1f, opening);
-            visibility.SetLightingScale(Mathf.Lerp(.86f, .43f, opening));
+            loomingShadow.position = Vector3.Lerp(Vector3.Lerp(shadowRestPosition, grip, lunge), shadowRestPosition, pull);
+            loomingShadow.localScale = shadowRestScale * Mathf.Lerp(.28f, 1f, lunge) * Mathf.Lerp(1f, .38f, pull);
+            visibility.SetLightingScale(Mathf.Lerp(.86f, .54f, opening));
             childhoodFriend.RestorePosition(Vector3.Lerp(from, grabMark.position, pull));
             childhoodFriend.transform.localScale = friendRestScale * Mathf.Lerp(1f, .35f, pull);
             yield return null;
@@ -270,7 +281,9 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
         childhoodFriend.RestorePosition(grabMark.position);
         childhoodFriend.gameObject.SetActive(false);
         childhoodFriend.transform.localScale = friendRestScale;
+        HideShaftHunter();
         pullingFriend = null;
+        dialogue.CanAdvanceLine = null;
     }
 
     private IEnumerator ReachForFriend(PlayerMove actor, Vector3 offset)
@@ -294,13 +307,14 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
         {
             StopCoroutine(pullingFriend);
             pullingFriend = null;
+            dialogue.CanAdvanceLine = null;
         }
 
         childhoodFriend.RestorePosition(grabMark.position);
         childhoodFriend.gameObject.SetActive(false);
         childhoodFriend.transform.localScale = friendRestScale;
         openShaft.SetActive(false);
-        loomingShadow.gameObject.SetActive(false);
+        HideShaftHunter();
         closedSlab.localPosition = slabClosedPosition;
         visibility.SetLightingScale(.78f);
         dialogue.SetStoryValue("firstFloorCompanion", "taken");
@@ -309,6 +323,13 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
             foley.Stop();
             PlayFoley(impact, .84f);
         }
+    }
+
+    private void HideShaftHunter()
+    {
+        loomingShadow.gameObject.SetActive(false);
+        loomingShadow.position = shadowRestPosition;
+        loomingShadow.localScale = shadowRestScale;
     }
 
     // 回档到掳走事件之后，仍从同一处拐角走向红光。

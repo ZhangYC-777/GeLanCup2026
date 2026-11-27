@@ -3,19 +3,19 @@
   "nodes": [
     {
       "id": "find_bottle",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "咦，瓶子里有张图……是格兰岛的藏宝图！",
       "next": "wedding"
     },
     {
       "id": "wedding",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "太好了！找到宝藏，我就有钱跟她办婚礼了！",
       "next": "doubt"
     },
     {
       "id": "doubt",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "不过……这图是真的吗？我真要去吗？",
       "choices": [
         {
@@ -23,38 +23,38 @@
           "next": "return_home"
         },
         {
-          "text": "约青梅和兄弟一起出海",
+          "text": "约佩西和达尔一起出海",
           "next": "invite"
         }
       ]
     },
     {
       "id": "invite",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "快来看看！你们愿不愿意跟我去格兰岛？",
       "next": "love_accepts"
     },
     {
       "id": "love_accepts",
-      "speaker": "青梅",
+      "speaker": "佩西",
       "text": "看你高兴的！行，我陪你去。",
       "next": "friend_accepts"
     },
     {
       "id": "friend_accepts",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "算我一个！明早码头见。",
       "next": "departure"
     },
     {
       "id": "departure",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "出发！找到宝藏，记得请我喝喜酒啊！",
       "next": "rain"
     },
     {
       "id": "rain",
-      "speaker": "青梅",
+      "speaker": "佩西",
       "text": "雨越下越大了。咱们要不要掉头？",
       "choices": [
         {
@@ -73,7 +73,7 @@
     },
     {
       "id": "sail_on",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "继续开！咱们去格兰岛！"
     },
     {

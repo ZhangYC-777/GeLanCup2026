@@ -1,25 +1,25 @@
 {
   "entry": "sacrifice_two_doors",
   "nodes": [
-    {"id":"sacrifice_two_doors","speaker":"兄弟","text":"这扇门上连个记号都没有。里面能看清吗？","next":"sacrifice_other_way"},
-    {"id":"sacrifice_other_way","speaker":"青梅","text":"看不清……总觉得这地方在故意让我们选。","next":"sacrifice_choose_left"},
-    {"id":"sacrifice_choose_left","speaker":"主角","text":"这地方太邪门了。跟紧我，我打头阵。"},
+    {"id":"sacrifice_two_doors","speaker":"达尔","text":"这扇门上连个记号都没有。里面能看清吗？","next":"sacrifice_other_way"},
+    {"id":"sacrifice_other_way","speaker":"佩西","text":"看不清……总觉得这地方在故意让我们选。","next":"sacrifice_choose_left"},
+    {"id":"sacrifice_choose_left","speaker":"梅菲","text":"这地方太邪门了。跟紧我，我打头阵。"},
 
-    {"id":"sacrifice_watch_step","speaker":"主角","text":"慢点走，脚下不太平……","next":"sacrifice_ceiling_click"},
-    {"id":"sacrifice_ceiling_click","speaker":"","text":"青梅紧攥着主角的衣角，兄弟跟在最后。头顶突然传来一声细微的「咔哒」。","next":"sacrifice_look_up"},
-    {"id":"sacrifice_look_up","speaker":"青梅","text":"什么声——","next":"sacrifice_friend_taken"},
-    {"id":"sacrifice_friend_taken","speaker":"青梅","text":"啊——！救我！主角——！","next":"sacrifice_call_out"},
-    {"id":"sacrifice_call_out","speaker":"主角","text":"青梅！！","next":"sacrifice_grab_my_hand"},
-    {"id":"sacrifice_grab_my_hand","speaker":"兄弟","text":"操！拽住我！嫂子拽住我！","next":"sacrifice_shaft_shuts"},
+    {"id":"sacrifice_watch_step","speaker":"梅菲","text":"慢点走，脚下不太平……","next":"sacrifice_ceiling_click"},
+    {"id":"sacrifice_ceiling_click","speaker":"","text":"佩西紧攥着梅菲的衣角，达尔跟在最后。头顶突然传来一声细微的「咔哒」。","next":"sacrifice_look_up"},
+    {"id":"sacrifice_look_up","speaker":"佩西","text":"什么声——","next":"sacrifice_friend_taken"},
+    {"id":"sacrifice_friend_taken","speaker":"佩西","text":"啊——！救我！梅菲——！","next":"sacrifice_call_out"},
+    {"id":"sacrifice_call_out","speaker":"梅菲","text":"佩西！！","next":"sacrifice_grab_my_hand"},
+    {"id":"sacrifice_grab_my_hand","speaker":"达尔","text":"操！拽住我！嫂子拽住我！","next":"sacrifice_shaft_shuts"},
     {"id":"sacrifice_shaft_shuts","speaker":"","text":"「砰！」石板猛地合拢。哭喊声被截断了，通道里只剩两个人的喘息。","next":"sacrifice_panic"},
-    {"id":"sacrifice_panic","speaker":"主角","text":"门呢？口子在哪？把她还给我！！","next":"sacrifice_silence"},
-    {"id":"sacrifice_silence","speaker":"兄弟","text":"哥，冷静点！没声音了……上面根本没有门！这墙是实的！"},
+    {"id":"sacrifice_panic","speaker":"梅菲","text":"门呢？口子在哪？把她还给我！！","next":"sacrifice_silence"},
+    {"id":"sacrifice_silence","speaker":"达尔","text":"哥，冷静点！没声音了……上面根本没有门！这墙是实的！"},
 
     {"id":"sacrifice_red_light","speaker":"","text":"通道深处亮起一点红光，勉强照亮了前面的一小段台阶。","next":"sacrifice_wall_message"},
     {"id":"sacrifice_wall_message","speaker":"","text":"「赠品已收下，第一道试炼通过。请登第二层。」","next":"sacrifice_realization"},
-    {"id":"sacrifice_realization","speaker":"主角","text":"赠品……那个所谓的「献祭」……原来就是我们随便推开的这扇门……","next":"sacrifice_keep_moving"},
-    {"id":"sacrifice_keep_moving","speaker":"兄弟","text":"别看了……我们选错了路。她被抓走了，我们现在连她在哪都不知道。但路开了，如果她还没死，一定在第二层等我们！走啊！"},
+    {"id":"sacrifice_realization","speaker":"梅菲","text":"赠品……那个所谓的「献祭」……原来就是我们随便推开的这扇门……","next":"sacrifice_keep_moving"},
+    {"id":"sacrifice_keep_moving","speaker":"达尔","text":"别看了……我们选错了路。她被抓走了，我们现在连她在哪都不知道。但路开了，如果她还没死，一定在第二层等我们！走啊！"},
 
-    {"id":"sacrifice_stairs","speaker":"","text":"主角死死盯着那行字看了一眼，拖着沉重的双腿，一步一步向那片未知的红光走去。"}
+    {"id":"sacrifice_stairs","speaker":"","text":"梅菲死死盯着那行字看了一眼，拖着沉重的双腿，一步一步向那片未知的红光走去。"}
   ]
 }

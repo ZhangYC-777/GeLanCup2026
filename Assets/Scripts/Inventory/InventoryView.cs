@@ -58,7 +58,7 @@ public class InventoryView : MonoBehaviour
     {
         bool isSubmitting = !string.IsNullOrEmpty(submissionPrompt);
         title.text = isSubmitting ? submissionPrompt : "背包";
-        controls.text = isSubmitting ? "方向键  选择     F  提交     Esc  取消" : "方向键  选择     B / Esc  关闭";
+        controls.text = isSubmitting ? "方向键  选择     Enter  提交     Esc  取消" : "方向键  选择     B / Esc  关闭";
         SetStatus("");
         panel.SetActive(true);
     }

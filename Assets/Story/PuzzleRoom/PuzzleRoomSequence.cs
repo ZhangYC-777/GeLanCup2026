@@ -50,8 +50,10 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
     [SerializeField] private Animator gateAnimator;
     [SerializeField] private Collider2D gateBlocker;
     [SerializeField] private Collider2D landingArea;
+    [SerializeField] private Transform stairHunter;
 
     [SerializeField] private AudioSource foley;
+    [SerializeField] private AudioSource gateAudio;
     [SerializeField] private AudioClip scrape;
     [SerializeField] private AudioClip dripping;
     [SerializeField] private AudioClip breath;
@@ -75,6 +77,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
     private int selectedDial;
     private Quaternion spriteRestRotation;
     private Coroutine recoil;
+    private bool playingStairSnatch;
     private Vector2 flashlightDirection = Vector2.up;
     private Vector2 lastPosition;
     private bool flashlightOn;
@@ -93,6 +96,10 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
     private void OnDisable()
     {
         dialogue.LineStarted -= OnLineStarted;
+        if (playingStairSnatch)
+        {
+            dialogue.CanAdvanceLine = null;
+        }
     }
 
     private void Start()
@@ -144,7 +151,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         {
             StartReunion();
         }
-        else if (phase == Phase.Failed && Time.frameCount != inputOpenedFrame && party.WasInteractPressed())
+        else if (phase == Phase.Failed && Time.frameCount != inputOpenedFrame && MenuInput.WasConfirmPressed())
         {
             RetryGear();
         }
@@ -338,10 +345,13 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
                 recoil = StartCoroutine(RecoilAndDrop());
                 break;
             case "puzzle_gate_open":
+                gateAnimator.speed = .25f;
                 gateAnimator.SetBool(GateOpenParameter, true);
-                PlayFoley(mechanism, .78f, 0f);
+                gateAudio.Play();
                 break;
             case "puzzle_stair_darkness":
+                flashlightOn = false;
+                visibility.SetFlashlight(false, Vector2.zero, Vector2.up);
                 visibility.SetBlackout(true);
                 break;
             case "puzzle_stair_ceiling_click":
@@ -352,7 +362,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
                 break;
             case "puzzle_stair_lifted":
                 PlayFoley(breath, .76f, -.2f);
-                HideChildhoodFriend();
+                StartCoroutine(PlayStairSnatch());
                 break;
             case "puzzle_stair_slab_shuts":
                 foley.Stop();
@@ -371,6 +381,48 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         party.SelectPlayer(protagonist);
         flashlightDirection = Vector2.up;
         lastPosition = protagonist.SavePosition;
+    }
+
+    // 石板后的黑影只在掳人的瞬间露出来，随青梅一起退回黑暗。
+    private IEnumerator PlayStairSnatch()
+    {
+        if (stairHunter == null)
+        {
+            HideChildhoodFriend();
+            yield break;
+        }
+
+        playingStairSnatch = true;
+        dialogue.CanAdvanceLine = () => !playingStairSnatch;
+        Vector3 friendStart = childhoodFriend.SavePosition;
+        Vector3 friendScale = childhoodFriend.transform.localScale;
+        Vector3 shaft = stairHunter.position;
+        Vector3 grip = friendStart + new Vector3(-.46f, .15f, 0f);
+        visibility.SetLightingScale(0f);
+        visibility.SetBlackout(false);
+        stairHunter.gameObject.SetActive(true);
+
+        const float duration = .72f;
+        for (float elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
+        {
+            float t = elapsed / duration;
+            float lunge = Mathf.SmoothStep(0f, 1f, t / .32f);
+            float pull = Mathf.SmoothStep(0f, 1f, (t - .32f) / .68f);
+            stairHunter.position = Vector3.Lerp(Vector3.Lerp(shaft, grip, lunge), shaft, pull);
+            childhoodFriend.RestorePosition(Vector3.Lerp(friendStart, shaft, pull));
+            childhoodFriend.transform.localScale = friendScale * Mathf.Lerp(1f, .36f, pull);
+            visibility.SetLightingScale(.68f * Mathf.Sin(t * Mathf.PI));
+            yield return null;
+        }
+
+        visibility.SetBlackout(true);
+        visibility.SetLightingScale(1f);
+        stairHunter.gameObject.SetActive(false);
+        stairHunter.position = shaft;
+        HideChildhoodFriend();
+        childhoodFriend.transform.localScale = friendScale;
+        playingStairSnatch = false;
+        dialogue.CanAdvanceLine = null;
     }
 
     public void FinishStairAbduction()
@@ -505,7 +557,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
             return;
         }
 
-        if (party.WasInteractPressed())
+        if (MenuInput.WasConfirmPressed())
         {
             if (new string(passwordDigits) == PasswordCode)
             {

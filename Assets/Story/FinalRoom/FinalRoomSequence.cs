@@ -33,6 +33,7 @@ public sealed class FinalRoomSequence : MonoBehaviour
     [SerializeField] private SpriteRenderer flashlightGlow;
     [SerializeField] private SpriteRenderer hammer;
     [SerializeField] private SpriteRenderer[] hunters;
+    [SerializeField] private PlayerWalkSprites hunterWalkSprites;
     [SerializeField] private SpriteRenderer[] hunterSmoke;
 
     [Header("界面")]
@@ -51,6 +52,12 @@ public sealed class FinalRoomSequence : MonoBehaviour
     [SerializeField] private AudioClip breath;
     [SerializeField] private AudioClip clatter;
     [SerializeField] private AudioClip impact;
+    [SerializeField] private StoryAudioBed music;
+    [SerializeField] private StoryAudioBed pulse;
+    [SerializeField] private AudioClip eerieMusic;
+    [SerializeField] private AudioClip warmMusic;
+    [SerializeField] private AudioClip despairMusic;
+    [SerializeField] private AudioClip panicHeartbeat;
 
     private const string ChoiceKey = "finalChoice";
     private const string SelfValue = "self";
@@ -165,7 +172,11 @@ public sealed class FinalRoomSequence : MonoBehaviour
                     StartCoroutine(PlayBeat(FadeTo(0f, .7f)));
                 }
                 break;
+            case "final_memory":
+                music.Play(warmMusic, .23f);
+                break;
             case "final_friend_voice":
+                music.Play(eerieMusic, .24f);
                 Frame(new Vector2(0f, 2.8f), 5.2f);
                 Play(breath, .45f, .8f);
                 StartCoroutine(PlayBeat(PulseStatue()));
@@ -186,6 +197,16 @@ public sealed class FinalRoomSequence : MonoBehaviour
                 Frame(new Vector2(0f, .55f), 6.1f);
                 StartCoroutine(PlayBeat(IgniteCircle()));
                 break;
+            case "final_choice":
+                music.Play(despairMusic, .3f);
+                pulse.Play(panicHeartbeat, .35f);
+                break;
+            case "ending_other_1":
+                pulse.Play(panicHeartbeat, .42f);
+                break;
+            case "ending_self_1":
+                pulse.FadeOut();
+                break;
             case "ending_self_2":
                 StartCoroutine(PlayBeat(LayDownFlashlight()));
                 break;
@@ -196,6 +217,7 @@ public sealed class FinalRoomSequence : MonoBehaviour
                 StartCoroutine(PlayBeat(FadeTo(1f, .8f)));
                 break;
             case "ending_other_2":
+                pulse.FadeOut();
                 StartCoroutine(PlayBeat(WalkTo(protagonist.SavePosition + Vector3.down * .75f, 1.5f)));
                 break;
             case "ending_other_3":
@@ -253,9 +275,12 @@ public sealed class FinalRoomSequence : MonoBehaviour
         {
             for (int index = 0; index < hunters.Length; index++)
             {
-                float progress = Mathf.SmoothStep(0f, 1f, (elapsed - index * .12f) / .63f);
-                hunters[index].transform.position = origins[index] + Vector3.up * progress * 1.05f;
-                SetOpacity(hunters[index], progress);
+                float stepTime = Mathf.Clamp(elapsed - index * .12f, 0f, .63f);
+                float progress = Mathf.SmoothStep(0f, 1f, stepTime / .63f);
+                SpriteRenderer hunter = hunters[index];
+                hunter.transform.position = origins[index] + Vector3.up * progress * 1.05f;
+                SetHunterPose(hunter, origins[index].x, stepTime, walking: stepTime > 0f && stepTime < .63f);
+                SetOpacity(hunter, progress);
             }
 
             yield return null;
@@ -264,8 +289,20 @@ public sealed class FinalRoomSequence : MonoBehaviour
         for (int index = 0; index < hunters.Length; index++)
         {
             hunters[index].transform.position = origins[index] + Vector3.up * 1.05f;
+            SetHunterPose(hunters[index], origins[index].x, 0f, walking: false);
             SetOpacity(hunters[index], 1f);
         }
+    }
+
+    private void SetHunterPose(SpriteRenderer hunter, float startX, float elapsed, bool walking)
+    {
+        if (hunterWalkSprites == null)
+        {
+            return;
+        }
+
+        PlayerWalkSprites.Facing facing = startX < 0f ? PlayerWalkSprites.Facing.Right : PlayerWalkSprites.Facing.Left;
+        hunter.sprite = hunterWalkSprites.GetFrame(facing, walking, elapsed);
     }
 
     private IEnumerator IgniteCircle()
@@ -330,6 +367,7 @@ public sealed class FinalRoomSequence : MonoBehaviour
             {
                 Vector3 edge = sacrificeMark.position + (hunterStarts[index] - sacrificeMark.position).normalized * .42f;
                 hunters[index].transform.position = Vector3.Lerp(hunterStarts[index], edge, Mathf.SmoothStep(0f, 1f, progress));
+                SetHunterPose(hunters[index], hunterStarts[index].x, elapsed, walking: true);
             }
 
             float fall = Mathf.SmoothStep(0f, 1f, (progress - .38f) / .62f);

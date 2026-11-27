@@ -90,6 +90,7 @@ public sealed class SecondFloorExploration : MonoBehaviour
     [Header("遮罩与音效")]
     [SerializeField] private Image fade;
     [SerializeField] private AudioSource foley;
+    [SerializeField] private AudioSource gateAudio;
     [SerializeField] private AudioClip hammerClip;
     [SerializeField] private AudioClip gearClip;
     [SerializeField] private AudioClip scrapeClip;
@@ -127,6 +128,7 @@ public sealed class SecondFloorExploration : MonoBehaviour
     private Vector2 lastFlashlightPosition;
     private float exploreTime;
     private bool brotherFollowing;
+    private bool playingHunterCue;
     private float trailDistance;
     private Vector3 lastTrailSample;
     private float shakeTime;
@@ -198,6 +200,10 @@ public sealed class SecondFloorExploration : MonoBehaviour
     private void OnDisable()
     {
         dialogue.LineStarted -= OnLineStarted;
+        if (playingHunterCue)
+        {
+            dialogue.CanAdvanceLine = null;
+        }
         brotherFollowing = false;
         if (activeRoutine != null)
         {
@@ -871,7 +877,7 @@ public sealed class SecondFloorExploration : MonoBehaviour
         PlaceBrother(interceptMark.position);
         if (eastShadow != null && interceptMark != null)
         {
-            eastShadow.position = interceptMark.position;
+            eastShadow.position = interceptMark.position + Vector3.right * .55f;
             eastShadow.gameObject.SetActive(true);
         }
         party.SelectPlayer(protagonist);
@@ -896,19 +902,29 @@ public sealed class SecondFloorExploration : MonoBehaviour
                 StartCoroutine(HammeringLoop());
                 break;
             case "explore_hammer_scrape":
-                StartCoroutine(RevealHunters());
+                StartCoroutine(PlayHunterCue(RevealHunters()));
                 break;
             case "explore_hammer_final":
                 Play(hammerClip, .9f, .42f);
                 Shake(.22f, .18f);
                 break;
             case "explore_gate_burst":
-                StartCoroutine(OpenGateAndLunge());
+                StartCoroutine(PlayHunterCue(OpenGateAndLunge()));
                 break;
             case "explore_inner":
                 party.SetCameraFocus(protagonist.transform, snap: true);
                 break;
         }
+    }
+
+    // 红眼亮起和扑击着地前，允许补全台词，但先等动作结束再进下一句。
+    private IEnumerator PlayHunterCue(IEnumerator cue)
+    {
+        playingHunterCue = true;
+        dialogue.CanAdvanceLine = () => !playingHunterCue;
+        yield return cue;
+        playingHunterCue = false;
+        dialogue.CanAdvanceLine = null;
     }
 
     private IEnumerator HammeringLoop()
@@ -933,7 +949,7 @@ public sealed class SecondFloorExploration : MonoBehaviour
 
     private IEnumerator OpenGateAndLunge()
     {
-        Play(gearClip, .9f, .55f);
+        gateAudio.Play();
         Shake(.3f, .28f);
         StartCoroutine(OpenGateAnimation());
         SpawnSparks(gateLeaf.position + new Vector3(0f, .6f, 0f), 12);
@@ -943,12 +959,13 @@ public sealed class SecondFloorExploration : MonoBehaviour
         {
             eastShadow.gameObject.SetActive(true);
             Vector3 from = eastShadow.position;
-            Vector3 to = interceptMark != null ? interceptMark.position : from;
+            Vector3 to = interceptMark != null ? interceptMark.position + Vector3.right * .55f : from;
             for (float t = 0f; t < .45f; t += Time.deltaTime)
             {
                 eastShadow.position = Vector3.Lerp(from, to, Mathf.SmoothStep(0f, 1f, t / .45f));
                 yield return null;
             }
+            eastShadow.position = to;
         }
 
         if (protagonist != null && pushedClearMark != null)

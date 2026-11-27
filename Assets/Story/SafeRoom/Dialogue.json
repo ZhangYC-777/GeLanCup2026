@@ -9,30 +9,30 @@
     },
     {
       "id": "where_is_the_treasure",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "不应该啊，这不是藏宝的地方吗？怎么只有一座雕像？",
       "next": "look_inside"
     },
     {
       "id": "look_inside",
-      "speaker": "青梅",
+      "speaker": "佩西",
       "text": "等等，我们先进去看看。"
     },
     {
       "id": "brother_finds_note",
       "speaker": "",
-      "text": "兄弟顺着青梅的眼神走过去，从地上捡起一张纸。",
+      "text": "达尔顺着佩西的眼神走过去，从地上捡起一张纸。",
       "next": "offering_note"
     },
     {
       "id": "offering_note",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "「这是献于神的赠品」……旁边还写着「解谜」和「献祭」。嫂子，这是什么意思？"
     },
     {
       "id": "entrance_shuts",
       "speaker": "",
-      "text": "三人都走进来后，身后的门砰的一声关上了。主角赶忙回去推门，石门却纹丝不动。",
+      "text": "三人都走进来后，身后的门砰的一声关上了。梅菲赶忙回去推门，石门却纹丝不动。",
       "next": "route_doors_rise"
     },
     {

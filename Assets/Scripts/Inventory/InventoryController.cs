@@ -20,7 +20,7 @@ public class InventoryController : MonoBehaviour
     private bool isOpen;
     private float rewardUntil;
 
-    // 打开背包时接管 F，关闭当帧也不让同一次 F 传给对话。
+    // 背包打开及关闭当帧都挡住对话和场景交互。
     public bool BlocksDialogueInput => isOpen || Time.frameCount == closedFrame;
 
     // 按背包格子的顺序记录物品 ID。
@@ -90,7 +90,7 @@ public class InventoryController : MonoBehaviour
         return target != null && TryOpen(target);
     }
 
-    // 背包打开后，方向键只移动高亮，F 只用于确认提交。
+    // 背包打开后，方向键移动高亮，提交物品用 Enter 确认。
     private void Update()
     {
         if (rewardUntil > 0f && Time.unscaledTime >= rewardUntil)
@@ -120,7 +120,7 @@ public class InventoryController : MonoBehaviour
         }
 
         MoveSelection(switchPlayer.ReadInventoryNavigation());
-        if (submission != null && switchPlayer.WasInteractPressed())
+        if (submission != null && MenuInput.WasConfirmPressed())
         {
             SubmitSelection();
         }

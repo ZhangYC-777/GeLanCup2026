@@ -1,31 +1,31 @@
 {
   "entry": "final_arrival",
   "nodes": [
-    {"id":"final_sacrifice_arrival","speaker":"","text":"主角连滚带爬地跑回安全点，双腿一软，瘫坐在地。等他喘过气来抬起头，才发现这里更暗，石壁的纹路也更古老。他一定在逃跑中触发了什么机关。这里已经是第三层。","next":"final_arrival"},
-    {"id":"final_arrival","speaker":"","text":"来到第三层的安全点，不，或许该说是艰难的抉择点。凡人比拼神明的戏码，本该让人血脉偾张，可在这尊狰狞的圣女像前，主角像是被抽走了最后一丝力气。","next":"final_not_other"},
-    {"id":"final_not_other","speaker":"","text":"因为身前不是别人，正是青梅。","next":"final_memory"},
-    {"id":"final_memory","speaker":"","text":"主角想起往日的种种，她的微笑，她的嘴角，那张洋溢着青春的脸。泪水像珍珠一样一颗颗落下来，所有的恐惧、背叛、算计，在这一刻都化作深深的无力与悲痛。","next":"final_friend_voice"},
-    {"id":"final_friend_voice","speaker":"青梅","text":"陪我好不好……陪我！！","next":"final_footsteps"},
-    {"id":"final_footsteps","speaker":"","text":"随着青梅的声音落下，主角身后的黑暗里，传来一阵阵令人毛骨悚然的沉重脚步声。","next":"final_hunters"},
-    {"id":"final_hunters","speaker":"","text":"一大片一大片的追猎者从阴影中显现。而最让人崩溃的是——它们全都长着兄弟的模样。","next":"final_brother_voice"},
+    {"id":"final_sacrifice_arrival","speaker":"","text":"梅菲连滚带爬地跑回安全点，双腿一软，瘫坐在地。等他喘过气来抬起头，才发现这里更暗，石壁的纹路也更古老。他一定在逃跑中触发了什么机关。这里已经是第三层。","next":"final_arrival"},
+    {"id":"final_arrival","speaker":"","text":"来到第三层的安全点，不，或许该说是艰难的抉择点。凡人比拼神明的戏码，本该让人血脉偾张，可在这尊狰狞的圣女像前，梅菲像是被抽走了最后一丝力气。","next":"final_not_other"},
+    {"id":"final_not_other","speaker":"","text":"因为身前不是别人，正是佩西。","next":"final_memory"},
+    {"id":"final_memory","speaker":"","text":"梅菲想起往日的种种，她的微笑，她的嘴角，那张洋溢着青春的脸。泪水像珍珠一样一颗颗落下来，所有的恐惧、背叛、算计，在这一刻都化作深深的无力与悲痛。","next":"final_friend_voice"},
+    {"id":"final_friend_voice","speaker":"佩西","text":"陪我好不好……陪我！！","next":"final_footsteps"},
+    {"id":"final_footsteps","speaker":"","text":"随着佩西的声音落下，梅菲身后的黑暗里，传来一阵阵令人毛骨悚然的沉重脚步声。","next":"final_hunters"},
+    {"id":"final_hunters","speaker":"","text":"一大片一大片的追猎者从阴影中显现。而最让人崩溃的是——它们全都长着达尔的模样。","next":"final_brother_voice"},
     {"id":"final_brother_voice","speaker":"追猎者","text":"留在这里陪我们……留下来吧……","next":"final_circle"},
-    {"id":"final_circle","speaker":"","text":"前有化作圣女像的青梅，后有变成怪物的兄弟。那个曾经只为求财的普通人，此刻已经被逼到了深渊边缘。地上的血色法阵再次亮起，脑海中有冰冷的声音响起：","next":"final_trial"},
+    {"id":"final_circle","speaker":"","text":"前有化作圣女像的佩西，后有变成怪物的达尔。那个曾经只为求财的普通人，此刻已经被逼到了深渊边缘。地上的血色法阵再次亮起，脑海中有冰冷的声音响起：","next":"final_trial"},
     {"id":"final_trial","speaker":"","text":"「最终试炼。献祭自己，或献祭他人。」","next":"final_choice"},
-    {"id":"final_choice","speaker":"主角","text":"（盯着那张熟悉的脸，手在发抖）","choices":[
+    {"id":"final_choice","speaker":"梅菲","text":"（盯着那张熟悉的脸，手在发抖）","choices":[
       {"text":"献祭自己","next":"ending_self_1","set":{"key":"finalChoice","value":"self"}},
       {"text":"献祭他人","next":"ending_other_1","set":{"key":"finalChoice","value":"other"}}
     ]},
 
-    {"id":"ending_self_1","speaker":"","text":"面对步步紧逼的追猎者和诡异的石像，主角崩溃了。他不想再逃，选择了结束这一切。","next":"ending_self_2"},
-    {"id":"ending_self_2","speaker":"主角","text":"（惨笑一声，扔掉手电筒，缓缓走向圣女像）青梅，兄弟……是我对不起你们。我太怕死了，所以一路苟活到现在。但我不想再跑了。","next":"ending_self_3"},
-    {"id":"ending_self_3","speaker":"","text":"主角毫不犹豫地走进献祭中心。一瞬间，地底裂开，无数双枯手将他拉入深渊。那些长着兄弟模样的追猎者全部扑了上来，也在献祭的契约里被一起抽干了生机。圣女像在剧烈震动中坍塌，把青梅最后的残躯掩埋。","next":"ending_self_4"},
+    {"id":"ending_self_1","speaker":"","text":"面对步步紧逼的追猎者和诡异的石像，梅菲崩溃了。他不想再逃，选择了结束这一切。","next":"ending_self_2"},
+    {"id":"ending_self_2","speaker":"梅菲","text":"（惨笑一声，扔掉手电筒，缓缓走向圣女像）佩西，达尔……是我对不起你们。我太怕死了，所以一路苟活到现在。但我不想再跑了。","next":"ending_self_3"},
+    {"id":"ending_self_3","speaker":"","text":"梅菲毫不犹豫地走进献祭中心。一瞬间，地底裂开，无数双枯手将他拉入深渊。那些长着达尔模样的追猎者全部扑了上来，也在献祭的契约里被一起抽干了生机。圣女像在剧烈震动中坍塌，把佩西最后的残躯掩埋。","next":"ending_self_4"},
     {"id":"ending_self_4","speaker":"","text":"岛屿重归死寂。没有人知道你们来过，也没有人拿到宝藏。你们三个人，永远留在了这座岛上的迷宫里。一只漂流瓶又流了出来。"},
 
-    {"id":"ending_other_1","speaker":"","text":"面对必死的结局，求生的本能彻底压倒了理智。主角看着眼前那张青梅的面容，浑身发抖。","next":"ending_other_2"},
-    {"id":"ending_other_2","speaker":"主角","text":"我不想死！凭什么是我死？！你们都已经死了，为什么还要拉着我！我才是活人！","next":"ending_other_3"},
-    {"id":"ending_other_3","speaker":"","text":"主角猛地抓起地上原本属于兄弟的锤子，狠狠砸向圣女像。石像碎裂的瞬间，周围所有追猎者发出凄厉的尖叫，化作黑烟消散。整层剧烈震动，一扇直通外界的逃生门在主角面前轰然打开。","next":"ending_other_4"},
-    {"id":"ending_other_4","speaker":"主角","text":"活下来了……我终于活下来了！","next":"ending_other_5"},
-    {"id":"ending_other_5","speaker":"","text":"他逃出了那座满是鲜血和怪物的格兰岛，带着那笔想象中的钱，回到了现实世界。可当他站在阳光下照镜子时，他再也想不起青梅的笑容，也记不起兄弟拍他肩膀时的温度。","next":"ending_other_6"},
+    {"id":"ending_other_1","speaker":"","text":"面对必死的结局，求生的本能彻底压倒了理智。梅菲看着眼前佩西的脸，浑身发抖。","next":"ending_other_2"},
+    {"id":"ending_other_2","speaker":"梅菲","text":"我不想死！凭什么是我死？！你们都已经死了，为什么还要拉着我！我才是活人！","next":"ending_other_3"},
+    {"id":"ending_other_3","speaker":"","text":"梅菲猛地抓起地上原本属于达尔的锤子，狠狠砸向圣女像。石像碎裂的瞬间，周围所有追猎者发出凄厉的尖叫，化作黑烟消散。整层剧烈震动，一扇直通外界的逃生门在梅菲面前轰然打开。","next":"ending_other_4"},
+    {"id":"ending_other_4","speaker":"梅菲","text":"活下来了……我终于活下来了！","next":"ending_other_5"},
+    {"id":"ending_other_5","speaker":"","text":"他逃出了那座满是鲜血和怪物的格兰岛，带着那笔想象中的钱，回到了现实世界。可当他站在阳光下照镜子时，他再也想不起佩西的笑容，也记不起达尔拍他肩膀时的温度。","next":"ending_other_6"},
     {"id":"ending_other_6","speaker":"","text":"他活了下来。为了活下去，他把那个重情重义的自己，永远献祭在了那座岛上。"}
   ]
 }

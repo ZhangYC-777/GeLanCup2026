@@ -15,7 +15,7 @@ public class DialogueController : MonoBehaviour
         Typing,
         // 当前句已完整显示，等待 F 继续。
         WaitingForAdvance,
-        // 正在显示选项，此时上下键切换选项，F 确认。
+        // 正在显示选项，此时上下键切换选项，Enter 确认。
         Choosing
     }
 
@@ -101,7 +101,7 @@ public class DialogueController : MonoBehaviour
 
         PlayerInput.PlayerMapsActions actions = standalone ? standaloneInput.PlayerMaps : default;
 
-        // 选项出现时，读取上下键并切换高亮。
+        // 选项出现时只读取选择和确认输入，避免 F 连续推进误选分支。
         if (state == PlaybackState.Choosing)
         {
             if (standalone ? actions.DialogueUp.WasPressedThisFrame() : switchPlayer.WasDialogueUpPressed())
@@ -112,6 +112,12 @@ public class DialogueController : MonoBehaviour
             {
                 MoveChoice(1);
             }
+
+            if (MenuInput.WasConfirmPressed() && (CanAdvanceLine == null || CanAdvanceLine()))
+            {
+                Choose();
+            }
+            return;
         }
 
         bool advancePressed = standalone ? actions.Interact.WasPressedThisFrame() : switchPlayer.WasInteractPressed();
@@ -336,10 +342,6 @@ public class DialogueController : MonoBehaviour
                 {
                     EnterNode(currentNode.next);
                 }
-                break;
-            // 确认高亮的选项。
-            case PlaybackState.Choosing:
-                Choose();
                 break;
         }
     }

@@ -648,11 +648,11 @@ MonoBehaviour:
   choices: {fileID: 5018934896938286457}
   hint: {fileID: 6954713079147446865}
   portraits:
-  - speaker: "\u4E3B\u89D2"
+  - speaker: "\u6885\u83F2"
     image: {fileID: 1590660126954221312}
-  - speaker: "\u5144\u5F1F"
+  - speaker: "\u8FBE\u5C14"
     image: {fileID: 2813557580550425521}
-  - speaker: "\u9752\u6885"
+  - speaker: "\u4F69\u897F"
     image: {fileID: 586850233069779920}
 --- !u!1 &8841799432190604966
 GameObject:

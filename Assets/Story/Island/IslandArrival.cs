@@ -22,6 +22,7 @@ public class IslandArrival : MonoBehaviour
     [SerializeField] private Collider2D gateDiscoveryArea;
 
     [SerializeField] private Animator gateAnimator;
+    [SerializeField] private AudioSource gateAudio;
     [SerializeField] private PlayerHit gateInteraction;
     [SerializeField, Min(0f)] private float gateOpeningSeconds = 0.44f;
     [SerializeField] private string nextScenePath = SceneSave.MainStoryDirectory + "Scene2.unity";
@@ -181,14 +182,16 @@ public class IslandArrival : MonoBehaviour
         }
     }
 
-    // 最后一句开始时播放素材包里的石门开合动画。
+    // 推门台词开始时，放慢石门动画以配合录音中的石块移动。
     private void OnLineStarted(string nodeId)
     {
         if (nodeId == "push_the_gate" && !gateOpening)
         {
             gateOpening = true;
-            gateReadyAt = Time.time + gateOpeningSeconds;
+            gateAnimator.speed = .25f;
+            gateReadyAt = Time.time + gateOpeningSeconds / gateAnimator.speed;
             gateAnimator.SetBool("open", true);
+            gateAudio.Play();
         }
     }
 

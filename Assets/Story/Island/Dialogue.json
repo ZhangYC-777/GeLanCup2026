@@ -9,19 +9,19 @@
     },
     {
       "id": "brother_lands",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "嘿，伙计，希望我们能找到宝藏。",
       "next": "protagonist_lands"
     },
     {
       "id": "protagonist_lands",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "哈哈，宝藏肯定是我们的。",
       "next": "friend_lands"
     },
     {
       "id": "friend_lands",
-      "speaker": "青梅",
+      "speaker": "佩西",
       "text": "呀，这世上哪有那么多宝藏，我觉得我们还是做最坏的打算。",
       "next": "follow_the_map"
     },
@@ -32,30 +32,30 @@
     },
     {
       "id": "brother_finds_gate",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "嘿，这有个门，快过来！"
     },
     {
       "id": "party_reaches_gate",
       "speaker": "",
-      "text": "主角拉着青梅有说有笑地走了过来。",
+      "text": "梅菲拉着佩西有说有笑地走了过来。",
       "next": "a_good_start"
     },
     {
       "id": "a_good_start",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "不错，万事开头难，我感觉现在我们已经要成功咯。",
       "next": "the_wedding"
     },
     {
       "id": "the_wedding",
-      "speaker": "青梅",
+      "speaker": "佩西",
       "text": "瞧你那嘚瑟劲！不过，真要成功了，我们的婚礼就有着落了。",
       "next": "push_the_gate"
     },
     {
       "id": "push_the_gate",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "嫂子说得对。"
     }
   ]

@@ -631,6 +631,7 @@ MonoBehaviour:
   - {fileID: 128779908}
   - {fileID: 399272146}
   - {fileID: 1043563583}
+  hunterWalkSprites: {fileID: 11400000, guid: 4582c6df5518241f3aba366c6462e6d0, type: 2}
   hunterSmoke:
   - {fileID: 1567120924}
   - {fileID: 398251066}
@@ -647,11 +648,17 @@ MonoBehaviour:
   selfIllustration: {fileID: 2800000, guid: 209b69e712e4b463ab84ad363fb0e9db, type: 3}
   otherIllustration: {fileID: 2800000, guid: ee57f73b098d345f78ad0bfe2cb672af, type: 3}
   foley: {fileID: 29468191}
-  rumble: {fileID: 8300000, guid: 5f5cc614a10e340d6b715aa6a9d3d9ca, type: 3}
-  footsteps: {fileID: 8300000, guid: 347faeb65a0cc4076ac998aefac1054f, type: 3}
+  rumble: {fileID: 8300000, guid: da91f15a8146f47999b535e38660c415, type: 3}
+  footsteps: {fileID: 8300000, guid: 1321c8fa1a9b149d59493a99a75fc67d, type: 3}
   breath: {fileID: 8300000, guid: c51267a30a3ef4b21925de4253ede629, type: 3}
   clatter: {fileID: 8300000, guid: 800aab27b7cc24943a55379183777903, type: 3}
-  impact: {fileID: 8300000, guid: 5ed0b9ea6fc3a47f4819c2762b5ec670, type: 3}
+  impact: {fileID: 8300000, guid: c20a19b874c914af3b8b63461734d6f4, type: 3}
+  music: {fileID: 243068050}
+  pulse: {fileID: 767716011}
+  eerieMusic: {fileID: 8300000, guid: ab33eca7238a1456689a717607d2b633, type: 3}
+  warmMusic: {fileID: 8300000, guid: e063e5c9445564f369766b5d0b62f842, type: 3}
+  despairMusic: {fileID: 8300000, guid: f1d9d21620f024f82be704c3258e8753, type: 3}
+  panicHeartbeat: {fileID: 8300000, guid: 98e9108af5c964d4f973803ae6c2f766, type: 3}
 --- !u!82 &29468191
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5518,7 +5525,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.07845911, w: 0.99691737}
   m_LocalPosition: {x: -0.1, y: -6.44, z: 0}
-  m_LocalScale: {x: 0.18214287, y: 0.19464287, z: 1}
+  m_LocalScale: {x: 1.87, y: 2.08, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 939247377}
@@ -5564,12 +5571,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -6996
-  m_Sprite: {fileID: 158990917687048253, guid: 3df83fb365d934021a507ee7e71caeae, type: 3}
-  m_Color: {r: 0.39, g: 0.35, b: 0.45, a: 1}
-  m_FlipX: 1
+  m_Sprite: {fileID: -1547705020, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  m_Color: {r: 0.70, g: 0.47, b: 0.64, a: 1}
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 8.4, y: 11.2}
+  m_Size: {x: 0.8125, y: 0.875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -8370,8 +8377,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1144557476}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.035, y: 0.49}
-  m_AnchorMax: {x: 0.965, y: 0.74}
+  m_AnchorMin: {x: 0.035, y: 0.27}
+  m_AnchorMax: {x: 0.965, y: 0.72}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -8410,7 +8417,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 3
+    m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 0
     m_HorizontalOverflow: 0
@@ -8687,7 +8694,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.06975647, w: 0.9975641}
   m_LocalPosition: {x: -3.9, y: -6.67, z: 0}
-  m_LocalScale: {x: 0.18214287, y: 0.19464287, z: 1}
+  m_LocalScale: {x: 1.62, y: 1.71, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 939247377}
@@ -8733,12 +8740,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -6995
-  m_Sprite: {fileID: 158990917687048253, guid: 3df83fb365d934021a507ee7e71caeae, type: 3}
-  m_Color: {r: 0.39, g: 0.35, b: 0.45, a: 1}
+  m_Sprite: {fileID: -1547705020, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  m_Color: {r: 0.51, g: 0.38, b: 0.58, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 8.4, y: 11.2}
+  m_Size: {x: 0.8125, y: 0.875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -9482,7 +9489,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.07845911, w: 0.99691737}
   m_LocalPosition: {x: -5.45, y: -5.65, z: 0}
-  m_LocalScale: {x: 0.18214287, y: 0.19464287, z: 1}
+  m_LocalScale: {x: 1.68, y: 1.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 939247377}
@@ -9528,12 +9535,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -6998
-  m_Sprite: {fileID: 158990917687048253, guid: 3df83fb365d934021a507ee7e71caeae, type: 3}
-  m_Color: {r: 0.39, g: 0.35, b: 0.45, a: 1}
-  m_FlipX: 1
+  m_Sprite: {fileID: -1547705020, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  m_Color: {r: 0.49, g: 0.38, b: 0.55, a: 1}
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 8.4, y: 11.2}
+  m_Size: {x: 0.8125, y: 0.875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -10053,7 +10060,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.06975647, w: 0.9975641}
   m_LocalPosition: {x: 2.8, y: -4.42, z: 0}
-  m_LocalScale: {x: 0.18214287, y: 0.19464287, z: 1}
+  m_LocalScale: {x: 1.85, y: 1.95, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 939247377}
@@ -10099,12 +10106,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -6999
-  m_Sprite: {fileID: 158990917687048253, guid: 3df83fb365d934021a507ee7e71caeae, type: 3}
-  m_Color: {r: 0.39, g: 0.35, b: 0.45, a: 1}
+  m_Sprite: {fileID: -1322034740, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  m_Color: {r: 0.60, g: 0.43, b: 0.62, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 8.4, y: 11.2}
+  m_Size: {x: 0.8125, y: 0.875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -13934,11 +13941,11 @@ MonoBehaviour:
   choices: {fileID: 299121585}
   hint: {fileID: 468497435}
   portraits:
-  - speaker: "\u4E3B\u89D2"
+  - speaker: "\u6885\u83F2"
     image: {fileID: 649468420}
-  - speaker: "\u5144\u5F1F"
+  - speaker: "\u8FBE\u5C14"
     image: {fileID: 378489400}
-  - speaker: "\u9752\u6885"
+  - speaker: "\u4F69\u897F"
     image: {fileID: 288223772}
 --- !u!224 &671788021
 RectTransform:
@@ -17769,7 +17776,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.06975647, w: 0.9975641}
   m_LocalPosition: {x: 5.4, y: -5.7, z: 0}
-  m_LocalScale: {x: 0.18214287, y: 0.19464287, z: 1}
+  m_LocalScale: {x: 1.76, y: 1.82, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 939247377}
@@ -17815,12 +17822,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -6997
-  m_Sprite: {fileID: 158990917687048253, guid: 3df83fb365d934021a507ee7e71caeae, type: 3}
-  m_Color: {r: 0.39, g: 0.35, b: 0.45, a: 1}
+  m_Sprite: {fileID: -1322034740, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  m_Color: {r: 0.52, g: 0.38, b: 0.54, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 8.4, y: 11.2}
+  m_Size: {x: 0.8125, y: 0.875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -18467,7 +18474,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.07845911, w: 0.99691737}
   m_LocalPosition: {x: 3.65, y: -6.57, z: 0}
-  m_LocalScale: {x: 0.18214287, y: 0.19464287, z: 1}
+  m_LocalScale: {x: 1.65, y: 1.74, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 939247377}
@@ -18513,12 +18520,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -6994
-  m_Sprite: {fileID: 158990917687048253, guid: 3df83fb365d934021a507ee7e71caeae, type: 3}
-  m_Color: {r: 0.39, g: 0.35, b: 0.45, a: 1}
-  m_FlipX: 1
+  m_Sprite: {fileID: -1322034740, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  m_Color: {r: 0.47, g: 0.36, b: 0.54, a: 1}
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 8.4, y: 11.2}
+  m_Size: {x: 0.8125, y: 0.875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -19894,7 +19901,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.07845911, w: 0.99691737}
   m_LocalPosition: {x: -2.95, y: -4.1, z: 0}
-  m_LocalScale: {x: 0.18214287, y: 0.19464287, z: 1}
+  m_LocalScale: {x: 1.9, y: 1.95, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 939247377}
@@ -19940,12 +19947,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -7000
-  m_Sprite: {fileID: 158990917687048253, guid: 3df83fb365d934021a507ee7e71caeae, type: 3}
-  m_Color: {r: 0.39, g: 0.35, b: 0.45, a: 1}
-  m_FlipX: 1
+  m_Sprite: {fileID: -1547705020, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  m_Color: {r: 0.66, g: 0.49, b: 0.66, a: 1}
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 8.4, y: 11.2}
+  m_Size: {x: 0.8125, y: 0.875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -30141,6 +30148,98 @@ MonoBehaviour:
   selection: {fileID: 495303687}
   icon: {fileID: 55160051}
   label: {fileID: 437198223}
+--- !u!1 &243068049
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 243068051}
+  - component: {fileID: 243068050}
+  m_Layer: 0
+  m_Name: Story Music
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &243068050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243068049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf1663c5e22464a0b8f04930fb9ecf2c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  startingClip: {fileID: 8300000, guid: ab33eca7238a1456689a717607d2b633, type: 3}
+  startingVolume: 0.24
+--- !u!4 &243068051
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243068049}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &767716010
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 767716012}
+  - component: {fileID: 767716011}
+  m_Layer: 0
+  m_Name: Panic Heartbeat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &767716011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 767716010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf1663c5e22464a0b8f04930fb9ecf2c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  startingClip: {fileID: 0}
+  startingVolume: 0
+--- !u!4 &767716012
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 767716010}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -30159,3 +30258,5 @@ SceneRoots:
   - {fileID: 1515405798}
   - {fileID: 911162340}
   - {fileID: 939247377}
+  - {fileID: 243068051}
+  - {fileID: 767716012}

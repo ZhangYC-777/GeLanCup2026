@@ -9,7 +9,7 @@
     },
     {
       "id": "brother_reads_the_plaques",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "嘶——这牌子怎么跟冰块一样？哥，这上面有字。",
       "next": "second_floor_note"
     },
@@ -21,19 +21,19 @@
     },
     {
       "id": "protagonist_loses_patience",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "可恶！它就是故意不告诉我们去哪里，又让我们盲选。",
       "next": "brother_calms_protagonist"
     },
     {
       "id": "brother_calms_protagonist",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "哥，嫂子既然是被抓走的，说明她没死！现在不是发火的时候。只要我们往上爬，总能找到她。",
       "next": "brother_chooses_the_door"
     },
     {
       "id": "brother_chooses_the_door",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "哥，上次你选的，这次让我来。"
     },
 
@@ -45,7 +45,7 @@
     },
     {
       "id": "sacrifice_2_who",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "谁？！谁在那？！"
     },
     {
@@ -56,25 +56,25 @@
     },
     {
       "id": "sacrifice_2_brother_run",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "跑！哥！快跑！",
       "next": "sacrifice_2_brother_lost"
     },
     {
       "id": "sacrifice_2_brother_lost",
-      "speaker": "主角",
-      "text": "兄弟！！"
+      "speaker": "梅菲",
+      "text": "达尔！！"
     },
     {
       "id": "sacrifice_2_retreat",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "我一定会救你的……我一定会救你的……现在打不过它，我这也是为了保存有生之力，我死了就全完了……"
     },
 
     {
       "id": "explore_door",
       "speaker": "",
-      "text": "说罢，兄弟没有犹豫，径直走向了左侧的石门，主角紧紧跟上。"
+      "text": "说罢，达尔没有犹豫，径直走向了左侧的石门，梅菲紧紧跟上。"
     },
     {
       "id": "explore_vast",
@@ -84,13 +84,13 @@
     },
     {
       "id": "explore_panic",
-      "speaker": "主角",
-      "text": "这到底是哪儿？门呢？出口在哪？青梅到底被藏在哪里了？！",
+      "speaker": "梅菲",
+      "text": "这到底是哪儿？门呢？出口在哪？佩西到底被藏在哪里了？！",
       "next": "explore_calm"
     },
     {
       "id": "explore_calm",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "哥，别急。这地方太大了，我们得慢慢找线索，越是焦躁越容易出事。"
     },
     {
@@ -101,28 +101,28 @@
     {
       "id": "explore_punch",
       "speaker": "",
-      "text": "压抑的氛围让主角的情绪越来越焦灼。他甚至开始用拳头去砸那些坚硬的石壁，试图找到隐藏的暗道。",
+      "text": "压抑的氛围让梅菲的情绪越来越焦灼。他甚至开始用拳头去砸那些坚硬的石壁，试图找到隐藏的暗道。",
       "next": "explore_dead_end"
     },
     {
       "id": "explore_dead_end",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "该死！全都是死路！这根本就是个出不去的死局！"
     },
     {
       "id": "explore_chest_call",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "哥！快过来看！这里有个箱子！"
     },
     {
       "id": "explore_chest_open",
       "speaker": "",
-      "text": "主角猛地转过身跑过去。那是一个半埋在土里的破旧木箱。兄弟用随身带的匕首撬开了锁，里面赫然躺着一把沉甸甸的铁锤，以及一把备用的手电筒。",
+      "text": "梅菲猛地转过身跑过去。那是一个半埋在土里的破旧木箱。达尔用随身带的匕首撬开了锁，里面赫然躺着一把沉甸甸的铁锤，以及一把备用的手电筒。",
       "next": "explore_chest_tool"
     },
     {
       "id": "explore_chest_tool",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "太好了，有这玩意儿，前面要是再有那种石门，就不用再瞎找了！",
       "rewardItemId": "iron_hammer"
     },
@@ -133,25 +133,25 @@
     },
     {
       "id": "explore_gate_push",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "打不开！这破门根本推不动！",
       "next": "explore_gate_step"
     },
     {
       "id": "explore_gate_step",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "让开，我来。"
     },
     {
       "id": "explore_hammer",
       "speaker": "",
-      "text": "「砰——！」「砰——！」沉闷的金属撞击声在死寂的迷宫里显得震耳欲聋。兄弟抡起铁锤，一下又一下，拼尽全力地砸在那些卡死的齿轮上。火花四溅中，齿轮终于发出了令人牙酸的「嘎吱」声，开始缓缓转动。但巨大的噪音，也在黑暗中引来了恐怖的东西。",
+      "text": "「砰——！」「砰——！」沉闷的金属撞击声在死寂的迷宫里显得震耳欲聋。达尔抡起铁锤，一下又一下，拼尽全力地砸在那些卡死的齿轮上。火花四溅中，齿轮终于发出了令人牙酸的「嘎吱」声，开始缓缓转动。但巨大的噪音，也在黑暗中引来了恐怖的东西。",
       "next": "explore_hammer_listen"
     },
     {
       "id": "explore_hammer_listen",
-      "speaker": "主角",
-      "text": "兄弟，别砸了……你听，什么声音？",
+      "speaker": "梅菲",
+      "text": "达尔，别砸了……你听，什么声音？",
       "next": "explore_hammer_scrape"
     },
     {
@@ -162,65 +162,65 @@
     },
     {
       "id": "explore_hammer_hunters",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "追猎者……那些怪物追过来了！",
       "next": "explore_hammer_final"
     },
     {
       "id": "explore_hammer_final",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "给我——开！！！",
       "next": "explore_gate_burst"
     },
     {
       "id": "explore_gate_burst",
       "speaker": "",
-      "text": "「轰隆——」铁门终于被硬生生砸开了，露出了后面安全的通道。但在同一瞬间，一道巨大的黑影如闪电般从侧面扑向了主角。主角刚想举着手电筒去挡，却被兄弟一把狠狠推开。"
+      "text": "「轰隆——」铁门终于被硬生生砸开了，露出了后面安全的通道。但在同一瞬间，一道巨大的黑影如闪电般从侧面扑向了梅菲。梅菲刚想举着手电筒去挡，却被达尔一把狠狠推开。"
     },
     {
       "id": "explore_run",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "哥！跑！快跑啊！！",
       "next": "explore_brother"
     },
     {
       "id": "explore_brother",
-      "speaker": "主角",
-      "text": "兄弟！！",
+      "speaker": "梅菲",
+      "text": "达尔！！",
       "next": "explore_hesitate"
     },
     {
       "id": "explore_hesitate",
       "speaker": "",
-      "text": "铁门就在身后，只要退进去就能活命。但主角看着被黑影缠住的兄弟，腿脚却发软。",
+      "text": "铁门就在身后，只要退进去就能活命。但梅菲看着被黑影缠住的达尔，腿脚却发软。",
       "next": "explore_hold"
     },
     {
       "id": "explore_hold",
-      "speaker": "兄弟",
+      "speaker": "达尔",
       "text": "别管我！我拦住它！走！",
       "next": "explore_inner"
     },
     {
       "id": "explore_inner",
-      "speaker": "主角",
-      "text": "我打不过它……我过去也是白搭……我不能死，我必须留着命，我还要去救青梅。我这也是为了保存有生之力……"
+      "speaker": "梅菲",
+      "text": "我打不过它……我过去也是白搭……我不能死，我必须留着命，我还要去救佩西。我这也是为了保存有生之力……"
     },
     {
       "id": "explore_end_run",
       "speaker": "",
-      "text": "主角拼命地往前跑，不敢回头。当他终于脱力地瘫坐在地上，大口喘息着、惊魂未定地抬起头时，他发现周围的环境又变了。这里没有怪物，也没有黑暗的迷宫。他死里逃生——这扇砸开的门，直接连通的，正是第三层最终的安全点。而兄弟的惨叫声，已经被厚重的铁门彻底隔绝。",
+      "text": "梅菲拼命地往前跑，不敢回头。当他终于脱力地瘫坐在地上，大口喘息着、惊魂未定地抬起头时，他发现周围的环境又变了。这里没有怪物，也没有黑暗的迷宫。他死里逃生——这扇砸开的门，直接连通的，正是第三层最终的安全点。而达尔的惨叫声，已经被厚重的铁门彻底隔绝。",
       "next": "explore_end_light"
     },
     {
       "id": "explore_end_light",
       "speaker": "",
-      "text": "主角看着手里那只掉落出来的、原本属于兄弟的手电筒，整个人仿佛被抽干了灵魂，呆呆地坐在死寂的安全房里。",
+      "text": "梅菲看着手里那只掉落出来的、原本属于达尔的手电筒，整个人仿佛被抽干了灵魂，呆呆地坐在死寂的安全房里。",
       "next": "explore_end_last"
     },
     {
       "id": "explore_end_last",
-      "speaker": "主角",
+      "speaker": "梅菲",
       "text": "……就剩我了。"
     }
   ]

@@ -20,6 +20,7 @@ public sealed class BreadTrial : MonoBehaviour
     [SerializeField] private AudioClip dashSound;
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip winSound;
+    [SerializeField] private AudioClip heartbeat;
 
     private const float MoveSpeed = 4.3f;
     private const float DashSpeed = 10.5f;
@@ -41,7 +42,6 @@ public sealed class BreadTrial : MonoBehaviour
     private RenderTexture target;
     private Transform world;
     private AudioSource audioSource;
-    private AudioClip heartbeat;
     private BreadMazeLayout layout;
     private SpriteRenderer runner;
     private SpriteRenderer shadow;
@@ -101,11 +101,10 @@ public sealed class BreadTrial : MonoBehaviour
         audioSource = cameraObject.AddComponent<AudioSource>();
         audioSource.playOnAwake = false;
         audioSource.spatialBlend = 0f;
-        heartbeat = CreateHeartbeat();
         PrepareRun();
         ChangeState(State.Ready);
         view.ShowMenu("面包迷宫", "沿着手电的光找出口。捡到面包可恢复体力，冲刺可能引来影子。",
-            "开始  F", StartPlaying, "返回解谜房  Esc", Close);
+            "开始  Enter", StartPlaying, "返回解谜房  Esc", Close);
         return true;
     }
 
@@ -117,7 +116,7 @@ public sealed class BreadTrial : MonoBehaviour
         if (Time.frameCount == openedFrame) return;
 
         Keyboard keys = Keyboard.current;
-        bool confirm = keys != null && (keys.fKey.wasPressedThisFrame || keys.enterKey.wasPressedThisFrame);
+        bool confirm = MenuInput.WasConfirmPressed();
         bool escape = keys != null && keys.escapeKey.wasPressedThisFrame;
         bool retry = keys != null && keys.rKey.wasPressedThisFrame;
         bool leave = keys != null && keys.qKey.wasPressedThisFrame;
@@ -167,7 +166,7 @@ public sealed class BreadTrial : MonoBehaviour
             onWon();
             Play(winSound, .62f);
             view.ShowMenu("到达出口", $"用时 {TimeSpan.FromSeconds(elapsed):mm\\:ss}    ·    面包 {collected} / {BreadMazeLayout.BreadCount}    ·    被撞 {hits} 次",
-                "返回解谜房  F", Close, null, null);
+                "返回解谜房  Enter", Close, null, null);
         }
 
         UpdateWorldView(dt);
@@ -489,8 +488,6 @@ public sealed class BreadTrial : MonoBehaviour
             mazeCamera.enabled = false;
             Destroy(mazeCamera.gameObject);
         }
-        if (heartbeat != null)
-            Destroy(heartbeat);
         onWon = null;
         onClosed = null;
     }
@@ -507,17 +504,4 @@ public sealed class BreadTrial : MonoBehaviour
             audioSource.PlayOneShot(clip, volume);
     }
 
-    private static AudioClip CreateHeartbeat()
-    {
-        const int rate = 44100;
-        var samples = new float[7056];
-        for (int i = 0; i < samples.Length; i++)
-        {
-            float time = i / (float)rate;
-            samples[i] = (.7f * Mathf.Sin(345.5752f * time) + .25f * Mathf.Sin(691.1504f * time)) * Mathf.Exp(-26f * time);
-        }
-        var clip = AudioClip.Create("Shadow Heartbeat", samples.Length, 1, rate, false);
-        clip.SetData(samples, 0);
-        return clip;
-    }
 }

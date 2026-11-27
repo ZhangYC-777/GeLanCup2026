@@ -153,7 +153,8 @@ public sealed class SecondFloorSacrifice : MonoBehaviour
     {
         protagonist.RestorePosition(encounterMark.position);
         brother.RestorePosition(encounterMark.position + Vector3.up * FollowingGap);
-        visibility.SetFlashlight(true, protagonist.SavePosition, Vector2.up);
+        Vector2 towardShadow = (shadowDistantMark.position - protagonist.SavePosition).normalized;
+        visibility.SetFlashlight(true, protagonist.SavePosition, towardShadow);
     }
 
     // 手电只在远处照到一瞬，等主角喝问后黑影才冲到两人跟前。
