@@ -182,6 +182,12 @@ public sealed class SecondFloorExploration : MonoBehaviour
         {
             Physics2D.IgnoreCollision(protagonistCollider, brotherCollider, true);
         }
+
+        // 兄弟在这条路线上一直由脚本带着走，碰撞只会让他在柱子边打转。
+        if (brother != null)
+        {
+            brother.SetColliderEnabled(false);
+        }
     }
 
     private void OnEnable()

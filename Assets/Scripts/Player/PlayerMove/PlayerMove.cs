@@ -53,6 +53,15 @@ public class PlayerMove : MonoBehaviour
         physicsMotion = Vector2.zero;
     }
 
+    // 剧情里被脚本带着走的角色要能穿过柱子一类的布景，否则物理会把刚体顶回去，看着像被卡住。
+    internal void SetColliderEnabled(bool value)
+    {
+        foreach (Collider2D shape in GetComponents<Collider2D>())
+        {
+            shape.enabled = value;
+        }
+    }
+
     // 缓存刚体，关闭重力并冻结 Z 轴旋转。
     private void Awake()
     {

@@ -49,6 +49,11 @@ public sealed class SecondFloorSacrifice : MonoBehaviour
     {
         shadowColor = shadow.color;
         shadow.gameObject.SetActive(false);
+        // 献祭路线里兄弟同样只由演出脚本带走，关掉碰撞免得卡在柱子上。
+        if (brother != null)
+        {
+            brother.SetColliderEnabled(false);
+        }
     }
 
     private void OnEnable()

@@ -32,6 +32,8 @@ public sealed class SecondFloorArrival : MonoBehaviour
     {
         protagonistEntry = protagonist.transform.position;
         brotherEntry = brother.transform.position;
+        // 兄弟全程由演出脚本带走，关掉碰撞，避免被柱子顶回去卡在原地。
+        brother.SetColliderEnabled(false);
     }
 
     // 继续游戏保留自由移动的位置，开场对话检查点则重播跑门演出。
