@@ -1,0 +1,589 @@
+fileFormatVersion: 2
+guid: c884ae4422ce84517a63d85cae29f654
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ChildhoodFriend_left_idle
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 112
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6681adc7e0c70450aaa611005bafef5d
+      internalID: -776270281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_left_walk_1
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 112
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 502b59bc68870491a8b4cb2037762434
+      internalID: -18403410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_left_walk_2
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 112
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91a8da20ffdfb47b181c7ce1aee8e34e
+      internalID: -1092276291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_left_walk_3
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 112
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74dd13f9fc9894ef68a667b9bf273a77
+      internalID: -793167711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_left_walk_4
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 112
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0bb0d1e86dd945758589609948bd5dc
+      internalID: 21932964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_left_walk_5
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 112
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0c43b1bbf4004731915f8e504351bf8
+      internalID: -971320655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_left_walk_6
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 112
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a81cb98a143474d568ca692599de138f
+      internalID: 52029684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_right_idle
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 56
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 511ac383374064bce83abea62a73588e
+      internalID: 727997894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_right_walk_1
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 56
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db0db1019ccac43059f9fcaf33f2cdf0
+      internalID: 133468402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_right_walk_2
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 56
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8de7cbd8c118a4bd99bff34b0dd59d17
+      internalID: 1219343609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_right_walk_3
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 56
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2a2a5621922d44e083f0bdbd2a899d8
+      internalID: -375492541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_right_walk_4
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 56
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72515d64fe9fe48ff94c163b5d297906
+      internalID: 2056192010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_right_walk_5
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 56
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13f596277fe494ac3988b84b98fc9213
+      internalID: -241300780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_right_walk_6
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 56
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6da9286e8ab3244c1937b3e8e818ddb8
+      internalID: -300181843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_up_idle
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3d5fee0bcbd24afda1ef8dd8df7fc9d
+      internalID: 1796918768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_up_walk_1
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 0
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ad3382b691e4496ba32f38e856b28ea
+      internalID: 23141350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_up_walk_2
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 0
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51d77b2d480674da58dabc1060e85b36
+      internalID: 192203010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_up_walk_3
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 0
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb8a2cfc2b3b24058851d85964201ef0
+      internalID: -596407637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_up_walk_4
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 0
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 718b80a1efea94ec0a7fd316218da6e2
+      internalID: -2113982929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_up_walk_5
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 0
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc837470fe230422cac7e72226aaae5a
+      internalID: 1898098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChildhoodFriend_up_walk_6
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 0
+        width: 52
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40bb686feeeec45bf863c3c67bf91830
+      internalID: 1971413454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      ChildhoodFriend_left_idle: -776270281
+      ChildhoodFriend_left_walk_1: -18403410
+      ChildhoodFriend_left_walk_2: -1092276291
+      ChildhoodFriend_left_walk_3: -793167711
+      ChildhoodFriend_left_walk_4: 21932964
+      ChildhoodFriend_left_walk_5: -971320655
+      ChildhoodFriend_left_walk_6: 52029684
+      ChildhoodFriend_right_idle: 727997894
+      ChildhoodFriend_right_walk_1: 133468402
+      ChildhoodFriend_right_walk_2: 1219343609
+      ChildhoodFriend_right_walk_3: -375492541
+      ChildhoodFriend_right_walk_4: 2056192010
+      ChildhoodFriend_right_walk_5: -241300780
+      ChildhoodFriend_right_walk_6: -300181843
+      ChildhoodFriend_up_idle: 1796918768
+      ChildhoodFriend_up_walk_1: 23141350
+      ChildhoodFriend_up_walk_2: 192203010
+      ChildhoodFriend_up_walk_3: -596407637
+      ChildhoodFriend_up_walk_4: -2113982929
+      ChildhoodFriend_up_walk_5: 1898098
+      ChildhoodFriend_up_walk_6: 1971413454
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -173,7 +173,7 @@ public sealed class SafeRoomSequence : MonoBehaviour
     private bool WalkStep(PlayerMove actor, Transform mark)
     {
         Vector3 position = Vector3.MoveTowards(actor.SavePosition, mark.position, walkSpeed * Time.deltaTime);
-        actor.RestorePosition(position);
+        actor.MoveForStory(position);
         return position == mark.position;
     }
 

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69bc20ed4223b4cd58735594e8bd4400, type: 3}
+  m_Name: ProtagonistWalk
+  m_EditorClassIdentifier: 
+  left:
+  - {fileID: 1386987246, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: 50375026, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: -1697768340, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: 1777030363, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: 763984411, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: 577527571, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: -567120207, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  right:
+  - {fileID: -2092340953, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: -410810557, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: 2061942161, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: 807427103, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: 1351230441, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: 1054916707, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: -1105388253, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  up:
+  - {fileID: -1700935455, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: -1076523708, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: 1769717018, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: -1870284498, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: 1744707686, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: -581006613, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  - {fileID: -1573552196, guid: 79da36024ba8d4e3d823bdd3c3e95426, type: 3}
+  frameSeconds: 0.12

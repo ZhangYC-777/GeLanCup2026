@@ -12,12 +12,17 @@ public sealed class SecondFloorArrival : MonoBehaviour
     [SerializeField] private Transform protagonistAtStatue;
     [SerializeField] private Transform brotherAtStatue;
     [SerializeField] private Transform[] brotherRunMarks;
+    [SerializeField] private Collider2D explorationDoorApproach;
+    [SerializeField] private Collider2D sacrificeDoorApproach;
     [SerializeField, Min(0.1f)] private float arrivalSpeed = 5.5f;
     [SerializeField, Min(0.1f)] private float brotherRunSpeed = 6.8f;
     [SerializeField, Min(0f)] private float doorHoldSeconds = 0.35f;
 
     private const string ArrivalState = "second_floor_arrival";
     private const string BrotherAtDoor = "brother_at_exploration_door";
+    internal const string RouteState = "secondFloorRoute";
+    internal const string ExplorationRoute = "exploration";
+    internal const string SacrificeRoute = "sacrifice";
     private Vector3 protagonistEntry;
     private Vector3 brotherEntry;
     private Coroutine brotherRun;
@@ -32,7 +37,7 @@ public sealed class SecondFloorArrival : MonoBehaviour
     // 继续游戏保留自由移动的位置，开场对话检查点则重播跑门演出。
     private void Start()
     {
-        if (openingDialogue.Controller.HasStoryValue(ArrivalState, BrotherAtDoor))
+        if (openingDialogue.Controller.HasStoryValue(ArrivalState, BrotherAtDoor) || HasChosenRoute())
         {
             return;
         }
@@ -45,6 +50,33 @@ public sealed class SecondFloorArrival : MonoBehaviour
         {
             StartCoroutine(EnterSanctuary());
         }
+    }
+
+    // 跑门演出结束后，由主角靠近哪扇门决定路线。
+    private void Update()
+    {
+        if (!openingDialogue.Controller.HasStoryValue(ArrivalState, BrotherAtDoor) ||
+            HasChosenRoute() || switchPlayer.IsGameplayLocked)
+        {
+            return;
+        }
+
+        Vector2 position = protagonist.SavePosition;
+        if (sacrificeDoorApproach.OverlapPoint(position))
+        {
+            openingDialogue.Controller.SetStoryValue(RouteState, SacrificeRoute);
+        }
+        else if (explorationDoorApproach.OverlapPoint(position))
+        {
+            openingDialogue.Controller.SetStoryValue(RouteState, ExplorationRoute);
+        }
+    }
+
+    private bool HasChosenRoute()
+    {
+        DialogueController dialogue = openingDialogue.Controller;
+        return dialogue.HasStoryValue(RouteState, ExplorationRoute) ||
+               dialogue.HasStoryValue(RouteState, SacrificeRoute);
     }
 
     // 两人走到圣女像前，再把输入交给对话播放器。
@@ -104,7 +136,7 @@ public sealed class SecondFloorArrival : MonoBehaviour
     private static bool MoveStep(PlayerMove actor, Transform mark, float speed)
     {
         Vector3 position = Vector3.MoveTowards(actor.SavePosition, mark.position, speed * Time.deltaTime);
-        actor.RestorePosition(position);
+        actor.MoveForStory(position);
         return position == mark.position;
     }
 }

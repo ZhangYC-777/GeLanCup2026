@@ -41,7 +41,6 @@ public sealed class SecondFloorExploration : MonoBehaviour
     [SerializeField] private Transform mainCamera;
 
     [Header("到达与剧情段落")]
-    [SerializeField] private DialogueTrigger arrivalDialogue;
     [SerializeField] private DialogueTrigger doorBeat;
     [SerializeField] private DialogueTrigger vastBeat;
     [SerializeField] private DialogueTrigger lostBeat;
@@ -108,11 +107,7 @@ public sealed class SecondFloorExploration : MonoBehaviour
     // 第三层场景接入后填这里；为空时探索路线在安全点收束。
     [SerializeField] private string nextScenePath = "";
 
-    private const string ArrivalState = "second_floor_arrival";
-    private const string BrotherAtDoor = "brother_at_exploration_door";
     private const string HammerItemId = "iron_hammer";
-    private const string RouteState = "secondFloorRoute";
-    private const string RouteValue = "exploration";
     private const string ExitState = "secondFloorExplorationExit";
     private const string ExitReady = "ready";
     private const float FollowDistance = 1.05f;
@@ -208,9 +203,20 @@ public sealed class SecondFloorExploration : MonoBehaviour
     // 按最后一次完成的段落恢复。位置、背包和 SAN 已由 SceneSave 读回。
     private void Start()
     {
+        if (dialogue.HasStoryValue(SecondFloorArrival.RouteState, SecondFloorArrival.SacrificeRoute))
+        {
+            return;
+        }
+
+        // 旧存档在离开探索路线前还没有路线值，沿用原有的段落检查点。
+        if (doorBeat.HasCompleted)
+        {
+            dialogue.SetStoryValue(SecondFloorArrival.RouteState, SecondFloorArrival.ExplorationRoute);
+        }
+
         if (endBeat.HasCompleted)
         {
-            FinishStory(loadNextScene: false);
+            FinishStory();
             return;
         }
 
@@ -345,12 +351,17 @@ public sealed class SecondFloorExploration : MonoBehaviour
         }
     }
 
-    // 兄弟跑到探索门后，两人一起走向左侧石门。
+    // 主角靠近左门选定探索路线后，两人一起进门。
     private IEnumerator BeginWhenArrivalDone()
     {
-        while (!arrivalDialogue.HasCompleted ||
-               !dialogue.HasStoryValue(ArrivalState, BrotherAtDoor))
+        while (!dialogue.HasStoryValue(SecondFloorArrival.RouteState, SecondFloorArrival.ExplorationRoute))
         {
+            if (dialogue.HasStoryValue(SecondFloorArrival.RouteState, SecondFloorArrival.SacrificeRoute))
+            {
+                activeRoutine = null;
+                yield break;
+            }
+
             yield return null;
         }
 
@@ -789,7 +800,7 @@ public sealed class SecondFloorExploration : MonoBehaviour
     private IEnumerator ReplayEnding()
     {
         yield return PlayBeat(endBeat);
-        FinishStory(loadNextScene: true);
+        FinishStory();
     }
 
     // 黑场后主角已经穿过了铁门，兄弟的惨叫声被隔绝在门后。
@@ -809,11 +820,11 @@ public sealed class SecondFloorExploration : MonoBehaviour
         yield return FadeTo(0f, .6f);
 
         yield return PlayBeat(endBeat);
-        FinishStory(loadNextScene: true);
+        FinishStory();
     }
 
     // 已经完成整条路线时，把场景恢复成兄弟已经不在的状态。
-    private void FinishStory(bool loadNextScene)
+    private void FinishStory()
     {
         SetGateOpened(true, immediate: true);
         brotherFollowing = false;
@@ -823,20 +834,15 @@ public sealed class SecondFloorExploration : MonoBehaviour
         flashlightOn = true;
         party.SetSwitchingLocked(false);
         party.SetGameplayLocked(false);
-        dialogue.SetStoryValue(RouteState, RouteValue);
+        dialogue.SetStoryValue(SecondFloorArrival.RouteState, SecondFloorArrival.ExplorationRoute);
         dialogue.SetStoryValue(ExitState, ExitReady);
         phase = Phase.Finished;
         sceneSave.CaptureCheckpoint();
         activeRoutine = null;
 
-        if (loadNextScene && !string.IsNullOrEmpty(nextScenePath))
+        if (!string.IsNullOrEmpty(nextScenePath))
         {
-            int index = UnityEngine.SceneManagement.SceneUtility.GetBuildIndexByScenePath(nextScenePath);
-            if (index >= 0)
-            {
-                party.SetGameplayLocked(true);
-                UnityEngine.SceneManagement.SceneManager.LoadScene(index);
-            }
+            sceneSave.LoadNextPartyScene(nextScenePath);
         }
     }
 
@@ -1115,7 +1121,7 @@ public sealed class SecondFloorExploration : MonoBehaviour
             trail.RemoveAt(0);
         }
 
-        brother.RestorePosition(position);
+        brother.MoveForStory(position);
     }
 
     private void ResetTrail(Vector3 start)
@@ -1159,7 +1165,7 @@ public sealed class SecondFloorExploration : MonoBehaviour
     private bool MoveStep(PlayerMove actor, Vector3 target, float speed)
     {
         Vector3 next = Vector3.MoveTowards(actor.SavePosition, target, speed * Time.deltaTime);
-        actor.RestorePosition(next);
+        actor.MoveForStory(next);
         return next == target;
     }
 

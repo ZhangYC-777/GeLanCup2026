@@ -38,6 +38,40 @@
     },
 
     {
+      "id": "sacrifice_2_sighting",
+      "speaker": "",
+      "text": "右侧门后是一片死寂的黑暗。手电筒刚照向通道深处，一团浓稠的黑影便一闪而过。",
+      "next": "sacrifice_2_who"
+    },
+    {
+      "id": "sacrifice_2_who",
+      "speaker": "主角",
+      "text": "谁？！谁在那？！"
+    },
+    {
+      "id": "sacrifice_2_shadow",
+      "speaker": "",
+      "text": "那团黑影一下贴到了两人面前。手电光里刚照出扭曲的人形，一个沙哑、带着笑意的声音就在耳边响起：『你……是在找我吗？』",
+      "next": "sacrifice_2_brother_run"
+    },
+    {
+      "id": "sacrifice_2_brother_run",
+      "speaker": "兄弟",
+      "text": "跑！哥！快跑！",
+      "next": "sacrifice_2_brother_lost"
+    },
+    {
+      "id": "sacrifice_2_brother_lost",
+      "speaker": "主角",
+      "text": "兄弟！！"
+    },
+    {
+      "id": "sacrifice_2_retreat",
+      "speaker": "主角",
+      "text": "我一定会救你的……我一定会救你的……现在打不过它，我这也是为了保存有生之力，我死了就全完了……"
+    },
+
+    {
       "id": "explore_door",
       "speaker": "",
       "text": "说罢，兄弟没有犹豫，径直走向了左侧的石门，主角紧紧跟上。"

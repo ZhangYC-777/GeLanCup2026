@@ -8,9 +8,10 @@ using UnityEngine.UI;
 [DisallowMultipleComponent, DefaultExecutionOrder(20)]
 public class SceneSave : MonoBehaviour
 {
-    internal const string MainMenuPath = "Assets/Scenes/MainMenu.unity";
     internal const string MainStoryDirectory = "Assets/Scenes/GameScene/";
+    internal const string MainMenuPath = MainStoryDirectory + "scene-1.unity";
     internal const string SecondFloorPath = MainStoryDirectory + "Scene4.unity";
+    internal const string ThirdFloorPath = MainStoryDirectory + "scene5.unity";
 
     [SerializeField] private SwitchPlayer switchPlayer;
     [SerializeField] private InventoryController inventory;
@@ -20,6 +21,8 @@ public class SceneSave : MonoBehaviour
     [SerializeField] private Text errorLabel;
     [SerializeField] private SafeRoomSequence safeRoom;
     [SerializeField] private bool checkpointOnArrival;
+    // 终局等连续演出从出生点重播，保留到达场景时的背包和 SAN。
+    [SerializeField] private bool keepArrivalCheckpoint;
 
     private static SceneProgress pendingRestore;
     private static SceneProgress latestProgress;
@@ -33,7 +36,7 @@ public class SceneSave : MonoBehaviour
 
     internal static bool IsMainStoryScene(string path)
     {
-        return path != null && path.StartsWith(MainStoryDirectory, StringComparison.Ordinal);
+        return path != null && path != MainMenuPath && path.StartsWith(MainStoryDirectory, StringComparison.Ordinal);
     }
 
     // 每次进入播放模式时重置，包括 Unity 关闭域重载的情况。
@@ -85,7 +88,7 @@ public class SceneSave : MonoBehaviour
 
         pendingRestore = null;
         HasRestoredProgress = true;
-        if (switchPlayer != null && restore.playerPositions.Length > 0)
+        if (!keepArrivalCheckpoint && switchPlayer != null && restore.playerPositions.Length > 0)
         {
             safeRoom?.RestoreRoutePositions(restore);
             switchPlayer.RestoreParty(restore.playerPositions, restore.activePlayerIndex);
@@ -111,7 +114,7 @@ public class SceneSave : MonoBehaviour
         }
 
         // 跨场景进度没有位置数据，由本场景的出生站位建立检查点。
-        if (checkpointOnArrival && restore.playerPositions.Length == 0)
+        if (checkpointOnArrival && (keepArrivalCheckpoint || restore.playerPositions.Length == 0))
         {
             CaptureCheckpoint();
         }
@@ -119,7 +122,7 @@ public class SceneSave : MonoBehaviour
 
     private void OnEnable()
     {
-        if (dialogue != null && switchPlayer != null)
+        if (dialogue != null && switchPlayer != null && !keepArrivalCheckpoint)
         {
             dialogue.PlaybackCompleted += CaptureCheckpoint;
         }
@@ -132,7 +135,7 @@ public class SceneSave : MonoBehaviour
     private void Start()
     {
         // 第一段对话完成前，也有一个安全的关卡初始位置可重试。
-        if (switchPlayer != null && latestCheckpoint == null)
+        if (switchPlayer != null && (latestCheckpoint == null || keepArrivalCheckpoint && !HasRestoredProgress))
         {
             CaptureCheckpoint();
         }
@@ -140,7 +143,7 @@ public class SceneSave : MonoBehaviour
 
     private void OnDisable()
     {
-        if (dialogue != null && switchPlayer != null)
+        if (dialogue != null && switchPlayer != null && !keepArrivalCheckpoint)
         {
             dialogue.PlaybackCompleted -= CaptureCheckpoint;
         }
@@ -274,7 +277,7 @@ public class SceneSave : MonoBehaviour
         }
 
         // 对话播到一半时仍保存最近完整的进度，避免记录只执行了一半的分支。
-        if (switchPlayer != null && (dialogue == null || !dialogue.IsPlaying))
+        if (!keepArrivalCheckpoint && switchPlayer != null && (dialogue == null || !dialogue.IsPlaying))
         {
             latestProgress = CaptureProgress() ?? latestProgress;
         }

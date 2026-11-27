@@ -358,7 +358,7 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
     private bool MoveTo(PlayerMove actor, Vector3 target)
     {
         Vector3 next = Vector3.MoveTowards(actor.SavePosition, target, walkSpeed * Time.deltaTime);
-        actor.RestorePosition(next);
+        actor.MoveForStory(next);
         return next == target;
     }
 

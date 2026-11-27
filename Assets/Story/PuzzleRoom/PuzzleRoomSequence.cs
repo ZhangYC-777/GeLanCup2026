@@ -260,7 +260,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         {
             while (protagonist.SavePosition != waypoint.position)
             {
-                protagonist.RestorePosition(Vector3.MoveTowards(protagonist.SavePosition, waypoint.position, 5f * Time.deltaTime));
+                protagonist.MoveForStory(Vector3.MoveTowards(protagonist.SavePosition, waypoint.position, 5f * Time.deltaTime));
                 yield return null;
             }
 
@@ -399,7 +399,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         visibility.SetFlashlight(true, flashlightDrop.position, flashlightDirection);
         while (protagonist.SavePosition != end)
         {
-            protagonist.RestorePosition(Vector3.MoveTowards(protagonist.SavePosition, end, 6.7f * Time.deltaTime));
+            protagonist.MoveForStory(Vector3.MoveTowards(protagonist.SavePosition, end, 6.7f * Time.deltaTime));
             yield return null;
         }
         recoil = null;

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69bc20ed4223b4cd58735594e8bd4400, type: 3}
+  m_Name: BrotherWalk
+  m_EditorClassIdentifier: 
+  left:
+  - {fileID: -1322034740, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: 1848863065, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: -943769768, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: 1025724656, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: 672327124, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: 187001852, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: 323004727, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  right:
+  - {fileID: -1547705020, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: 817792608, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: 177778703, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: 1360131159, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: -493225471, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: -940476178, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: 1604288222, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  up:
+  - {fileID: 59463311, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: 1658933289, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: -1242289853, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: 1311314214, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: 135602345, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: 1652866138, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  - {fileID: -1482451965, guid: 6ed14f4d089044c22a885ea640ae4af3, type: 3}
+  frameSeconds: 0.12

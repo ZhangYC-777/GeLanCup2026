@@ -1,106 +1,137 @@
 using System.Collections;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 三层终局房：圣女像前的最终试炼，两个结局的演出与结局卡。
+// 第三层终局演出。台词触发画面，重要走位完成后才允许继续。
 [DisallowMultipleComponent]
 public sealed class FinalRoomSequence : MonoBehaviour
 {
-    [Header("对话与队伍")]
+    [Header("对话与角色")]
     [SerializeField] private SwitchPlayer party;
     [SerializeField] private DialogueController dialogue;
-    [SerializeField] private DialogueTrigger intro;
-
-    [Header("角色与站位")]
     [SerializeField] private PlayerMove protagonist;
     [SerializeField] private Transform sacrificeMark;
+    [SerializeField] private Transform statueMark;
+    [SerializeField] private Transform doorApproach;
     [SerializeField] private Transform doorMark;
-    [SerializeField, Min(.1f)] private float walkSpeed = 2.4f;
+
+    [Header("镜头")]
+    [SerializeField] private CinemachineVirtualCamera gameCamera;
+    [SerializeField] private Transform cameraPivot;
 
     [Header("场景物件")]
     [SerializeField] private Transform statue;
+    [SerializeField] private GameObject statueRubble;
+    [SerializeField] private Collider2D statueFoundation;
     [SerializeField] private GameObject ritualCircle;
-    [SerializeField] private GameObject escapeDoor;
-    [SerializeField] private GameObject[] hunters = new GameObject[0];
+    [SerializeField] private Transform floorRift;
+    [SerializeField] private Transform escapeDoor;
+    [SerializeField] private Collider2D doorBlocker;
+    [SerializeField] private GameObject exitLight;
+    [SerializeField] private SpriteRenderer flashlight;
+    [SerializeField] private SpriteRenderer flashlightGlow;
+    [SerializeField] private SpriteRenderer hammer;
+    [SerializeField] private SpriteRenderer[] hunters;
+    [SerializeField] private SpriteRenderer[] hunterSmoke;
+
+    [Header("界面")]
     [SerializeField] private CanvasGroup fade;
     [SerializeField] private GameObject endingCard;
     [SerializeField] private Text endingTitle;
     [SerializeField] private Text endingQuote;
+    [SerializeField] private RawImage endingIllustration;
+    [SerializeField] private Texture selfIllustration;
+    [SerializeField] private Texture otherIllustration;
 
     [Header("音效")]
     [SerializeField] private AudioSource foley;
     [SerializeField] private AudioClip rumble;
-    [SerializeField] private AudioClip heartbeat;
+    [SerializeField] private AudioClip footsteps;
+    [SerializeField] private AudioClip breath;
+    [SerializeField] private AudioClip clatter;
+    [SerializeField] private AudioClip impact;
 
     private const string ChoiceKey = "finalChoice";
     private const string SelfValue = "self";
 
-    private const string SelfEndingTitle = "结局一 · 团灭";
-    private const string SelfEndingQuote = "你问谁会来救我们？黑暗中没有回答。这里既是荒岛，也是迷宫，更是我们的坟墓。";
-    private const string OtherEndingTitle = "结局二 · 人格迷失";
-    private const string OtherEndingQuote = "门后没有海风，只有无尽的深渊。你终于逃出了格兰岛，但你也把最真实的自己，留在了更深的迷宫里。";
-
-    private Vector3 statueRestScale;
-    private Vector3 statueRestPosition;
+    private Vector3 cameraCenter;
+    private Vector3 framedCenter;
+    private float cameraSize;
+    private float shakeUntil;
+    private float shakeAmplitude;
+    private bool blockingAdvance;
     private bool cardShown;
+    private Font endingFont;
 
     private void Awake()
     {
-        if (statue != null)
+        cameraCenter = framedCenter = cameraPivot.position;
+        cameraSize = gameCamera.m_Lens.OrthographicSize;
+        foreach (SpriteRenderer hunter in hunters)
         {
-            statueRestScale = statue.localScale;
-            statueRestPosition = statue.localPosition;
+            hunter.gameObject.SetActive(false);
         }
 
-        SetHuntersVisible(false);
-        if (ritualCircle != null)
+        foreach (SpriteRenderer smoke in hunterSmoke)
         {
-            ritualCircle.SetActive(false);
+            smoke.gameObject.SetActive(false);
         }
 
-        if (escapeDoor != null)
-        {
-            escapeDoor.SetActive(false);
-        }
-
-        if (endingCard != null)
-        {
-            endingCard.SetActive(false);
-        }
-
-        if (fade != null)
-        {
-            fade.alpha = 0f;
-            fade.blocksRaycasts = false;
-        }
+        ritualCircle.SetActive(false);
+        floorRift.gameObject.SetActive(false);
+        statueRubble.SetActive(false);
+        exitLight.SetActive(false);
+        flashlight.enabled = false;
+        endingCard.SetActive(false);
+        endingFont = MainMenu.ApplyMenuFont(endingCard);
+        fade.alpha = 1f;
+        fade.blocksRaycasts = false;
     }
 
     private void OnEnable()
     {
-        if (dialogue != null)
-        {
-            dialogue.LineStarted += OnLineStarted;
-        }
+        dialogue.LineStarted += OnLineStarted;
+        dialogue.CanAdvanceLine = () => !blockingAdvance;
     }
 
     private void OnDisable()
     {
-        if (dialogue != null)
-        {
-            dialogue.LineStarted -= OnLineStarted;
-        }
+        dialogue.LineStarted -= OnLineStarted;
+        dialogue.CanAdvanceLine = null;
     }
 
     private void Start()
     {
-        // 台词开始后由对话播放器接管输入，这里只确保演出开场时角色站在起始位置。
-        if (protagonist != null)
+        // 队伍初始化完成后，由演出控制 Cinemachine 的跟随点。
+        party.SetCameraFocus(cameraPivot, snap: true);
+    }
+
+    private void OnDestroy()
+    {
+        if (endingFont != null)
         {
-            protagonist.RestorePosition(protagonist.SavePosition);
+            Destroy(endingFont);
         }
     }
 
-    // 两个结局都播完后由 DialogueTrigger 的 onFinished 调用。
+    private void LateUpdate()
+    {
+        float blend = 1f - Mathf.Exp(-6f * Time.unscaledDeltaTime);
+        framedCenter = Vector3.Lerp(framedCenter, cameraCenter, blend);
+        float shake = Mathf.Clamp01((shakeUntil - Time.unscaledTime) * 2f) * shakeAmplitude;
+        cameraPivot.position = framedCenter + (Vector3)(Random.insideUnitCircle * shake);
+        gameCamera.m_Lens.OrthographicSize = Mathf.Lerp(gameCamera.m_Lens.OrthographicSize, cameraSize, blend);
+
+        if (flashlightGlow.enabled)
+        {
+            flashlightGlow.transform.position = flashlight.enabled
+                ? flashlight.transform.position + Vector3.left * .55f
+                : protagonist.transform.position + Vector3.up * 1.25f;
+        }
+    }
+
+    // DialogueTrigger 在最后一句结束后调用，立即收回刚交还的移动权。
     public void OnDialogueFinished()
     {
         if (cardShown)
@@ -109,250 +140,355 @@ public sealed class FinalRoomSequence : MonoBehaviour
         }
 
         cardShown = true;
-        bool sacrificedSelf = dialogue.HasStoryValue(ChoiceKey, SelfValue);
-        StartCoroutine(ShowEndingCard(sacrificedSelf));
+        party.SetGameplayLocked(true);
+        StartCoroutine(ShowEndingCard(dialogue.HasStoryValue(ChoiceKey, SelfValue)));
     }
 
     private void OnLineStarted(string id)
     {
         switch (id)
         {
+            case "final_sacrifice_arrival":
+                Play(breath, .55f, .76f);
+                StartCoroutine(PlayBeat(FadeTo(0f, .7f)));
+                break;
+            case "final_arrival":
+                if (fade.alpha > 0f)
+                {
+                    StartCoroutine(PlayBeat(FadeTo(0f, .7f)));
+                }
+                break;
             case "final_friend_voice":
-                PlayFoley(heartbeat, .8f);
-                StartCoroutine(PulseStatue());
+                Frame(new Vector2(0f, 2.8f), 5.2f);
+                Play(breath, .45f, .8f);
+                StartCoroutine(PlayBeat(PulseStatue()));
                 break;
             case "final_footsteps":
-                PlayFoley(rumble, .7f);
-                StartCoroutine(ShakeCamera(.35f, .18f));
+                // 对话框占据画面下方，让南侧进场的追猎者完整出现在对话框上方。
+                Frame(new Vector2(0f, -3.85f), 6.35f);
+                StartCoroutine(PlayBeat(ApproachingFootsteps()));
                 break;
             case "final_hunters":
-                StartCoroutine(RevealHunters());
+                StartCoroutine(PlayBeat(RevealHunters()));
                 break;
             case "final_brother_voice":
-                StartCoroutine(ShakeCamera(.5f, .1f));
+                Play(breath, .75f, .63f);
+                Shake(.45f, .07f);
                 break;
             case "final_circle":
-                if (ritualCircle != null)
-                {
-                    ritualCircle.SetActive(true);
-                }
-                PlayFoley(heartbeat, .9f);
-                StartCoroutine(ShakeCamera(.8f, .08f));
+                Frame(new Vector2(0f, .55f), 6.1f);
+                StartCoroutine(PlayBeat(IgniteCircle()));
                 break;
             case "ending_self_2":
-                StartCoroutine(WalkTo(sacrificeMark));
+                StartCoroutine(PlayBeat(LayDownFlashlight()));
                 break;
             case "ending_self_3":
-                StartCoroutine(CollapseStatue());
+                StartCoroutine(PlayBeat(PerformSelfSacrifice()));
                 break;
             case "ending_self_4":
-                StartCoroutine(FadeToBlack(1.2f));
+                StartCoroutine(PlayBeat(FadeTo(1f, .8f)));
+                break;
+            case "ending_other_2":
+                StartCoroutine(PlayBeat(WalkTo(protagonist.SavePosition + Vector3.down * .75f, 1.5f)));
                 break;
             case "ending_other_3":
-                StartCoroutine(SmashStatue());
+                StartCoroutine(PlayBeat(BreakStatue()));
                 break;
             case "ending_other_4":
-                StartCoroutine(WalkTo(doorMark));
+                StartCoroutine(PlayBeat(Escape()));
                 break;
             case "ending_other_5":
-                StartCoroutine(FadeToBlack(1.2f));
+                StartCoroutine(PlayBeat(FadeTo(1f, .75f)));
                 break;
+        }
+    }
+
+    private IEnumerator PlayBeat(IEnumerator action)
+    {
+        blockingAdvance = true;
+        yield return action;
+        blockingAdvance = false;
+    }
+
+    private IEnumerator PulseStatue()
+    {
+        Vector3 restScale = statue.localScale;
+        for (float elapsed = 0f; elapsed < .85f; elapsed += Time.unscaledDeltaTime)
+        {
+            statue.localScale = restScale * (1f + Mathf.Sin(elapsed / .85f * Mathf.PI) * .032f);
+            yield return null;
+        }
+
+        statue.localScale = restScale;
+    }
+
+    private IEnumerator ApproachingFootsteps()
+    {
+        for (int step = 0; step < 3; step++)
+        {
+            Play(footsteps, .34f + step * .15f, .64f + step * .09f);
+            Shake(.21f, .055f + step * .035f);
+            yield return new WaitForSecondsRealtime(.26f);
         }
     }
 
     private IEnumerator RevealHunters()
     {
-        foreach (GameObject hunter in hunters)
+        float duration = .63f + (hunters.Length - 1) * .12f;
+        Vector3[] origins = System.Array.ConvertAll(hunters, hunter => hunter.transform.position);
+        foreach (SpriteRenderer hunter in hunters)
         {
-            if (hunter == null)
-            {
-                continue;
-            }
-
-            hunter.SetActive(true);
-            StartCoroutine(FadeInHunter(hunter));
-            PlayFoley(heartbeat, .45f);
-            yield return new WaitForSeconds(.28f);
+            SetOpacity(hunter, 0f);
+            hunter.gameObject.SetActive(true);
         }
-    }
 
-    private IEnumerator FadeInHunter(GameObject hunter)
-    {
-        SpriteRenderer[] renderers = hunter.GetComponentsInChildren<SpriteRenderer>(true);
-        Vector3 from = hunter.transform.localScale * .82f;
-        hunter.transform.localScale = from;
-        for (float t = 0f; t < .6f; t += Time.deltaTime)
+        for (float elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
         {
-            float k = Mathf.SmoothStep(0f, 1f, t / .6f);
-            hunter.transform.localScale = Vector3.Lerp(from, Vector3.one, k);
-            foreach (SpriteRenderer renderer in renderers)
+            for (int index = 0; index < hunters.Length; index++)
             {
-                Color color = renderer.color;
-                color.a = k;
-                renderer.color = color;
+                float progress = Mathf.SmoothStep(0f, 1f, (elapsed - index * .12f) / .63f);
+                hunters[index].transform.position = origins[index] + Vector3.up * progress * 1.05f;
+                SetOpacity(hunters[index], progress);
             }
 
             yield return null;
         }
+
+        for (int index = 0; index < hunters.Length; index++)
+        {
+            hunters[index].transform.position = origins[index] + Vector3.up * 1.05f;
+            SetOpacity(hunters[index], 1f);
+        }
     }
 
-    private void SetHuntersVisible(bool visible)
+    private IEnumerator IgniteCircle()
     {
-        foreach (GameObject hunter in hunters)
+        SpriteRenderer[] marks = ritualCircle.GetComponentsInChildren<SpriteRenderer>();
+        float[] opacities = System.Array.ConvertAll(marks, mark => mark.color.a);
+        foreach (SpriteRenderer mark in marks)
         {
-            if (hunter != null)
+            SetOpacity(mark, 0f);
+        }
+
+        ritualCircle.SetActive(true);
+        Play(rumble, .5f, 1.15f);
+        for (float elapsed = 0f; elapsed < .65f; elapsed += Time.unscaledDeltaTime)
+        {
+            for (int index = 0; index < marks.Length; index++)
             {
-                hunter.SetActive(visible);
-            }
-        }
-    }
-
-    private IEnumerator PulseStatue()
-    {
-        if (statue == null)
-        {
-            yield break;
-        }
-
-        for (float t = 0f; t < 1.4f; t += Time.deltaTime)
-        {
-            float k = Mathf.Sin(t / 1.4f * Mathf.PI * 3f) * .04f;
-            statue.localScale = statueRestScale * (1f + k);
-            yield return null;
-        }
-
-        statue.localScale = statueRestScale;
-    }
-
-    private IEnumerator CollapseStatue()
-    {
-        PlayFoley(rumble, 1f);
-        Vector3 flattened = Vector3.Scale(statueRestScale, new Vector3(1.06f, .55f, 1f));
-        float duration = 1.1f;
-        for (float t = 0f; t < duration; t += Time.deltaTime)
-        {
-            float k = t / duration;
-            statue.localScale = Vector3.Lerp(statueRestScale, flattened, k);
-            statue.localPosition = statueRestPosition + Vector3.down * (k * .8f);
-            yield return null;
-        }
-
-        if (statue != null)
-        {
-            statue.gameObject.SetActive(false);
-        }
-    }
-
-    private IEnumerator SmashStatue()
-    {
-        PlayFoley(rumble, 1f);
-        yield return ShakeCamera(.9f, .22f);
-        if (statue != null)
-        {
-            statue.gameObject.SetActive(false);
-        }
-
-        foreach (GameObject hunter in hunters)
-        {
-            if (hunter != null)
-            {
-                hunter.SetActive(false);
-            }
-        }
-
-        if (escapeDoor != null)
-        {
-            escapeDoor.SetActive(true);
-        }
-
-        yield return ShakeCamera(.5f, .12f);
-    }
-
-    private IEnumerator WalkTo(Transform mark)
-    {
-        if (mark == null || protagonist == null)
-        {
-            yield break;
-        }
-
-        while (true)
-        {
-            Vector3 next = Vector3.MoveTowards(protagonist.SavePosition, mark.position, walkSpeed * Time.deltaTime);
-            protagonist.RestorePosition(next);
-            if (next == mark.position)
-            {
-                yield break;
+                SetOpacity(marks[index], opacities[index] * Mathf.SmoothStep(0f, 1f, elapsed / .65f));
             }
 
             yield return null;
         }
+
+        for (int index = 0; index < marks.Length; index++)
+        {
+            SetOpacity(marks[index], opacities[index]);
+        }
     }
 
-    private IEnumerator FadeToBlack(float duration)
+    private IEnumerator LayDownFlashlight()
     {
-        if (fade == null)
-        {
-            yield break;
-        }
+        flashlight.transform.position = protagonist.SavePosition + new Vector3(-.65f, -.15f, 0f);
+        flashlight.transform.localRotation = Quaternion.Euler(0f, 0f, 27f);
+        flashlight.enabled = true;
+        Play(clatter, .75f);
+        Frame(new Vector2(0f, 2.25f), 5.2f);
+        yield return WalkTo(statueMark.position, 2.8f);
+        flashlightGlow.enabled = false;
+    }
 
-        fade.blocksRaycasts = true;
-        for (float t = 0f; t < duration; t += Time.deltaTime)
+    private IEnumerator PerformSelfSacrifice()
+    {
+        Frame(new Vector2(0f, 1.3f), 5.65f);
+        yield return WalkTo(sacrificeMark.position, 2.45f);
+
+        Play(rumble, .9f, .74f);
+        Shake(1.5f, .19f);
+        floorRift.gameObject.SetActive(true);
+        Vector3 riftScale = floorRift.localScale;
+        Vector3 actorScale = protagonist.transform.localScale;
+        Vector3[] hunterStarts = System.Array.ConvertAll(hunters, hunter => hunter.transform.position);
+        Vector3 statueStart = statue.localPosition;
+        Vector3 statueScale = statue.localScale;
+        const float duration = 1.25f;
+
+        for (float elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
         {
-            fade.alpha = Mathf.Clamp01(t / duration);
+            float progress = Mathf.Clamp01(elapsed / duration);
+            floorRift.localScale = riftScale * Mathf.Lerp(.12f, 1f, Mathf.Clamp01(progress * 2f));
+            protagonist.transform.localScale = actorScale * Mathf.Lerp(1f, .1f, Mathf.SmoothStep(0f, 1f, progress));
+            for (int index = 0; index < hunters.Length; index++)
+            {
+                Vector3 edge = sacrificeMark.position + (hunterStarts[index] - sacrificeMark.position).normalized * .42f;
+                hunters[index].transform.position = Vector3.Lerp(hunterStarts[index], edge, Mathf.SmoothStep(0f, 1f, progress));
+            }
+
+            float fall = Mathf.SmoothStep(0f, 1f, (progress - .38f) / .62f);
+            statue.localPosition = statueStart + Vector3.down * (.72f * fall);
+            statue.localScale = Vector3.Scale(statueScale, new Vector3(1f, 1f - fall * .6f, 1f));
             yield return null;
         }
 
-        fade.alpha = 1f;
+        floorRift.localScale = riftScale;
+        foreach (SpriteRenderer renderer in protagonist.GetComponentsInChildren<SpriteRenderer>())
+        {
+            renderer.enabled = false;
+        }
+
+        ReplaceStatueWithRubble();
+        yield return DissolveHunters();
+    }
+
+    private IEnumerator BreakStatue()
+    {
+        Frame(new Vector2(0f, 2.65f), 5.1f);
+        yield return WalkTo(hammer.transform.position + Vector3.down * .45f, 3.2f);
+        hammer.enabled = false;
+        yield return WalkTo(statueMark.position, 3.6f);
+
+        hammer.transform.position = protagonist.SavePosition + new Vector3(.45f, .72f, 0f);
+        hammer.enabled = true;
+        for (float elapsed = 0f; elapsed < .3f; elapsed += Time.unscaledDeltaTime)
+        {
+            hammer.transform.localRotation = Quaternion.Euler(0f, 0f, Mathf.Lerp(130f, -35f, elapsed / .3f));
+            yield return null;
+        }
+
+        Play(impact, .9f, .81f);
+        Play(rumble, .8f, .68f);
+        Shake(1.1f, .18f);
+        hammer.enabled = false;
+        flashlightGlow.enabled = false;
+        ReplaceStatueWithRubble();
+        ritualCircle.SetActive(false);
+        yield return DissolveHunters();
+
+        Frame(new Vector2(2.8f, 4.3f), 5.45f);
+        exitLight.SetActive(true);
+        Play(rumble, .78f, .95f);
+        Vector3 closedPosition = escapeDoor.localPosition;
+        for (float elapsed = 0f; elapsed < .62f; elapsed += Time.unscaledDeltaTime)
+        {
+            escapeDoor.localPosition = closedPosition + Vector3.up * (2.5f * Mathf.SmoothStep(0f, 1f, elapsed / .62f));
+            yield return null;
+        }
+
+        escapeDoor.gameObject.SetActive(false);
+        doorBlocker.enabled = false;
+    }
+
+    private void ReplaceStatueWithRubble()
+    {
+        statue.gameObject.SetActive(false);
+        statueFoundation.enabled = false;
+        statueRubble.SetActive(true);
+    }
+
+    private IEnumerator DissolveHunters()
+    {
+        Play(breath, .6f, 1.35f);
+        for (int index = 0; index < hunters.Length; index++)
+        {
+            hunterSmoke[index].transform.position = hunters[index].transform.position;
+            SetOpacity(hunterSmoke[index], 0f);
+            hunterSmoke[index].gameObject.SetActive(true);
+        }
+
+        for (float elapsed = 0f; elapsed < .65f; elapsed += Time.unscaledDeltaTime)
+        {
+            float progress = elapsed / .65f;
+            for (int index = 0; index < hunters.Length; index++)
+            {
+                SetOpacity(hunters[index], 1f - progress);
+                SetOpacity(hunterSmoke[index], Mathf.Sin(progress * Mathf.PI) * .88f);
+                hunterSmoke[index].transform.position += Vector3.up * Time.unscaledDeltaTime * .8f;
+            }
+
+            yield return null;
+        }
+
+        foreach (SpriteRenderer hunter in hunters)
+        {
+            hunter.gameObject.SetActive(false);
+        }
+
+        foreach (SpriteRenderer smoke in hunterSmoke)
+        {
+            smoke.gameObject.SetActive(false);
+        }
+    }
+
+    private IEnumerator Escape()
+    {
+        Frame(new Vector2(3.2f, 5.4f), 5.2f);
+        yield return WalkTo(doorApproach.position, 6.6f);
+        yield return WalkTo(doorMark.position, 6.6f);
+        foreach (SpriteRenderer renderer in protagonist.GetComponentsInChildren<SpriteRenderer>())
+        {
+            renderer.enabled = false;
+        }
+    }
+
+    private IEnumerator WalkTo(Vector3 destination, float speed)
+    {
+        while (protagonist.SavePosition != destination)
+        {
+            protagonist.MoveForStory(Vector3.MoveTowards(
+                protagonist.SavePosition, destination, speed * Time.unscaledDeltaTime));
+            yield return null;
+        }
     }
 
     private IEnumerator ShowEndingCard(bool sacrificedSelf)
     {
-        yield return FadeToBlack(.9f);
-        yield return new WaitForSeconds(.6f);
-
-        if (endingTitle != null)
-        {
-            endingTitle.text = sacrificedSelf ? SelfEndingTitle : OtherEndingTitle;
-        }
-
-        if (endingQuote != null)
-        {
-            endingQuote.text = sacrificedSelf ? SelfEndingQuote : OtherEndingQuote;
-        }
-
-        if (endingCard != null)
-        {
-            endingCard.SetActive(true);
-        }
+        yield return FadeTo(1f, .35f);
+        endingTitle.text = sacrificedSelf ? "结局一 · 团灭" : "结局二 · 人格迷失";
+        endingQuote.text = sacrificedSelf
+            ? "你问谁会来救我们？黑暗中没有回答。\n这里既是荒岛，也是迷宫，更是我们的坟墓。"
+            : "门后没有海风，只有无尽的深渊。\n你终于逃出了格兰岛，但你也把最真实的自己，留在了更深的迷宫里。";
+        endingIllustration.texture = sacrificedSelf ? selfIllustration : otherIllustration;
+        endingIllustration.GetComponent<AspectRatioFitter>().aspectRatio =
+            (float)endingIllustration.texture.width / endingIllustration.texture.height;
+        endingIllustration.color = sacrificedSelf ? new Color(.7f, .69f, .74f) : new Color(.66f, .73f, .8f);
+        endingCard.SetActive(true);
     }
 
-    private IEnumerator ShakeCamera(float duration, float magnitude)
+    private IEnumerator FadeTo(float alpha, float duration)
     {
-        Camera camera = Camera.main;
-        if (camera == null)
+        float from = fade.alpha;
+        for (float elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
         {
-            yield break;
-        }
-
-        Transform view = camera.transform;
-        Vector3 rest = view.localPosition;
-        for (float t = 0f; t < duration; t += Time.deltaTime)
-        {
-            float fadeOut = 1f - t / duration;
-            view.localPosition = rest + new Vector3(
-                Random.Range(-1f, 1f),
-                Random.Range(-1f, 1f), 0f) * magnitude * fadeOut;
+            fade.alpha = Mathf.Lerp(from, alpha, elapsed / duration);
             yield return null;
         }
 
-        view.localPosition = rest;
+        fade.alpha = alpha;
     }
 
-    private void PlayFoley(AudioClip clip, float volume)
+    private void Frame(Vector2 center, float size)
     {
-        if (foley != null && clip != null)
-        {
-            foley.PlayOneShot(clip, volume);
-        }
+        cameraCenter = center;
+        cameraSize = size;
+    }
+
+    private void Shake(float duration, float magnitude)
+    {
+        shakeUntil = Time.unscaledTime + duration;
+        shakeAmplitude = magnitude;
+    }
+
+    private void Play(AudioClip clip, float volume, float pitch = 1f)
+    {
+        foley.pitch = pitch;
+        foley.PlayOneShot(clip, volume);
+    }
+
+    private static void SetOpacity(SpriteRenderer renderer, float opacity)
+    {
+        Color color = renderer.color;
+        color.a = opacity;
+        renderer.color = color;
     }
 }

@@ -1,32 +1,40 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-// 角色在家具后面且与其画面重叠时，降低家具不透明度。
+// 当前角色被装饰物遮挡时，降低整件装饰物的不透明度。
 [DefaultExecutionOrder(30)]
-[RequireComponent(typeof(SortingGroup), typeof(SpriteRenderer))]
+[RequireComponent(typeof(SortingGroup))]
 [DisallowMultipleComponent]
 public sealed class PuzzlePropOcclusion : MonoBehaviour
 {
     [SerializeField] private SwitchPlayer switchPlayer;
     [SerializeField, Range(0f, 1f)] private float obscuringOpacity = 0.22f;
 
-    private SpriteRenderer furniture;
-    private SortingGroup furnitureOrder;
+    private SpriteRenderer[] propSprites;
+    private float[] normalOpacities;
+    private SortingGroup propOrder;
     private Transform currentPlayer;
     private SortingGroup playerOrder;
     private SpriteRenderer[] playerSprites = System.Array.Empty<SpriteRenderer>();
-    private Color normalColor;
+    private float opacity = 1f;
 
     private void Awake()
     {
-        furniture = GetComponent<SpriteRenderer>();
-        furnitureOrder = GetComponent<SortingGroup>();
-        normalColor = furniture.color;
+        propOrder = GetComponent<SortingGroup>();
+        propSprites = GetComponentsInChildren<SpriteRenderer>(true);
+        normalOpacities = new float[propSprites.Length];
+        for (int i = 0; i < propSprites.Length; i++)
+        {
+            normalOpacities[i] = propSprites[i].color.a;
+        }
     }
 
     private void OnDisable()
     {
-        furniture.color = normalColor;
+        if (propSprites != null && opacity < 1f)
+        {
+            SetOpacity(1f);
+        }
     }
 
     private void LateUpdate()
@@ -39,26 +47,51 @@ public sealed class PuzzlePropOcclusion : MonoBehaviour
             playerSprites = player != null ? player.GetComponentsInChildren<SpriteRenderer>(true) : System.Array.Empty<SpriteRenderer>();
         }
 
-        bool overlap = playerOrder != null && furnitureOrder.sortingOrder >= playerOrder.sortingOrder && OverlapsPlayer();
-        Color color = normalColor;
-        color.a = overlap ? normalColor.a * obscuringOpacity : Mathf.MoveTowards(furniture.color.a, normalColor.a, 6f * Time.unscaledDeltaTime);
-        furniture.color = color;
+        bool overlap = playerOrder != null && propOrder.sortingOrder >= playerOrder.sortingOrder && OverlapsPlayer();
+        float nextOpacity = overlap ? obscuringOpacity : Mathf.MoveTowards(opacity, 1f, 6f * Time.unscaledDeltaTime);
+        if (nextOpacity != opacity)
+        {
+            SetOpacity(nextOpacity);
+        }
+    }
+
+    private void SetOpacity(float value)
+    {
+        opacity = value;
+        for (int i = 0; i < propSprites.Length; i++)
+        {
+            SpriteRenderer sprite = propSprites[i];
+            if (sprite != null)
+            {
+                Color color = sprite.color;
+                color.a = normalOpacities[i] * opacity;
+                sprite.color = color;
+            }
+        }
     }
 
     private bool OverlapsPlayer()
     {
-        Bounds bounds = furniture.bounds;
-        foreach (SpriteRenderer sprite in playerSprites)
+        foreach (SpriteRenderer prop in propSprites)
         {
-            if (!sprite.enabled || !sprite.gameObject.activeInHierarchy || sprite.sprite == null)
+            if (prop == null || !prop.enabled || !prop.gameObject.activeInHierarchy || prop.sprite == null)
             {
                 continue;
             }
 
-            Bounds body = sprite.bounds;
-            if (body.min.x < bounds.max.x && body.max.x > bounds.min.x && body.min.y < bounds.max.y && body.max.y > bounds.min.y)
+            Bounds bounds = prop.bounds;
+            foreach (SpriteRenderer sprite in playerSprites)
             {
-                return true;
+                if (sprite == null || !sprite.enabled || !sprite.gameObject.activeInHierarchy || sprite.sprite == null)
+                {
+                    continue;
+                }
+
+                Bounds body = sprite.bounds;
+                if (body.min.x < bounds.max.x && body.max.x > bounds.min.x && body.min.y < bounds.max.y && body.max.y > bounds.min.y)
+                {
+                    return true;
+                }
             }
         }
 

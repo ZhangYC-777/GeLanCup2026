@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69bc20ed4223b4cd58735594e8bd4400, type: 3}
+  m_Name: ChildhoodFriendWalk
+  m_EditorClassIdentifier: 
+  left:
+  - {fileID: -776270281, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: -18403410, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: -1092276291, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: -793167711, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: 21932964, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: -971320655, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: 52029684, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  right:
+  - {fileID: 727997894, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: 133468402, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: 1219343609, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: -375492541, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: 2056192010, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: -241300780, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: -300181843, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  up:
+  - {fileID: 1796918768, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: 23141350, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: 192203010, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: -596407637, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: -2113982929, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: 1898098, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  - {fileID: 1971413454, guid: c884ae4422ce84517a63d85cae29f654, type: 3}
+  frameSeconds: 0.12

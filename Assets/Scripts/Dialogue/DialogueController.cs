@@ -60,6 +60,7 @@ public class DialogueController : MonoBehaviour
     // 开始显示一句时，场景可按节点 ID 同步切图或播放音效。
     public event Action<string> LineStarted;
     internal event Action PlaybackCompleted;
+    internal Func<bool> CanAdvanceLine { get; set; }
 
     // 处于任意对话状态时返回 true，供触发器和提示判断。
     public bool IsPlaying
@@ -128,7 +129,8 @@ public class DialogueController : MonoBehaviour
                 point.Interact();
             }
         }
-        else if (Time.frameCount != openedFrame)
+        else if (Time.frameCount != openedFrame &&
+                 (state == PlaybackState.Typing || CanAdvanceLine == null || CanAdvanceLine()))
         {
             Advance();
         }

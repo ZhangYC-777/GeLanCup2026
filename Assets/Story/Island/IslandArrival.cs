@@ -87,7 +87,7 @@ public class IslandArrival : MonoBehaviour
         {
             while (brother.SavePosition != waypoint.position)
             {
-                brother.RestorePosition(Vector3.MoveTowards(brother.SavePosition, waypoint.position,
+                brother.MoveForStory(Vector3.MoveTowards(brother.SavePosition, waypoint.position,
                     Time.deltaTime * brotherSpeed));
                 yield return null;
             }
@@ -150,7 +150,7 @@ public class IslandArrival : MonoBehaviour
                 remaining -= distanceToTarget;
                 trail.Dequeue();
             }
-            childhoodFriend.RestorePosition(position);
+            childhoodFriend.MoveForStory(position);
 
             // 进门前空地并等青梅赶上后，才接门前的对话。
             if (gateDiscoveryArea.OverlapPoint(leader) &&
