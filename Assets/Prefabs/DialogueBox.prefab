@@ -569,10 +569,13 @@ MonoBehaviour:
   portraits:
   - speaker: "\u6885\u83F2"
     image: {fileID: 1590660126954221312}
+    distressedSprite: {fileID: 21300000, guid: e5c7d03f5e214c618446adc64a1a52c0, type: 3}
   - speaker: "\u8FBE\u5C14"
     image: {fileID: 2813557580550425521}
+    distressedSprite: {fileID: 21300000, guid: c9cb0d46d28145b1a1bc5842537a8e85, type: 3}
   - speaker: "\u4F69\u897F"
     image: {fileID: 586850233069779920}
+    distressedSprite: {fileID: 21300000, guid: fdd78f7dde8644de917f2fb3417ab9b9, type: 3}
   nameplate: {fileID: 5019173708737796647}
 --- !u!1 &8841799432190604966
 GameObject:

@@ -191,6 +191,7 @@ public class DialogueEditorWindow : EditorWindow
     {
         node.id = EditorGUILayout.TextField("节点 ID", node.id);
         node.speaker = EditorGUILayout.TextField("说话人", node.speaker);
+        node.distressedPortrait = EditorGUILayout.Toggle("使用惊恐立绘", node.distressedPortrait);
         EditorGUILayout.LabelField("台词");
         node.text = EditorGUILayout.TextArea(node.text, GUILayout.MinHeight(65));
 

@@ -21,7 +21,7 @@
     },
     {
       "id": "protagonist_loses_patience",
-      "speaker": "梅菲",
+      "speaker": "梅菲","distressedPortrait":true,
       "text": "可恶！它就是故意不告诉我们去哪里，又让我们盲选。",
       "next": "brother_calms_protagonist"
     },
@@ -45,7 +45,7 @@
     },
     {
       "id": "sacrifice_2_who",
-      "speaker": "梅菲",
+      "speaker": "梅菲","distressedPortrait":true,
       "text": "谁？！谁在那？！"
     },
     {
@@ -56,18 +56,18 @@
     },
     {
       "id": "sacrifice_2_brother_run",
-      "speaker": "达尔",
+      "speaker": "达尔","distressedPortrait":true,
       "text": "跑！哥！快跑！",
       "next": "sacrifice_2_brother_lost"
     },
     {
       "id": "sacrifice_2_brother_lost",
-      "speaker": "梅菲",
+      "speaker": "梅菲","distressedPortrait":true,
       "text": "达尔！！"
     },
     {
       "id": "sacrifice_2_retreat",
-      "speaker": "梅菲",
+      "speaker": "梅菲","distressedPortrait":true,
       "text": "我一定会救你的……我一定会救你的……现在打不过它，我这也是为了保存有生之力，我死了就全完了……"
     },
 
@@ -84,7 +84,7 @@
     },
     {
       "id": "explore_panic",
-      "speaker": "梅菲",
+      "speaker": "梅菲","distressedPortrait":true,
       "text": "这到底是哪儿？门呢？出口在哪？佩西到底被藏在哪里了？！",
       "next": "explore_calm"
     },
@@ -106,7 +106,7 @@
     },
     {
       "id": "explore_dead_end",
-      "speaker": "梅菲",
+      "speaker": "梅菲","distressedPortrait":true,
       "text": "该死！全都是死路！这根本就是个出不去的死局！"
     },
     {
@@ -162,13 +162,13 @@
     },
     {
       "id": "explore_hammer_hunters",
-      "speaker": "梅菲",
+      "speaker": "梅菲","distressedPortrait":true,
       "text": "追猎者……那些怪物追过来了！",
       "next": "explore_hammer_final"
     },
     {
       "id": "explore_hammer_final",
-      "speaker": "达尔",
+      "speaker": "达尔","distressedPortrait":true,
       "text": "给我——开！！！",
       "next": "explore_gate_burst"
     },
@@ -179,13 +179,13 @@
     },
     {
       "id": "explore_run",
-      "speaker": "达尔",
+      "speaker": "达尔","distressedPortrait":true,
       "text": "哥！跑！快跑啊！！",
       "next": "explore_brother"
     },
     {
       "id": "explore_brother",
-      "speaker": "梅菲",
+      "speaker": "梅菲","distressedPortrait":true,
       "text": "达尔！！",
       "next": "explore_hesitate"
     },
@@ -197,13 +197,13 @@
     },
     {
       "id": "explore_hold",
-      "speaker": "达尔",
+      "speaker": "达尔","distressedPortrait":true,
       "text": "别管我！我拦住它！走！",
       "next": "explore_inner"
     },
     {
       "id": "explore_inner",
-      "speaker": "梅菲",
+      "speaker": "梅菲","distressedPortrait":true,
       "text": "我打不过它……我过去也是白搭……我不能死，我必须留着命，我还要去救佩西。我这也是为了保存有生之力……"
     },
     {

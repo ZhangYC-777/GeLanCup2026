@@ -12,6 +12,8 @@ public class DialogueView : MonoBehaviour
         public string speaker;
         // 立绘使用对应 Image 的 RectTransform 布局。
         public Image image;
+        // 可选的惊恐立绘。普通立绘仍由 Image 的 Sprite 提供。
+        public Sprite distressedSprite;
     }
 
     // 可以整体开关的对话面板物体。
@@ -54,7 +56,7 @@ public class DialogueView : MonoBehaviour
     }
 
     // name 是新一句的说话人。清空上一句文字和选项后显示面板。
-    public void ShowLine(string name)
+    public void ShowLine(string name, bool distressedPortrait = false)
     {
         speaker.text = name;
         nameplate.gameObject.SetActive(!string.IsNullOrWhiteSpace(name));
@@ -62,7 +64,7 @@ public class DialogueView : MonoBehaviour
         choiceList?.Hide();
         hint.enabled = true;
         hint.text = "F  继续";
-        ShowPortrait(name);
+        ShowPortrait(name, distressedPortrait);
         panel.SetActive(true);
     }
 
@@ -93,19 +95,23 @@ public class DialogueView : MonoBehaviour
     {
         choiceList?.Hide();
         panel.SetActive(false);
-        ShowPortrait(null);
+        ShowPortrait(null, false);
     }
 
     // 每句只显示当前说话人的立绘，旁白和未配置的说话人清空立绘。
-    private void ShowPortrait(string name)
+    private void ShowPortrait(string name, bool distressedPortrait)
     {
         string speakerName = name?.Trim();
         foreach (SpeakerPortrait portrait in portraits)
         {
-            if (portrait?.image != null)
+            if (portrait?.image == null)
             {
-                portrait.image.enabled = !string.IsNullOrEmpty(speakerName) && portrait.speaker == speakerName;
+                continue;
             }
+
+            bool visible = !string.IsNullOrEmpty(speakerName) && portrait.speaker == speakerName;
+            portrait.image.overrideSprite = visible && distressedPortrait ? portrait.distressedSprite : null;
+            portrait.image.enabled = visible;
         }
     }
 

@@ -22,6 +22,8 @@ public class DialogueNode
     public string speaker;
     // 台词正文。
     public string text;
+    // 本句使用说话人的惊恐立绘，未填写时使用普通立绘。
+    public bool distressedPortrait;
     // 普通台词的下一个节点 ID，留空时结束本段。
     public string next;
     // 玩家可以选择的回应。有选项时由选项各自的 next 决定后续。

@@ -11,6 +11,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private PlayerWalkSprites walkSprites;
 
     private const float MinimumMotionSquared = 0.000001f;
+    private const float WalkStopDelay = 0.06f;
 
     // 本角色的动态刚体，负责实际移动和碰撞。
     private Rigidbody2D body;
@@ -22,8 +23,11 @@ public class PlayerMove : MonoBehaviour
     private Vector2 storyMotion;
     private double sampledFixedTime;
     private PlayerWalkSprites.Facing facing;
+    private bool facingHorizontally;
     private bool walking;
+    private bool lastMotionWasScripted;
     private float walkElapsed;
+    private float stoppedElapsed;
 
     // 读取物理位置，避免把插值中的显示位置写入存档。
     internal Vector3 SavePosition => new Vector3(body.position.x, body.position.y, transform.position.z);
@@ -117,16 +121,32 @@ public class PlayerMove : MonoBehaviour
         }
 
         bool scripted = storyMotion.sqrMagnitude > MinimumMotionSquared;
-        Vector2 motion = scripted ? storyMotion : moveDirection != Vector2.zero ? physicsMotion : Vector2.zero;
+        bool hasMoveInput = moveDirection != Vector2.zero;
+        Vector2 motion = scripted ? storyMotion : hasMoveInput ? physicsMotion : Vector2.zero;
         storyMotion = Vector2.zero;
         if (motion.sqrMagnitude <= MinimumMotionSquared)
         {
-            ShowIdle();
+            if (!walking)
+            {
+                return;
+            }
+
+            // 跟随和擦墙时可能短暂没有位移，先保留当前步态。松键则立即停步。
+            stoppedElapsed += lastMotionWasScripted ? Time.unscaledDeltaTime : Time.deltaTime;
+            if ((!lastMotionWasScripted && !hasMoveInput) || stoppedElapsed >= WalkStopDelay)
+            {
+                ShowIdle();
+            }
             return;
         }
 
-        // 斜向接近 45 度时按竖向处理，以免浮点误差让朝向来回切换。
-        if (Mathf.Abs(motion.x) > Mathf.Abs(motion.y) * 1.01f)
+        stoppedElapsed = 0f;
+        lastMotionWasScripted = scripted;
+
+        // 接近 45 度时保持原轴，减少斜走和沿墙滑动时的朝向切换。
+        float facingThreshold = facingHorizontally ? 0.9f : 1.1f;
+        facingHorizontally = Mathf.Abs(motion.x) > Mathf.Abs(motion.y) * facingThreshold;
+        if (facingHorizontally)
         {
             facing = motion.x > 0f ? PlayerWalkSprites.Facing.Right : PlayerWalkSprites.Facing.Left;
         }
@@ -147,7 +167,9 @@ public class PlayerMove : MonoBehaviour
     private void ShowIdle()
     {
         walking = false;
+        lastMotionWasScripted = false;
         walkElapsed = 0f;
+        stoppedElapsed = 0f;
         ShowFrame();
     }
 

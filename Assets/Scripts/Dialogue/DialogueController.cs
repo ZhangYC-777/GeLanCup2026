@@ -297,7 +297,7 @@ public class DialogueController : MonoBehaviour
         characterStarts = StringInfo.ParseCombiningCharacters(currentNode.text);
         typingStarted = Time.unscaledTime;
         visibleCharacters = 0;
-        view.ShowLine(currentNode.speaker);
+        view.ShowLine(currentNode.speaker, currentNode.distressedPortrait);
         LineStarted?.Invoke(id);
     }
 
