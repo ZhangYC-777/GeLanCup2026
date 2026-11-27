@@ -20,9 +20,6 @@ public sealed class PuzzleRoomOverlay : MonoBehaviour
     [SerializeField] private GameObject failurePanel;
     [SerializeField] private Text[] wallWriting;
 
-    private static readonly Color SelectedDigit = new Color32(253, 224, 164, 255);
-    private static readonly Color IdleDigit = new Color32(199, 189, 176, 255);
-    private static readonly Color RejectedText = new Color32(242, 146, 116, 255);
     private Font font;
 
     private void Awake()
@@ -64,13 +61,13 @@ public sealed class PuzzleRoomOverlay : MonoBehaviour
         {
             Dial dial = dials[i];
             dial.digit.text = digits[i].ToString();
-            dial.digit.color = i == selected ? SelectedDigit : IdleDigit;
+            dial.digit.color = i == selected ? GameUiTheme.Silver : GameUiTheme.Muted;
             dial.selection.SetActive(i == selected);
             dial.wheel.localRotation = Quaternion.Euler(0f, 0f, (digits[i] - '0') * -36f);
         }
 
         passwordFeedback.text = feedback;
-        passwordFeedback.color = rejected ? RejectedText : IdleDigit;
+        passwordFeedback.color = rejected ? GameUiTheme.Danger : GameUiTheme.Muted;
         passwordPanel.SetActive(true);
     }
 

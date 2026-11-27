@@ -8,12 +8,17 @@ public class PartySan : MonoBehaviour, IHealth
 {
     [SerializeField, Min(1)] private int maxSan = 100;
     [SerializeField, Min(0)] private int startingSan = 100;
+    [SerializeField] private AudioClip damageSound;
+
+    internal const int StandardDamage = 20;
+    internal const int StatueRecovery = 10;
 
     // 从正数降到 0 时触发，关卡可以在 Inspector 绑定失败流程。
     [SerializeField] private UnityEvent onDepleted = new UnityEvent();
 
     // 第一次修改前直接读取配置的初始值。
     private int? currentSan;
+    private AudioSource feedbackAudio;
 
     // SAN 实际变化后通知界面，参数依次是当前值和上限。
     public event Action<int, int> SanChanged;
@@ -32,8 +37,17 @@ public class PartySan : MonoBehaviour, IHealth
     // 扣除正数点数，扣完最低为 0。
     public void TakeDamage(int amount)
     {
-        if (amount > 0)
+        if (amount > 0 && CurrentSan > 0)
         {
+            if (damageSound != null)
+            {
+                if (feedbackAudio == null)
+                {
+                    feedbackAudio = gameObject.AddComponent<AudioSource>();
+                    feedbackAudio.playOnAwake = false;
+                }
+                feedbackAudio.PlayOneShot(damageSound, .55f);
+            }
             SetSan(Mathf.Max(0, CurrentSan - amount));
         }
     }
@@ -52,6 +66,12 @@ public class PartySan : MonoBehaviour, IHealth
     internal void RestoreSan(int savedSan)
     {
         SetSan(Mathf.Clamp(savedSan, 0, MaxSan), notifyDepleted: false);
+    }
+
+    // 终局演出直接更新真实 SAN，归零后继续播放结局。
+    internal void SetEndingSan(int san)
+    {
+        SetSan(Mathf.Clamp(san, 0, MaxSan), notifyDepleted: false);
     }
 
     private void SetSan(int nextSan, bool notifyDepleted = true)

@@ -3,7 +3,7 @@ using UnityEngine;
 // 挂在怪物攻击用的 2D Trigger 上。每次启用代表一次新攻击。
 public class SanAttackHitbox : MonoBehaviour
 {
-    [SerializeField, Min(1)] private int damage = 15;
+    [SerializeField, Min(1)] private int damage = PartySan.StandardDamage;
 
     // 多个角色或多个碰撞体命中同一次攻击时，共享 SAN 只扣一次。
     private bool hasHit;

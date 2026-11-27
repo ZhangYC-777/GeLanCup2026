@@ -27,6 +27,10 @@ public sealed class SecondFloorArrival : MonoBehaviour
     private Vector3 brotherEntry;
     private Coroutine brotherRun;
 
+    internal bool BlocksTimedHunter =>
+        !openingDialogue.Controller.HasStoryValue(ArrivalState, BrotherAtDoor) && !HasChosenRoute() ||
+        openingDialogue.Controller.HasStoryValue(RouteState, SacrificeRoute);
+
     // 在 SceneSave 恢复旧进度前记住楼梯上的初始站位。
     private void Awake()
     {

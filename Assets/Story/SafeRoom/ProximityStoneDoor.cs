@@ -15,15 +15,20 @@ public sealed class ProximityStoneDoor : MonoBehaviour
     [SerializeField] private bool startsRaised;
     [SerializeField, Min(0.1f)] private float riseDistance = 2.5f;
     [SerializeField, Min(0.1f)] private float riseSeconds = 0.85f;
+    [SerializeField] private AudioClip openingSound;
 
     private static readonly int OpenParameter = Animator.StringToHash("open");
     private static readonly int OpenState = Animator.StringToHash("DoorNSOpen");
+    private static readonly int OpeningState = Animator.StringToHash("DoorNSOpening");
     private readonly List<Collider2D> occupants = new List<Collider2D>(6);
     private readonly ContactFilter2D occupantFilter = new ContactFilter2D { useTriggers = false };
+    private AudioSource doorAudio;
     private Vector3 raisedPosition;
     private float remainingRise;
     private bool rising;
     private bool raised;
+    internal bool IsRaised => raised;
+    private bool wasOpening;
 
     // 为剧情升起的门记住原位，也允许场景直接放置已升起的门。
     private void Awake()
@@ -32,6 +37,14 @@ public sealed class ProximityStoneDoor : MonoBehaviour
         if (!startsRaised)
         {
             risingVisuals.localPosition = raisedPosition + Vector3.down * riseDistance;
+        }
+
+        if (openingSound != null)
+        {
+            doorAudio = gameObject.AddComponent<AudioSource>();
+            doorAudio.clip = openingSound;
+            doorAudio.playOnAwake = false;
+            doorAudio.spatialBlend = 0f;
         }
     }
 
@@ -56,6 +69,7 @@ public sealed class ProximityStoneDoor : MonoBehaviour
         }
         remainingRise = riseSeconds;
         rising = true;
+        PlayMovement(.3f, .8f);
     }
 
     // 读档恢复石门的演出状态。有人存档在门洞时，先让出通路。
@@ -96,7 +110,26 @@ public sealed class ProximityStoneDoor : MonoBehaviour
         bool approaching = player != null && approachArea.OverlapPoint(player.position);
         bool shouldOpen = approaching || IsDoorwayOccupied();
         doorAnimator.SetBool(OpenParameter, shouldOpen);
-        closedDoorCollider.enabled = !shouldOpen || doorAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash != OpenState;
+        int state = doorAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+        closedDoorCollider.enabled = !shouldOpen || state != OpenState;
+
+        // 进到开门动画才播放，站在检测区内或读档时直接恢复开启都不会重复响。
+        bool opening = state == OpeningState;
+        if (opening && !wasOpening)
+        {
+            PlayMovement(.62f, 1f);
+        }
+        wasOpening = opening;
+    }
+
+    private void PlayMovement(float volume, float pitch)
+    {
+        if (doorAudio != null)
+        {
+            doorAudio.volume = volume;
+            doorAudio.pitch = pitch;
+            doorAudio.Play();
+        }
     }
 
     private void FinishRise()

@@ -35,6 +35,8 @@ public class SceneSave : MonoBehaviour
     private Font menuFont;
 
     internal bool HasRestoredProgress { get; private set; }
+    internal PartySan PartySan => partySan;
+    internal bool IsLoading => loading;
 
     // 由终局演出在开场调用：本场景不再写任何进度，退出时保留上一个场景的存档。
     internal void BlockProgressWrite()

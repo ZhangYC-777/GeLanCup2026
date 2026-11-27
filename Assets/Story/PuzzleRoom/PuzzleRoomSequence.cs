@@ -74,6 +74,8 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
     private readonly char[] passwordDigits = new char[PasswordCode.Length];
     private Phase phase;
     internal bool HasEnteredRoute => phase != Phase.Approach || entry.HasCompleted;
+    internal bool BlocksTimedHunter => HasEnteredRoute &&
+        (phase == Phase.Staging || phase == Phase.Failed || phase == Phase.Password || phase == Phase.BreadTrial);
     private int selectedDial;
     private Quaternion spriteRestRotation;
     private Coroutine recoil;
@@ -389,6 +391,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         if (stairHunter == null)
         {
             HideChildhoodFriend();
+            sceneSave.PartySan.TakeDamage(PartySan.StandardDamage);
             yield break;
         }
 
@@ -423,6 +426,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         childhoodFriend.transform.localScale = friendScale;
         playingStairSnatch = false;
         dialogue.CanAdvanceLine = null;
+        sceneSave.PartySan.TakeDamage(PartySan.StandardDamage);
     }
 
     public void FinishStairAbduction()
@@ -523,7 +527,7 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         }
 
         SpriteRenderer avatar = trialAvatars[party.CurrentPlayerIndex];
-        if (breadTrial.Begin(avatar, RecordBreadTrialWin, CloseBreadTrial))
+        if (breadTrial.Begin(avatar, RecordBreadTrialWin, CloseBreadTrial, ChargeIncompleteBreadTrial))
         {
             phase = Phase.BreadTrial;
             party.SetGameplayLocked(true);
@@ -532,12 +536,25 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
 
     private void RecordBreadTrialWin()
     {
+        if (sceneSave.IsLoading)
+        {
+            return;
+        }
         dialogue.SetStoryValue(BreadTrialStoryKey, CompletedTrial);
         sceneSave.CaptureCheckpoint();
     }
 
+    private void ChargeIncompleteBreadTrial()
+    {
+        sceneSave.PartySan.TakeDamage(PartySan.StandardDamage);
+    }
+
     private void CloseBreadTrial(bool won)
     {
+        if (sceneSave.IsLoading)
+        {
+            return;
+        }
         phase = Phase.Reunited;
         inputOpenedFrame = Time.frameCount;
         party.SetGameplayLocked(false);

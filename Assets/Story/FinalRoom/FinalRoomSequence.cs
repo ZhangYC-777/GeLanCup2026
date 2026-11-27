@@ -48,6 +48,7 @@ public sealed class FinalRoomSequence : MonoBehaviour
     [Header("音效")]
     [SerializeField] private AudioSource foley;
     [SerializeField] private AudioClip rumble;
+    [SerializeField] private AudioClip escapeDoorSound;
     [SerializeField] private AudioClip footsteps;
     [SerializeField] private AudioClip breath;
     [SerializeField] private AudioClip clatter;
@@ -70,6 +71,7 @@ public sealed class FinalRoomSequence : MonoBehaviour
     private bool blockingAdvance;
     private bool cardShown;
     private Font endingFont;
+    private PartySan partySan;
 
     private void Awake()
     {
@@ -99,6 +101,7 @@ public sealed class FinalRoomSequence : MonoBehaviour
         SceneSave save = FindObjectOfType<SceneSave>();
         if (save != null)
         {
+            partySan = save.PartySan;
             save.BlockProgressWrite();
         }
     }
@@ -227,7 +230,7 @@ public sealed class FinalRoomSequence : MonoBehaviour
                 StartCoroutine(PlayBeat(Escape()));
                 break;
             case "ending_other_5":
-                StartCoroutine(PlayBeat(FadeTo(1f, .75f)));
+                StartCoroutine(PlayBeat(DrainSanAndFade()));
                 break;
         }
     }
@@ -237,6 +240,26 @@ public sealed class FinalRoomSequence : MonoBehaviour
         blockingAdvance = true;
         yield return action;
         blockingAdvance = false;
+    }
+
+    private IEnumerator DrainSanAndFade()
+    {
+        if (partySan != null && partySan.CurrentSan > 0)
+        {
+            const float duration = 2.2f;
+            int startingSan = partySan.CurrentSan;
+            pulse.Play(panicHeartbeat, .42f);
+            for (float elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
+            {
+                partySan.SetEndingSan(Mathf.CeilToInt(Mathf.Lerp(startingSan, 0f, elapsed / duration)));
+                yield return null;
+            }
+            partySan.SetEndingSan(0);
+            pulse.FadeOut();
+            yield return new WaitForSecondsRealtime(.45f);
+        }
+
+        yield return FadeTo(1f, .75f);
     }
 
     private IEnumerator PulseStatue()
@@ -412,7 +435,7 @@ public sealed class FinalRoomSequence : MonoBehaviour
 
         Frame(new Vector2(2.8f, 4.3f), 5.45f);
         exitLight.SetActive(true);
-        Play(rumble, .78f, .95f);
+        Play(escapeDoorSound, .78f, .95f);
         Vector3 closedPosition = escapeDoor.localPosition;
         for (float elapsed = 0f; elapsed < .62f; elapsed += Time.unscaledDeltaTime)
         {

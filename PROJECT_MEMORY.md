@@ -49,7 +49,8 @@ DSH 侧由工程内 [`unity-mcp-bundle`](.dsh/unity-mcp-bundle/cordis.patch.yml)
 
 | 路径 | 用途 |
 | --- | --- |
-| [`Assets/Scenes/GameScene/scene-1.unity`](Assets/Scenes/GameScene/scene-1.unity) | 游戏启动与返回主界面的入口。新游戏进入序章，继续游戏恢复保存的主线进度。 |
+| [`Assets/Scenes/GameScene/Scene-1.unity`](Assets/Scenes/GameScene/Scene-1.unity) | 游戏启动与返回主界面的入口。新游戏进入黑屏引言，继续游戏恢复保存的主线进度。 |
+| [`Assets/Scenes/GameScene/scene-0.5.unity`](Assets/Scenes/GameScene/scene-0.5.unity) | 黑屏引言，每按一次 F 推进一句，末句后进入漂流瓶序章。 |
 | [`Assets/Scenes/GameScene/Scene0.unity`](Assets/Scenes/GameScene/Scene0.unity) | 漂流瓶、出海和暴雨中的两次选择。 |
 | [`Assets/Scenes/GameScene/Scene1.unity`](Assets/Scenes/GameScene/Scene1.unity) | 登岛、兄弟先到石门、玩家带青梅会合及进门。 |
 | [`Assets/Scenes/GameScene/Scene2.unity`](Assets/Scenes/GameScene/Scene2.unity) | 石门后的迷宫入口，北门通往一层安全房。 |

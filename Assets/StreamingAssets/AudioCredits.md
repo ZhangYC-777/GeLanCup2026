@@ -9,13 +9,14 @@
 | `IslandWildlife.mp3` | [Amazon Jungle in the Morning at Rainforest Tambopata National Reserve · alberto_cendra_woodman](https://freesound.org/people/alberto_cendra_woodman/sounds/737513/) | CC0 1.0 | 格兰岛的鸟鸣和林地动物环境声 |
 | `IronGateOpen.wav` | [cemeterygate13.aif · celadon_noise](https://freesound.org/people/celadon_noise/sounds/399452/) | CC0 1.0 | 二层铁门开启，裁取 2.164–4.329 秒 |
 | `StoneDoorOpen.wav` | [DOORSton_Stone Door Opening, Secret Passage Entry · harrisonlace](https://freesound.org/people/harrisonlace/sounds/833925/) | CC0 1.0 | 遗迹入口和解谜石门开启，裁取 3.088–6.177 秒 |
-| `PanicHeartbeat.mp3`、`HeartbeatPulse.wav` | [heartbeat (fast but inconsistent).wav · ultraaxvii](https://freesound.org/people/ultraaxvii/sounds/533909/) | CC0 1.0 | 终局发抖时用整段。面包迷宫裁取单次心跳，取代代码合成的心跳 |
+| `StoneDoorOpenShort.wav` | [DOORSton_Stone Door Opening, Secret Passage Entry · harrisonlace](https://freesound.org/people/harrisonlace/sounds/833925/) | CC0 1.0 | 从 `StoneDoorOpen.wav` 取开头 0.66 秒，用于分流石门和终局逃生门 |
+| `PanicHeartbeat.mp3`、`HeartbeatPulse.wav` | [heartbeat (fast but inconsistent).wav · ultraaxvii](https://freesound.org/people/ultraaxvii/sounds/533909/) | CC0 1.0 | 终局发抖与 SAN 归零时用整段。裁取的单次心跳供面包迷宫和 SAN 受损使用 |
 | `CloseBreath.wav` | [Sharp Exhale · sblitzer](https://freesound.org/people/sblitzer/sounds/777239/) | CC0 1.0 | 裁取近距离呼气声 |
 | `DistantDrips.wav` | [cave dripping water · mentos987](https://freesound.org/people/mentos987/sounds/818888/) | CC0 1.0 | 裁取两次洞穴滴水声并提高增益 |
 | `FlashlightClatter.wav` | [Aluminium pipe dropped on concrete. 400Hz High-Pass.wav · Bibow](https://freesound.org/people/Bibow/sounds/426845/) | CC0 1.0 | 裁取金属物件落地及短暂回响 |
 | `GearRelease.wav` | [Old Mechanism · qubodup](https://freesound.org/people/qubodup/sounds/187853/) | CC0 1.0 | 裁取机关转动与扣合声 |
 | `StoneScrape.wav` | [Stone,Block,Drag,Wood,Grind.wav · Mediaman57](https://freesound.org/people/Mediaman57/sounds/347149/) | CC0 1.0 | 裁取石头摩擦声 |
-| `StoneFootstep.wav` | [Hiking Boot Footsteps on Stone · Fission9](https://freesound.org/people/Fission9/sounds/521590/) | CC0 1.0 | 裁取单步靴声，供终局递进脚步演出使用 |
+| `StoneFootstep.wav` | [Hiking Boot Footsteps on Stone · Fission9](https://freesound.org/people/Fission9/sounds/521590/) | CC0 1.0 | 裁取单步靴声，供限时追猎与终局递进脚步演出使用 |
 | `StoneCollapse.wav`、`StoneImpact.wav` | [Big falling debris (crash) · xkeril](https://freesound.org/people/xkeril/sounds/703247/) | CC0 1.0 | 分别裁取瓦片石块坍落和起始冲击 |
 | `HammerOnMetal.wav` | [hammering on metal.wav · Fenodyrie](https://freesound.org/people/Fenodyrie/sounds/588259/) | CC0 1.0 | 裁取单次锤击，替换二层已有敲击声 |
 | `AnabasisI.mp3` | [Anabasis I · Scott Buckley](https://www.scottbuckley.com.au/library/anabasis-i/) | CC BY 4.0 | 地牢阴森弦乐 |

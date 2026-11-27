@@ -33,7 +33,9 @@ public sealed class BreadTrial : MonoBehaviour
     private readonly List<Tile> runtimeTiles = new List<Tile>();
     private State state;
     private Action onWon;
+    private Action onIncomplete;
     private Action<bool> onClosed;
+    private bool attemptActive;
     private Sprite runnerSprite;
     private Color runnerTint;
     private BreadTrialView view;
@@ -67,7 +69,7 @@ public sealed class BreadTrial : MonoBehaviour
     private Vector2 shadowPosition;
     private bool chasing;
 
-    internal bool Begin(SpriteRenderer avatar, Action celebrate, Action<bool> close)
+    internal bool Begin(SpriteRenderer avatar, Action celebrate, Action<bool> close, Action incomplete)
     {
         if (state != State.Closed || avatar == null || avatar.sprite == null || floors.Length == 0 || wall == null ||
             exit == null || bread == null || glow == null || flashlightShader == null)
@@ -80,6 +82,7 @@ public sealed class BreadTrial : MonoBehaviour
         runnerTint = avatar.color;
         onWon = celebrate;
         onClosed = close;
+        onIncomplete = incomplete;
         var canvas = new GameObject("Bread Trial Overlay", typeof(RectTransform));
         canvas.transform.SetParent(transform, false);
         view = canvas.AddComponent<BreadTrialView>();
@@ -104,7 +107,7 @@ public sealed class BreadTrial : MonoBehaviour
         PrepareRun();
         ChangeState(State.Ready);
         view.ShowMenu("面包迷宫", "沿着手电的光找出口。捡到面包可恢复体力，冲刺可能引来影子。",
-            "开始  Enter", StartPlaying, "返回解谜房  Esc", Close);
+            "开始  F", StartPlaying, "返回解谜房  Esc", Close);
         return true;
     }
 
@@ -144,8 +147,8 @@ public sealed class BreadTrial : MonoBehaviour
         if (escape)
         {
             ChangeState(State.Paused);
-            view.ShowMenu("已暂停", "Esc 继续    ·    R 重新开始",
-                "继续  Esc", StartPlaying, "返回解谜房  Q", Close);
+            view.ShowMenu("已暂停", "R 重新开始",
+                "继续  F", StartPlaying, "返回解谜房  Q", Close);
             return;
         }
 
@@ -157,16 +160,24 @@ public sealed class BreadTrial : MonoBehaviour
         if (health <= 0)
         {
             ChangeState(State.Lost);
-            view.ShowMenu("影子追上了你", "可以重试，或回到桌边再试。",
-                "重试  R", Restart, "返回解谜房  Esc", Close);
+            bool charged = SettleAttempt();
+            string loss = charged ? $"面包未集齐，SAN −{PartySan.StandardDamage}。可以重试。" : "可以重试，或回到桌边再试。";
+            view.ShowMenu("影子追上了你", loss,
+                "重试  F", Restart, "返回解谜房  Esc", Close);
         }
         else if ((position - BreadMazeLayout.Center(BreadMazeLayout.Exit)).sqrMagnitude < .28f)
         {
             ChangeState(State.Won);
+            bool charged = SettleAttempt();
             onWon();
             Play(winSound, .62f);
-            view.ShowMenu("到达出口", $"用时 {TimeSpan.FromSeconds(elapsed):mm\\:ss}    ·    面包 {collected} / {BreadMazeLayout.BreadCount}    ·    被撞 {hits} 次",
-                "返回解谜房  Enter", Close, null, null);
+            string result = $"用时 {TimeSpan.FromSeconds(elapsed):mm\\:ss}    ·    面包 {collected} / {BreadMazeLayout.BreadCount}    ·    被撞 {hits} 次";
+            if (charged)
+            {
+                result += $"    ·    SAN −{PartySan.StandardDamage}";
+            }
+            view.ShowMenu("到达出口", result,
+                "返回解谜房  F", Close, null, null);
         }
 
         UpdateWorldView(dt);
@@ -424,12 +435,14 @@ public sealed class BreadTrial : MonoBehaviour
 
     private void Restart()
     {
+        SettleAttempt();
         PrepareRun();
         StartPlaying();
     }
 
     private void StartPlaying()
     {
+        attemptActive = true;
         ChangeState(State.Playing);
         view.HideMenu();
     }
@@ -445,9 +458,27 @@ public sealed class BreadTrial : MonoBehaviour
         if (state == State.Closed) return;
 
         bool won = state == State.Won;
+        SettleAttempt();
         Action<bool> callback = onClosed;
         ReleaseTrial();
         callback(won);
+    }
+
+    private bool SettleAttempt()
+    {
+        if (!attemptActive)
+        {
+            return false;
+        }
+
+        attemptActive = false;
+        if (collected >= BreadMazeLayout.BreadCount)
+        {
+            return false;
+        }
+
+        onIncomplete?.Invoke();
+        return true;
     }
 
     private void ReleaseTerrain()
@@ -490,6 +521,8 @@ public sealed class BreadTrial : MonoBehaviour
         }
         onWon = null;
         onClosed = null;
+        onIncomplete = null;
+        attemptActive = false;
     }
 
     private void OnDisable()

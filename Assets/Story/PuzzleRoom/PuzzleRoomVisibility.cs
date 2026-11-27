@@ -132,6 +132,24 @@ public sealed class PuzzleRoomVisibility : MonoBehaviour
         return safeRoom;
     }
 
+    // 追猎者与镜头使用同一组房间边界。门洞仍属于角色刚走出来的房间。
+    internal int GetHunterRoom(Vector2 position, int previousRoom)
+    {
+        View view = GetView(position);
+        if (view != safeRoom)
+        {
+            return System.Array.IndexOf(views, view);
+        }
+
+        if (previousRoom >= 0 && previousRoom < views.Length &&
+            (views[previousRoom].room.Contains(position) || views[previousRoom].doorway.Contains(position)))
+        {
+            return previousRoom;
+        }
+
+        return safeRoom.room.Contains(position) || safeRoom.doorway.Contains(position) ? views.Length : -1;
+    }
+
     private static Vector4 GetBounds(Rect rect)
     {
         return new Vector4(rect.xMin, rect.yMin, rect.xMax, rect.yMax);

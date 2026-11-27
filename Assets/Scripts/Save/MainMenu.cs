@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     // 新游戏加载的起始关卡。路线变化时在主菜单修改这里。
-    [SerializeField] private string firstScenePath = SceneSave.MainStoryDirectory + "Scene0.unity";
+    [SerializeField] private string firstScenePath = OpeningQuote.ScenePath;
     [SerializeField] private GameObject options;
     [SerializeField] private GameObject confirmation;
     [SerializeField] private Button newGameButton;
@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour
     private GameSaveData savedGame;
     private Font menuFont;
     private bool loading;
+    [SerializeField] private GameObject confirmationShade;
 
     private void Awake()
     {
@@ -46,6 +47,7 @@ public class MainMenu : MonoBehaviour
         if (savedGame != null)
         {
             options.SetActive(false);
+            confirmationShade.SetActive(true);
             confirmation.SetActive(true);
             cancelButton.Select();
             return;
@@ -62,6 +64,7 @@ public class MainMenu : MonoBehaviour
     public void CancelNewGame()
     {
         confirmation.SetActive(false);
+        confirmationShade.SetActive(false);
         options.SetActive(true);
         newGameButton.Select();
     }

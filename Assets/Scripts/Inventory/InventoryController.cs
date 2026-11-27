@@ -90,7 +90,7 @@ public class InventoryController : MonoBehaviour
         return target != null && TryOpen(target);
     }
 
-    // 背包打开后，方向键移动高亮，提交物品用 Enter 确认。
+    // 背包打开后，方向键移动高亮，提交物品用 F 确认。
     private void Update()
     {
         if (rewardUntil > 0f && Time.unscaledTime >= rewardUntil)

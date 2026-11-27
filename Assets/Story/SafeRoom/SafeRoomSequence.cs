@@ -32,6 +32,25 @@ public sealed class SafeRoomSequence : MonoBehaviour
     private static readonly int ClosedState = Animator.StringToHash("DoorNSClosed");
     private Vector3[] entryPositions;
 
+    internal bool DoorsReadyForExploration
+    {
+        get
+        {
+            if (!doorsDialogue.HasCompleted)
+            {
+                return false;
+            }
+            foreach (ProximityStoneDoor door in routeDoors)
+            {
+                if (!door.IsRaised)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
     private void Awake()
     {
         // 保存场景中的开场站位。旧存档缺少演出记录时也能从入口重播。

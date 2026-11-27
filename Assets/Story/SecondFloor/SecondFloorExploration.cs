@@ -99,7 +99,7 @@ public sealed class SecondFloorExploration : MonoBehaviour
     [Header("节奏")]
     [SerializeField] private float walkSpeed = 4.6f;
     [SerializeField] private float followSpeed = 6.4f;
-    [SerializeField, Min(5f)] private float wanderTimeout = 40f;
+    [SerializeField, Min(5f)] private float wanderTimeout = 53f;
     // 给镜头做推拉用的虚拟相机与移动节点。
     [SerializeField] private CinemachineVirtualCamera gameCamera;
     [SerializeField] private Transform cameraPivot;
@@ -122,6 +122,7 @@ public sealed class SecondFloorExploration : MonoBehaviour
 
     private readonly List<TrailPoint> trail = new List<TrailPoint>();
     private Phase phase = Phase.Waiting;
+    internal bool BlocksTimedHunter => phase == Phase.Busy;
     private Coroutine activeRoutine;
     private bool flashlightOn;
     private Vector2 flashlightDirection = Vector2.up;
@@ -302,7 +303,7 @@ public sealed class SecondFloorExploration : MonoBehaviour
     {
         UpdateFlashlight();
 
-        if (phase == Phase.Exploring && party.CurrentPlayer != null)
+        if (phase == Phase.Exploring && !party.IsGameplayLocked && !dialogue.IsPlaying && party.CurrentPlayer != null)
         {
             exploreTime += Time.deltaTime;
             if (punchArea != null && punchArea.OverlapPoint(party.CurrentPlayer.position))
@@ -910,6 +911,9 @@ public sealed class SecondFloorExploration : MonoBehaviour
                 break;
             case "explore_gate_burst":
                 StartCoroutine(PlayHunterCue(OpenGateAndLunge()));
+                break;
+            case "explore_hesitate":
+                sceneSave.PartySan.TakeDamage(PartySan.StandardDamage);
                 break;
             case "explore_inner":
                 party.SetCameraFocus(protagonist.transform, snap: true);

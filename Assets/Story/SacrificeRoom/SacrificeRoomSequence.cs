@@ -14,7 +14,7 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
     [SerializeField] private DialogueTrigger doorsRaised;
     [SerializeField] private Collider2D passageEntry;
     [SerializeField] private Rect waitingArea;
-    [SerializeField, Min(1f)] private float decisionTimeout = 45f;
+    [SerializeField, Min(1f)] private float decisionTimeout = 53f;
 
     [Header("对话")]
     [SerializeField] private DialogueTrigger decision;
@@ -284,6 +284,7 @@ public sealed class SacrificeRoomSequence : MonoBehaviour
         HideShaftHunter();
         pullingFriend = null;
         dialogue.CanAdvanceLine = null;
+        sceneSave.PartySan.TakeDamage(PartySan.StandardDamage);
     }
 
     private IEnumerator ReachForFriend(PlayerMove actor, Vector3 offset)

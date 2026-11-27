@@ -4,7 +4,7 @@
     {
       "id": "inside_the_safe_room",
       "speaker": "",
-      "text": "门后的空气很清新。映入眼帘的，只有一座端庄的圣女雕像。",
+      "text": "门后的空气很清新。映入眼帘的，只有一座端庄的圣女雕像。\n（靠近圣女像，按 F 可恢复 10 点 SAN 值。）",
       "next": "where_is_the_treasure"
     },
     {

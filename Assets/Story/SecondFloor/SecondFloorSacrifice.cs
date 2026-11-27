@@ -201,6 +201,7 @@ public sealed class SecondFloorSacrifice : MonoBehaviour
         shadow.gameObject.SetActive(false);
         intercepting = false;
         dialogue.CanAdvanceLine = null;
+        sceneSave.PartySan.TakeDamage(PartySan.StandardDamage);
     }
 
     private void RestoreAfterInterception()

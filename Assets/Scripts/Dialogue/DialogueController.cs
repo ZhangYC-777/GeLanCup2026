@@ -15,7 +15,7 @@ public class DialogueController : MonoBehaviour
         Typing,
         // 当前句已完整显示，等待 F 继续。
         WaitingForAdvance,
-        // 正在显示选项，此时上下键切换选项，Enter 确认。
+        // 正在显示选项，此时上下键或鼠标选中一项，再用 F 确认。
         Choosing
     }
 
@@ -49,6 +49,7 @@ public class DialogueController : MonoBehaviour
     private int openedFrame;
     // 当前高亮选项在数组中的编号，从 0 开始。
     private int selectedChoice;
+    private int selectedChoiceFrame;
     // 每个文本单位在原始字符串中的起始位置。
     private int[] characterStarts;
     // 本句开始打字的时间，以不受 Time Scale 影响的时间记录。
@@ -101,7 +102,9 @@ public class DialogueController : MonoBehaviour
 
         PlayerInput.PlayerMapsActions actions = standalone ? standaloneInput.PlayerMaps : default;
 
-        // 选项出现时只读取选择和确认输入，避免 F 连续推进误选分支。
+        bool advancePressed = standalone ? actions.Interact.WasPressedThisFrame() : switchPlayer.WasInteractPressed();
+
+        // 主动选中一项以后，下一次单独按 F 才会确认。
         if (state == PlaybackState.Choosing)
         {
             if (standalone ? actions.DialogueUp.WasPressedThisFrame() : switchPlayer.WasDialogueUpPressed())
@@ -113,14 +116,14 @@ public class DialogueController : MonoBehaviour
                 MoveChoice(1);
             }
 
-            if (MenuInput.WasConfirmPressed() && (CanAdvanceLine == null || CanAdvanceLine()))
+            if (advancePressed && selectedChoice >= 0 && Time.frameCount != selectedChoiceFrame &&
+                (CanAdvanceLine == null || CanAdvanceLine()))
             {
                 Choose();
             }
             return;
         }
 
-        bool advancePressed = standalone ? actions.Interact.WasPressedThisFrame() : switchPlayer.WasInteractPressed();
         if (!advancePressed)
         {
             return;
@@ -334,9 +337,9 @@ public class DialogueController : MonoBehaviour
             case PlaybackState.WaitingForAdvance:
                 if (currentNode.choices != null && currentNode.choices.Length > 0)
                 {
-                    selectedChoice = 0;
+                    selectedChoice = -1;
                     state = PlaybackState.Choosing;
-                    view.ShowChoices(currentNode.choices, selectedChoice);
+                    view.ShowChoices(currentNode.choices, SelectChoice);
                 }
                 else
                 {
@@ -350,8 +353,18 @@ public class DialogueController : MonoBehaviour
     private void MoveChoice(int direction)
     {
         int count = currentNode.choices.Length;
-        selectedChoice = (selectedChoice + direction + count) % count;
-        view.ShowChoices(currentNode.choices, selectedChoice);
+        int next = selectedChoice < 0 ? (direction > 0 ? 0 : count - 1) : (selectedChoice + direction + count) % count;
+        SelectChoice(next);
+    }
+
+    private void SelectChoice(int index)
+    {
+        if (state == PlaybackState.Choosing && index >= 0 && index < currentNode.choices.Length)
+        {
+            selectedChoice = index;
+            selectedChoiceFrame = Time.frameCount;
+            view.HighlightChoice(index);
+        }
     }
 
     // 先保存选择的影响，再跳到对应的台词。

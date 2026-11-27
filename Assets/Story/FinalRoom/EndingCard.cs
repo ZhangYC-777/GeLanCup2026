@@ -24,6 +24,14 @@ public sealed class EndingCard : MonoBehaviour
         returnButton.onClick.AddListener(ReturnToMenu);
     }
 
+    private void OnEnable()
+    {
+        if (returnButton != null)
+        {
+            returnButton.Select();
+        }
+    }
+
     public void ReturnToMenu()
     {
         int index = SceneUtility.GetBuildIndexByScenePath(SceneSave.MainMenuPath);
