@@ -87,6 +87,13 @@ public sealed class FinalRoomSequence : MonoBehaviour
         endingFont = MainMenu.ApplyMenuFont(endingCard);
         fade.alpha = 1f;
         fade.blocksRaycasts = false;
+
+        // 结局房只演出不写档，退出游戏时保留第三层之前的进度。
+        SceneSave save = FindObjectOfType<SceneSave>();
+        if (save != null)
+        {
+            save.BlockProgressWrite();
+        }
     }
 
     private void OnEnable()

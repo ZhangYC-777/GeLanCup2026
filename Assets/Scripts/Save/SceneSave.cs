@@ -9,9 +9,9 @@ using UnityEngine.UI;
 public class SceneSave : MonoBehaviour
 {
     internal const string MainStoryDirectory = "Assets/Scenes/GameScene/";
-    internal const string MainMenuPath = MainStoryDirectory + "scene-1.unity";
+    internal const string MainMenuPath = MainStoryDirectory + "Scene-1.unity";
     internal const string SecondFloorPath = MainStoryDirectory + "Scene4.unity";
-    internal const string ThirdFloorPath = MainStoryDirectory + "scene5.unity";
+    internal const string ThirdFloorPath = MainStoryDirectory + "Scene5.unity";
 
     [SerializeField] private SwitchPlayer switchPlayer;
     [SerializeField] private InventoryController inventory;
@@ -30,9 +30,17 @@ public class SceneSave : MonoBehaviour
     private static bool startedFromMenu;
     private readonly List<DialogueTrigger> sceneTriggers = new List<DialogueTrigger>();
     private bool loading;
+    // 终局场景只演出不推进存档，避免「继续游戏」回到结局房。
+    private bool progressBlocked;
     private Font menuFont;
 
     internal bool HasRestoredProgress { get; private set; }
+
+    // 由终局演出在开场调用：本场景不再写任何进度，退出时保留上一个场景的存档。
+    internal void BlockProgressWrite()
+    {
+        progressBlocked = true;
+    }
 
     internal static bool IsMainStoryScene(string path)
     {
@@ -199,7 +207,7 @@ public class SceneSave : MonoBehaviour
 
     private SceneProgress CaptureProgress()
     {
-        if (loading || !CanCapture() || (partySan != null && partySan.CurrentSan == 0))
+        if (progressBlocked || loading || !CanCapture() || (partySan != null && partySan.CurrentSan == 0))
         {
             return null;
         }
@@ -271,7 +279,8 @@ public class SceneSave : MonoBehaviour
 
     private bool SaveProgress()
     {
-        if (!IsMainStoryScene(gameObject.scene.path))
+        // 终局只演出不写档：直接当作保存成功，退出时沿用上一个场景的进度。
+        if (progressBlocked || !IsMainStoryScene(gameObject.scene.path))
         {
             return true;
         }

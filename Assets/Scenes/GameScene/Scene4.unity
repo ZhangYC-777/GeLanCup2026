@@ -114198,7 +114198,7 @@ MonoBehaviour:
   cameraPivot: {fileID: 1865137533}
   cameraPanOutSeconds: 1.2
   cameraPanBackSeconds: 1
-  nextScenePath: Assets/Scenes/GameScene/scene5.unity
+  nextScenePath: Assets/Scenes/GameScene/Scene5.unity
 --- !u!4 &1774044187
 Transform:
   m_ObjectHideFlags: 0
