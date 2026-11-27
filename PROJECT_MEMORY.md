@@ -35,9 +35,11 @@ DSH 侧由工程内 [`unity-mcp-bundle`](.dsh/unity-mcp-bundle/cordis.patch.yml)
 | --- | --- | --- |
 | 一层 | 三人从遗迹入口进安全房，入口随后关上。安全房有圣女像和纸条，两扇分流门分别通往解谜路线与献祭路线。解谜路线从暗处的刻痕入手，借手电取得线索、收集密码并开门。献祭路线沿通道推进。两条路都接到二层。 | 解谜路能发现墙上的「快逃」和疑似青梅的影子。青梅在一层离队，被掳走。主角和兄弟继续向上找她。 |
 | 二层 | 主角与兄弟进入相似的安全房。圣女像变为伸手姿态，纸条问「想救她吗」。两人可走探索路或献祭路，两条路都通向三层。 | 探索路线通关时兄弟牺牲。献祭路遇到黑影时，兄弟为主角争取逃跑时间，主角沿原路逃跑时跌入三层。 |
-| 三层 | 主角独自在终局房醒来，在圣女像前选择「献祭自己」或「献祭他人」，随后从同一扇北门触发各自的结局。 | 「献祭自己」进入团灭结局，主角仍被困在迷宫。「献祭他人」进入人格迷失结局，主角离开岛，但把真实的自己留在迷宫。 |
+| 三层 | 主角独自抵达终局房。北侧的圣女像以青梅的声音挽留他，兄弟模样的追猎者从南侧逼近，中央血阵亮起后出现最终选择。 | 「献祭自己」时主角走入血阵，地面裂开，追猎者和圣女像随之毁灭。选择「献祭他人」时，主角捡起兄弟的锤子砸碎圣女像，从打开的北门逃生，进入人格迷失结局。 |
 
-二层探索路线的演出已在 [`Scene4`](Assets/Scenes/GameScene/Scene4.unity) 接通：左门后的无光迷宫、补给箱取铁锤、铁门砸齿轮、追猎者围上来、兄弟牺牲并把主角推过铁门。铁门处需要先交互打开背包、提交铁锤，才会触发砸门与后续演出；铁锤物品 ID 为 `iron_hammer`。第三层场景尚未创建，路线末尾暂在 Scene4 的第三层安全点收束。
+二层探索路线的演出在 [`Scene4`](Assets/Scenes/GameScene/Scene4.unity) 接通。左门后需从补给箱取得铁锤，在铁门交互时提交，才会触发砸门与兄弟断后。铁锤物品 ID 为 `iron_hammer`。二层两条路线都进入 [`scene5`](Assets/Scenes/GameScene/scene5.unity)，沿用各自的到达台词并保留背包和 SAN。
+
+第三层是一间独立的终局房。地牢石板从出生点连续铺到北侧逃生门，圣女像前与中央血阵留出演出走位，两侧布置祭台、阴影和藤蔓。结局依据《献祭3》，流程走完后展示结局卡，继续游戏从终局房入口重新开始。
 
 视觉和玩法中保留俯视、昏暗环境与手电探索，石门可以使用之前确认过的「轮回」印记。三名角色共享 SAN，与圣女像交互可恢复 SAN，遭怪物攻击会扣除 SAN。游戏失败回到上一段完整对话的结尾，恢复该检查点保存的分支状态。
 
@@ -51,6 +53,7 @@ DSH 侧由工程内 [`unity-mcp-bundle`](.dsh/unity-mcp-bundle/cordis.patch.yml)
 | [`Assets/Scenes/GameScene/Scene2.unity`](Assets/Scenes/GameScene/Scene2.unity) | 石门后的迷宫入口，北门通往一层安全房。 |
 | [`Assets/Scenes/GameScene/Scene3.unity`](Assets/Scenes/GameScene/Scene3.unity) | 一层安全房、解谜和献祭分流。 |
 | [`Assets/Scenes/GameScene/Scene4.unity`](Assets/Scenes/GameScene/Scene4.unity) | 二层安全房、探索迷宫和献祭通道。 |
+| [`Assets/Scenes/GameScene/scene5.unity`](Assets/Scenes/GameScene/scene5.unity) | 三层终局房、最终选择和两个结局。 |
 | [`Assets/Story/`](Assets/Story/) | 剧情演出脚本、对话数据和配套资源。 |
 
 所有新增的主线流程场景都在 `Assets/Scenes/GameScene/` 创建。该目录只放 Unity 场景文件及对应的 `.meta`。剧情数据、脚本、图片、预制体等按用途放在已有资源目录。接通新场景时核对 [构建场景列表](ProjectSettings/EditorBuildSettings.asset) 和前后场景入口。`DialogueTestRoom` 与 `SampleScene` 用于测试。
