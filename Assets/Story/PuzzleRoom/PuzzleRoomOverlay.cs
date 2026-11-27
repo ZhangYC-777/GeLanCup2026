@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 显示解谜失败界面和密码门的三枚转盘。
+// 显示解谜失败、密码转盘和骸骨揭露画面。
 [DisallowMultipleComponent]
 public sealed class PuzzleRoomOverlay : MonoBehaviour
 {
@@ -19,8 +19,10 @@ public sealed class PuzzleRoomOverlay : MonoBehaviour
     [SerializeField] private Dial[] dials;
     [SerializeField] private GameObject failurePanel;
     [SerializeField] private Text[] wallWriting;
+    [SerializeField] private Sprite skullIllustration;
 
     private Font font;
+    private GameObject skullReveal;
 
     private void Awake()
     {
@@ -37,6 +39,25 @@ public sealed class PuzzleRoomOverlay : MonoBehaviour
 
         HidePassword();
         failurePanel.SetActive(false);
+
+        if (skullIllustration != null)
+        {
+            skullReveal = new GameObject("Persie Skull Reveal", typeof(RectTransform), typeof(Canvas));
+            skullReveal.transform.SetParent(transform, false);
+            Canvas canvas = skullReveal.GetComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            // 盖住探索 HUD（2000），保留上方的对话框（2100）。
+            canvas.sortingOrder = 2050;
+
+            RectTransform backdrop = GameUiTheme.Box(skullReveal.transform, "Black Backdrop");
+            GameUiTheme.Place(backdrop, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            GameUiTheme.Fill(backdrop, Color.black);
+
+            RectTransform illustration = GameUiTheme.Box(backdrop, "Persie Illustration");
+            GameUiTheme.Place(illustration, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            GameUiTheme.Art(illustration, skullIllustration).preserveAspect = true;
+            SetSkullRevealVisible(false);
+        }
     }
 
     private void OnDestroy()
@@ -79,5 +100,13 @@ public sealed class PuzzleRoomOverlay : MonoBehaviour
     public void ShowFailure()
     {
         failurePanel.SetActive(true);
+    }
+
+    internal void SetSkullRevealVisible(bool visible)
+    {
+        if (skullReveal != null)
+        {
+            skullReveal.SetActive(visible);
+        }
     }
 }

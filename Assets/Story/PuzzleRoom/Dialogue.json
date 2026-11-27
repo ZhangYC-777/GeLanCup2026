@@ -16,7 +16,7 @@
       {"text":"上、下、上 → 左、右、左","next":"puzzle_gear_failed"}
     ]},
     {"id":"puzzle_gear_failed","speaker":"","text":"齿轮卡死了。脚步声停在你身后。"},
-    {"id":"puzzle_first_beam","speaker":"","text":"手电闪了两下，终于亮起。北墙上密密麻麻，全是「快逃」。","next":"puzzle_faceless"},
+    {"id":"puzzle_first_beam","speaker":"","text":"手电终于亮起。北墙上密密麻麻，全是「快逃」。","next":"puzzle_faceless"},
     {"id":"puzzle_faceless","speaker":"","text":"墙下坐着一具穿着和佩西一样衣服的骸骨。一张没有五官的脸，正对着他。","next":"puzzle_recoil"},
     {"id":"puzzle_recoil","speaker":"梅菲","distressedPortrait":true,"text":"啊——！","next":"puzzle_lamp_falls"},
     {"id":"puzzle_lamp_falls","speaker":"","text":"他跌坐在地，手电撞上石板，滚了半圈。他伸手捡起手电，照见骸骨的手里攥着两张纸条。","rewardItemId":"flashlight"},

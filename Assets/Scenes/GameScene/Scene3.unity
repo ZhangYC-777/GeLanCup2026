@@ -26376,6 +26376,7 @@ MonoBehaviour:
   - {fileID: 1153668802}
   - {fileID: 966623201}
   - {fileID: 514186945}
+  skullIllustration: {fileID: 21300000, guid: e269a2be76f74aac951eb6dc686caf89, type: 3}
 --- !u!114 &921998068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26446,6 +26447,8 @@ MonoBehaviour:
   breath: {fileID: 8300000, guid: c51267a30a3ef4b21925de4253ede629, type: 3}
   mechanism: {fileID: 8300000, guid: 5ed0b9ea6fc3a47f4819c2762b5ec670, type: 3}
   clickAndDrop: {fileID: 8300000, guid: 800aab27b7cc24943a55379183777903, type: 3}
+  skullRevealMusic: {fileID: 8300000, guid: f1d9d21620f024f82be704c3258e8753, type: 3}
+  skullRevealMusicStart: 1.35
   distantSound: {fileID: 536544080}
   closeSound: {fileID: 495122490}
 --- !u!4 &921998069

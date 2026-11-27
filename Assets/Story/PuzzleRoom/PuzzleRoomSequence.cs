@@ -59,6 +59,8 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
     [SerializeField] private AudioClip breath;
     [SerializeField] private AudioClip mechanism;
     [SerializeField] private AudioClip clickAndDrop;
+    [SerializeField] private AudioClip skullRevealMusic;
+    [SerializeField, Min(0f)] private float skullRevealMusicStart = 1.35f;
     [SerializeField] private Transform distantSound;
     [SerializeField] private Transform closeSound;
 
@@ -68,6 +70,10 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
     private const string FlashlightItemId = "flashlight";
     private const string BreadTrialStoryKey = "puzzleBreadTrial";
     private const string CompletedTrial = "cleared";
+    private const float SkullRevealMinimumSeconds = .95f;
+    private const float SkullRevealMusicFadeStart = .78f;
+    private const float SkullRevealMusicDuration = 1.85f;
+    private const float SkullRevealMusicVolume = .84f;
 
     private bool BreadTrialCleared => dialogue.HasStoryValue(BreadTrialStoryKey, CompletedTrial);
 
@@ -80,6 +86,9 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
     private Quaternion spriteRestRotation;
     private Coroutine recoil;
     private bool playingStairSnatch;
+    private AudioSource skullRevealSource;
+    private bool skullRevealVisible;
+    private float skullRevealStartedAt;
     private Vector2 flashlightDirection = Vector2.up;
     private Vector2 lastPosition;
     private bool flashlightOn;
@@ -88,6 +97,15 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
     private void Awake()
     {
         spriteRestRotation = protagonistSprite.localRotation;
+
+        if (skullRevealMusic != null)
+        {
+            skullRevealSource = gameObject.AddComponent<AudioSource>();
+            skullRevealSource.playOnAwake = false;
+            skullRevealSource.spatialBlend = 0f;
+            skullRevealSource.clip = skullRevealMusic;
+            skullRevealMusic.LoadAudioData();
+        }
     }
 
     private void OnEnable()
@@ -98,6 +116,11 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
     private void OnDisable()
     {
         dialogue.LineStarted -= OnLineStarted;
+        HideSkullReveal();
+        if (skullRevealSource != null)
+        {
+            skullRevealSource.Stop();
+        }
         if (playingStairSnatch)
         {
             dialogue.CanAdvanceLine = null;
@@ -140,6 +163,26 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
 
     private void Update()
     {
+        if (skullRevealVisible && !dialogue.IsPlaying)
+        {
+            HideSkullReveal();
+            if (skullRevealSource != null)
+            {
+                skullRevealSource.Stop();
+            }
+        }
+
+        if (skullRevealSource != null && skullRevealSource.isPlaying)
+        {
+            float elapsed = Time.unscaledTime - skullRevealStartedAt;
+            float fade = Mathf.InverseLerp(SkullRevealMusicFadeStart, SkullRevealMusicDuration, elapsed);
+            skullRevealSource.volume = SkullRevealMusicVolume * (1f - fade);
+            if (elapsed >= SkullRevealMusicDuration)
+            {
+                skullRevealSource.Stop();
+            }
+        }
+
         Transform player = party.CurrentPlayer;
         if (phase == Phase.Approach && player != null && !party.IsGameplayLocked)
         {
@@ -308,18 +351,39 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
         protagonist.RestorePosition(firstBeam.position);
         flashlightDirection = ((Vector2)(writing.position - firstBeam.position)).normalized;
         visibility.SetFlashlight(true, firstBeam.position, flashlightDirection);
-        for (int flicker = 0; flicker < 2; flicker++)
-        {
-            PlayFoley(clickAndDrop, .34f, .1f);
-            visibility.SetBlackout(false);
-            yield return new WaitForSeconds(.11f);
-            visibility.SetBlackout(true);
-            yield return new WaitForSeconds(.14f);
-        }
-
+        PlayFoley(clickAndDrop, .34f, .1f);
         visibility.SetBlackout(false);
         party.SetGameplayLocked(false);
         reveal.Play();
+    }
+
+    // 切入原画和音乐的重音，至少留一拍再接梅菲的惊叫。
+    private void ShowSkullReveal()
+    {
+        skullRevealStartedAt = Time.unscaledTime;
+        skullRevealVisible = true;
+        overlay.SetSkullRevealVisible(true);
+        dialogue.CanAdvanceLine = () => Time.unscaledTime - skullRevealStartedAt >= SkullRevealMinimumSeconds;
+
+        if (skullRevealSource != null)
+        {
+            skullRevealSource.volume = SkullRevealMusicVolume;
+            skullRevealSource.timeSamples = Mathf.Clamp(
+                Mathf.RoundToInt(skullRevealMusicStart * skullRevealMusic.frequency), 0, skullRevealMusic.samples - 1);
+            skullRevealSource.Play();
+        }
+    }
+
+    private void HideSkullReveal()
+    {
+        if (!skullRevealVisible)
+        {
+            return;
+        }
+
+        skullRevealVisible = false;
+        overlay.SetSkullRevealVisible(false);
+        dialogue.CanAdvanceLine = null;
     }
 
     private void OnLineStarted(string node)
@@ -343,7 +407,11 @@ public sealed class PuzzleRoomSequence : MonoBehaviour
                 foley.Stop();
                 PlayAt(breath, .88f, closeSound);
                 break;
+            case "puzzle_faceless":
+                ShowSkullReveal();
+                break;
             case "puzzle_recoil":
+                HideSkullReveal();
                 recoil = StartCoroutine(RecoilAndDrop());
                 break;
             case "puzzle_gate_open":
